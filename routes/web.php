@@ -70,7 +70,14 @@ Route::get('/leadsfeedback_detail', [LeadsController::class, 'leadsFeedbackDetai
 Route::get('/upload', [LeadsController::class, 'showUploadForm'])->name('upload.form');
 Route::post('/import', [LeadsController::class, 'import'])->name('leads.import');
 
+Route::get('/call_history_today', [CallHistoryController::class, 'todayCallHistory'])->name('call_history_today');
+Route::get('/today_call_history_detail', [CallHistoryController::class, 'todaycallhistoryDetail'])->name('today_call_history_detail');
 
+
+
+
+
+Route::get('/filter_call-history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
 
 
 

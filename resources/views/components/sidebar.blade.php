@@ -31,6 +31,11 @@
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/call_history">All Call Histroy</a></li>
                 </ul>
+
+                <div class="collapse" id="form-elements">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Call History</a></li>
+                </ul>
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="#">Call History By Employee</a></li>
                 </ul>
