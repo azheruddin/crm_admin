@@ -10,19 +10,22 @@
               <!-- <img src="assets/images/logo.svg" alt="logo" /> -->
               <h2><span class="text-primary text-center">CRM</span>Admin</h2>
             </a>
+
             <a class="navbar-brand brand-logo-mini" href="index.html">
-              <img src="assets/images/logo-mini.svg" alt="logo" />
+              <img src="assets/images/logo-mini.svg" alt="logo"/>
             </a>
           </div>
         </div>
+
         <div class="navbar-menu-wrapper d-flex align-items-top">
           <ul class="navbar-nav">
             <li class="nav-item fw-semibold d-none d-lg-block ms-0">
-              <h1 class="welcome-text">Welcome, <span class="text-black fw-bold">Admin</span></h1>
-              
+              <h1 class="welcome-text">Welcome,<span class="text-black fw-bold">Admin</span></h1> 
             </li>
           </ul>
+
           <ul class="navbar-nav ms-auto">
+
             <!-- <li class="nav-item dropdown d-none d-lg-block">
               <a class="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Select Category </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
@@ -61,15 +64,20 @@
                 <span class="input-group-addon input-group-prepend border-right">
                   <span class="icon-calendar input-group-text calendar-icon"></span>
                 </span>
+
                 <input type="text" class="form-control">
+
               </div>
             </li>
+  
+
             <li class="nav-item">
               <form class="search-form" action="#">
                 <i class="icon-search"></i>
                 <input type="search" class="form-control" placeholder="Search Here" title="Search here">
               </form>
             </li>
+
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                 <i class="icon-bell"></i>
@@ -104,7 +112,7 @@
                   </div>
                   <div class="preview-item-content">
                     <h6 class="preview-subject fw-normal text-dark mb-1">New user registration</h6>
-                    <p class="fw-light small-text mb-0"> 2 days ago </p>
+                    <p class="fw-light small-text mb-0">2 days ago</p>
                   </div>
                 </a>
               </div>
@@ -124,7 +132,7 @@
                     <img src="assets/images/faces/face10.jpg" alt="image" class="img-sm profile-pic">
                   </div>
                   <div class="preview-item-content flex-grow py-2">
-                    <p class="preview-subject ellipsis fw-medium text-dark">Marian Garner </p>
+                    <p class="preview-subject ellipsis fw-medium text-dark">Marian Garner</p>
                     <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
                   </div>
                 </a>
@@ -170,3 +178,15 @@
           </button>
         </div>
       </nav>
+
+
+
+      
+
+
+
+
+
+      
+
+      

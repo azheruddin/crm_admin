@@ -13,7 +13,7 @@
                   <h4 class="card-title text-primary">Show Employees</h4><hr>
                    
                     <!-- table goes here -->
-                    
+                     
 
 <table id="example" class="table table-striped" style="width:100%">
         <thead>
@@ -51,8 +51,8 @@
         @endforeach
 </tbody>
 </table>
-                  </div>
-                </div>
-              </div>
+ </div>
+</div>
+  </div>
 </div>
 @endsection

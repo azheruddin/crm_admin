@@ -53,12 +53,10 @@ Route::get('/employees/{id}/toggle', [EmployeeController::class, 'toggleActive']
 Route::get('/call_history',[CallHistoryController::class, 'showCallHistory'])->name('call_history');
 
 Route::get('/call_history_detail', [CallHistoryController::class, 'callHistoryDetail'])->name('call_history_detail');
-// Route::get('/call_history', [CallController::class, ''])->name('call_history');ss
 
 
 
 Route::get('/employee_call_history',[CallHistoryController::class, 'callHistoryByEmployee'])->name('employee_call_history');
-// Route::get('/employee_call_history',[EmployeeController::class, 'showEmployees'])->name('show_employee');
 
 Route::get('/leads_feedback',[LeadsController::class, 'showLeadsFeedback'])->name('leads_feedback');
 
@@ -78,6 +76,16 @@ Route::get('/today_call_history_detail', [CallHistoryController::class, 'todayca
 
 
 Route::get('/filter_call-history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
+
+
+
+
+
+Route::get('/dashboard', [EmployeeController::class, 'countEmployees'])->name('dashboard');
+
+
+
+
 
 
 

@@ -100,8 +100,27 @@ public function destroy($id)
 }
 
 
+// Controller: EmployeeController.php
+public function countEmployees()
+    {
+        // Fetch the counts for total, active, and deactivated employees
+        $totalEmployees = Employee::count();
+        $activeEmployees = Employee::where('is_active', 1)->count();
+        $deactivatedEmployees = Employee::where('is_active', 0)->count();
 
+        // Return the view with the counts
+        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees'));
+    }
 
+    public function toggleActives($id)
+    {
+        // Find the employee by ID and toggle the active status
+        $employee = Employee::findOrFail($id);
+        $employee->is_active = !$employee->is_active;
+        $employee->save();
 
+        // Redirect back with a success message
+        return redirect()->route('dashboard')->with('success', 'Employee status updated successfully');
+    }
 
 }
