@@ -46,7 +46,7 @@ class ApiController extends Controller
             $leads->phone = $request->phone;
             $leads->employee_id = $request->employee_id;$leads->notes = $request->notes;
             $leads->lead_stage = $request->lead_stage;           
-            $leads->lead_date = $request->lead_date;           
+            $leads->feedback = $request->feedback;           
              $leads->expected_revenue = $request->expected_revenue;          
             $leads->next_follow_up = $request->next_follow_up;           
             //            
