@@ -9,13 +9,11 @@
   <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <!-- <h4 class="card-title text-primary">Filter Call History</h4>
-                <hr> -->
-
-        <form action="{{ route('filter_call_history') }}" method="GET">
-          <div class="form-group col-md-3">
+      <div class="form-group col-md-3">
             <h4 class="card-title text-primary"> Today Call History</h4>
           </div>
+        <form action="{{ route('filter_call_history') }}" method="GET">
+       
 
           <div class="form-row">
             <div class="form-group col-md-3">
@@ -23,12 +21,13 @@
               <label for="from_date">From Date</label>
               <input type="date" class="form-control" id="from_date" name="from_date"
           value="{{ request('from_date') }}">
+          
+              <label for="to_date">To Date</label>
+              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}">
             </div>
 
             <div class="form-group col-md-3">
 
-              <label for="to_date">To Date</label>
-              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}">
             </div>
             <div class="form-group col-md-4">
                             <label>&nbsp;</label>

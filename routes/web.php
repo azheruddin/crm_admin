@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CallHistoryController;
 use App\Http\Controllers\LeadsController;
+use App\Http\Controllers\CommonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +82,7 @@ Route::get('/filter_call-history', [CallHistoryController::class, 'filterCallHis
 
 
 
-Route::get('/dashboard', [EmployeeController::class, 'countEmployees'])->name('dashboard');
+Route::get('/dashboard', [CommonController::class, 'dashBoardCounts'])->name('dashboard');
 
 
 
