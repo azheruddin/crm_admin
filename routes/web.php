@@ -78,12 +78,18 @@ Route::get('/today_call_history_detail', [CallHistoryController::class, 'todayca
 
 Route::get('/filter_call-history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
 
+Route::get('/filter_leads', [LeadsController::class, 'filterLeads'])->name('filter_leads');
+
+
+
+Route::get('/today_leads', [LeadsController::class, 'todayLeads'])->name('today_leads');
+
+
 
 
 
 
 Route::get('/dashboard', [CommonController::class, 'dashBoardCounts'])->name('dashboard');
-
 
 
 
