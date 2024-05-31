@@ -22,16 +22,12 @@
                        
                         <tbody>
                           <tr>
-                            <td>CUSTOMER NAME</td>
-                            <td>{{ $calls->customer_name }}</td>
-                          </tr>
-                          <tr>
                             <td>PHONE</td>
                             <td>{{ $calls->phone }}</td>
                           </tr>
                           <tr>
                             <td>CALL TYPE</td>
-                            <td>{{ $calls->call_type }}</td>
+                            <td>{{ $calls->type }}</td>
                           </tr>
                           <tr>
                             <td>DURATION</td>
