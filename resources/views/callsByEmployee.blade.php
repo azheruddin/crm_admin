@@ -28,7 +28,7 @@
 <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
-                <th>CUSTOMER NAME</th>
+                <!-- <th>CUSTOMER NAME</th> -->
                 <th>PHONE</th>
                 <th>CALL TYPE</th>
                 <th>CALL DURATION</th>
@@ -42,8 +42,8 @@
         <tr>
             <td>{{ $calls->customer_name }}</td>
             <td>{{ $calls->phone }}</td>
-            <td>{{ $calls->call_type }}</td>
-            <td>{{ $calls->duration }}</td> 
+            <td>{{ $calls->type }}</td>
+            <td>{{ $calls->call_duration }}</td> 
              <td>{{ $calls->created_at }}</td> 
              <td>{{ $calls->employee->name }}</td> 
              <td><a href="#" class="btn btn-info"><i class="fa fa-eye"></i></a>

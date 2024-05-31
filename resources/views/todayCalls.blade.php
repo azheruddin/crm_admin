@@ -42,7 +42,6 @@
         <table id="example" class="table table-striped" style="width:100%">
           <thead>
             <tr>
-              <th>CUSTOMER NAME</th>
               <th>PHONE</th>
               <th>CALL TYPE</th>
               <th>DURATION</th>
@@ -54,10 +53,9 @@
           <tbody>
             @foreach($callHistories as $calls)
         <tr>
-        <td>{{ $calls->customer_name }}</td>
         <td>{{ $calls->phone }}</td>
-        <td>{{ $calls->call_type }}</td>
-        <td>{{ $calls->duration }}</td>
+        <td>{{ $calls->type }}</td>
+        <td>{{ $calls->call_duration }}</td>
         <td>{{ $calls->created_at }}</td>
         @if(isset($calls->employee->name) && $calls->employee->name != null)
       <td>{{ $calls->employee->name }}</td>

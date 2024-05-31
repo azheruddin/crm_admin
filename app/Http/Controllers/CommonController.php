@@ -21,9 +21,9 @@ class CommonController extends Controller
         $today = Carbon::today();
     
         // Fetch the counts for different call types created today
-        $incomingCallsToday = CallHistory::where('call_type', 'Incoming')->whereDate('created_at', $today)->count();
-        $outgoingCallsToday = CallHistory::where('call_type', 'Outgoing')->whereDate('created_at', $today)->count();
-        $missedCallsToday = CallHistory::where('call_type', 'Missed')->whereDate('created_at', $today)->count();
+        $incomingCallsToday = CallHistory::where('type', 'Incoming')->whereDate('created_at', $today)->count();
+        $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->whereDate('created_at', $today)->count();
+        $missedCallsToday = CallHistory::where('type', 'Missed')->whereDate('created_at', $today)->count();
         $todayCalls = CallHistory::whereDate('created_at', $today)->count();
 
         // leads
