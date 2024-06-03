@@ -36,6 +36,8 @@ Route::post('/lead_calls',[ApiController::class,'lead_calls'])->name('lead_calls
 
 Route::post('/login', [ApiController::class, 'login']);
 
+Route::get('/lead_by_employee', [ApiController::class, 'lead_by_employee']);
+
                                               
 
 

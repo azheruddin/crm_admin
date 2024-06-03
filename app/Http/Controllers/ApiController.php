@@ -159,4 +159,36 @@ public function add_call_logs(Request $request)
     }
 }
 
+
+// show leads by employee
+public function lead_by_employee(Request $request){
+    $leads=  Leads::where('employee_id', $request->employee_id)->orderBy('id', 'desc')->get();
+    $data_record = array();
+    foreach ($leads as $row) {
+     
+       $data_record[] = [
+           'customer_name' => $row->customer_name,
+           'customer_email' => $row->customer_email,
+           'phone' => $row->phone,
+           'lead_stage' => $row->lead_stage,
+           'feedback' => $row->feedback,
+           'expected_revenue' => $row->expected_revenue,
+           'notes' => $row->notes,
+           'next_follow_up' => $row->next_follow_up,
+           'employee_id' => $row->employee_id,
+       ];
+      
+   }
+   $array = json_encode($data_record);
+   $array = json_decode($array);
+    if ($leads != null && $request->employee_id != null) {
+       return response()->json([
+           'status' => 'S',
+           'data' => $array,
+
+       ], 200, [], JSON_NUMERIC_CHECK);
+   } else {
+       return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
+   }
+}
 }
