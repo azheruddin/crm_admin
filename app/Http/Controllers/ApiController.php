@@ -113,122 +113,7 @@ return response()->json([
     'data' => $employee
 ]);
 }
-
-
-
-
-// call log store api
-// public function add_call_Logs(Request $request)
-// {
-//             $callHistory = new CallHistory();
-//             $callHistory->customer_name = $request->customer_name;
-//             $callHistory->phone = $request->phone;
-//             $callHistory->call_type = $request->call_type;
-//             $callHistory->duration = $request->duration;           
-//             $callHistory->call_time = $request->call_time;           
-//             $callHistory->employee_id = $request->employee_id;           
-//             // $callHistory->save();
-
-//     // Check if the call log already exists
-//     $existingCallLog = CallHistory::where('phone_number', $request->phone)->whereDate('call_time', $request->call_time)
-//         ->where('call_time', $validatedData['call_time'])
-//         ->first();
-
-//     if (!$existingCallLog) {
-//         // Create a new call log
-//         $callLog = new CallLog();
-//         $callLog->phone_number = $validatedData['phone_number'];
-//         $callLog->call_time = $validatedData['call_time'];
-//         $callLog->save();
-
-//         return response()->json(['message' => 'Call log stored successfully'], 201);
-//     }
-
-//     return response()->json(['message' => 'Call log already exists'], 400);
-// }
-
-// public function add_call_logs(Request $request)
-// {
-
-//     $callHistory = new CallHistory();
-
-//     // Array to store unique call logs
-//     $uniqueCallLogs = [];
-//     $requestCallLogs = $request->call_logs;
-//     $employeeId = $request->employee_id;
-
-
-
-//     foreach ($requestCallLogs as $data) {
-//         // Check if the call log already exists
-//         $existingCallLog = CallHistory::where('employee_id', $request->employee_id)
-//             ->where('call_date', $request->call_date)
-//             ->exists();          
-//     // $callHistory->save();
-//     if (!$existingCallLog) {
-//         // Add the call log to the uniqueCallLogs array
-//         $uniqueCallLogs[] = [
-//             'phone' => $data['phone'],
-//             'type' => $data['type'],
-//             'call_date' => $data['call_date'],
-//             'call_duration' => $data['call_duration'],
-//             'employee_id' => $employeeId
-//             // Add other fields as needed
-//         ];
-//     }
-
-// }
-
-//     // Bulk insert unique call logs
-//     CallHistory::insert($uniqueCallLogs);
-
-//     return response()->json([
-//         'message' => 'Call logs stored successfully'], 201);
-    
-
-// }
-
-
-//////////////////////////
-
-// public function add_call_logs(Request $request)
-// {
-//     // Retrieve employee_id from the request
-//     $employeeId = $request->employee_id;
-
-//     // Array to store unique call logs
-//     $uniqueCallLogs = [];
-//     $requestCallLogs = $request->call_logs;
-
-//     foreach ($requestCallLogs as $data) {
-//         // Check if the call log already exists
-//         $existingCallLog = CallHistory::where('employee_id', $employeeId)
-//             ->where('call_date', $data['call_date'])
-//             ->exists();
-
-//         if (!$existingCallLog) {
-//             // Create a new call log
-//             $uniqueCallLogs[] = [
-//                 'employee_id' => $employeeId,
-//                 'phone' => $data['phone'],
-//                 'type' => $data['type'],
-//                 'call_date' => $data['call_date'],
-//                 'call_duration' => $data['call_duration']
-//                 // Add other fields as needed
-//             ];
-//         }
-//     }
-
-//     // Bulk insert unique call logs
-//     CallHistory::insert($uniqueCallLogs);
-
-//     return response()->json([
-//         'message' => 'Call logs stored successfully'
-//     ], 201);
-// }
-
-
-//////////////////////////////////////////////
+ 
 
 public function add_call_logs(Request $request)
 {
@@ -274,4 +159,36 @@ public function add_call_logs(Request $request)
     }
 }
 
+
+// show leads by employee
+public function lead_by_employee(Request $request){
+    $leads=  Leads::where('employee_id', $request->employee_id)->orderBy('id', 'desc')->get();
+    $data_record = array();
+    foreach ($leads as $row) {
+     
+       $data_record[] = [
+           'customer_name' => $row->customer_name,
+           'customer_email' => $row->customer_email,
+           'phone' => $row->phone,
+           'lead_stage' => $row->lead_stage,
+           'feedback' => $row->feedback,
+           'expected_revenue' => $row->expected_revenue,
+           'notes' => $row->notes,
+           'next_follow_up' => $row->next_follow_up,
+           'employee_id' => $row->employee_id,
+       ];
+      
+   }
+   $array = json_encode($data_record);
+   $array = json_decode($array);
+    if ($leads != null && $request->employee_id != null) {
+       return response()->json([
+           'status' => 'S',
+           'data' => $array,
+
+       ], 200, [], JSON_NUMERIC_CHECK);
+   } else {
+       return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
+   }
+}
 }
