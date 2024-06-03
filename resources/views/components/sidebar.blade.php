@@ -36,11 +36,11 @@
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Call History</a></li>
                 </ul>
-                <ul class="nav flex-column sub-menu">
+                <!-- <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="#">Call History By Employee</a></li>
                 </ul>
               </div>
-            </li>
+            </li> -->
              <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
                 <i class="menu-icon mdi mdi-chart-line"></i>
@@ -52,17 +52,25 @@
                   <li class="nav-item"> <a class="nav-link" href="/leads_feedback">Leads Feedback</a></li>
                 </ul>
               </div>
+
               <div class="collapse" id="charts">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/today_leads">Today Leads</a></li>
+                </ul>
+              </div>
+
+              
+              <!--  <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">Leadfeedback By Employee</a></li>
                 </ul>
-              </div>
-              <div class="collapse" id="charts">
+              </div> -->
+               <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="upload">Upload Leads</a></li>
                 </ul>
               </div>
-            </li>
+            </li> 
 
 
             

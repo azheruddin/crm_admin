@@ -64,4 +64,33 @@ public function leadsFeedbackDetail(Request $request)
 }
 
 
+public function todayLeads()
+    {
+        // Fetch today's leads
+        $todayLeads = Leads::whereDate('created_at', now()->toDateString())->get();
+
+        // Pass the leads to the view
+        return view('todayLeads', compact('todayLeads'));
+    }
+
+
+
+    public function filterLeads(Request $request)
+    {
+        // Get the date range from the request
+        $fromDate = $request->input('from_date', now()->startOfDay());
+        $toDate = $request->input('to_date', now()->endOfDay());
+
+        // Fetch leads within the specified date range
+        $todayLeads = Leads::whereBetween('created_at', [$fromDate, $toDate])->get();
+
+
+        // Pass the leads and date range inputs to the view
+        return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
+    }
+
+
+
+
+
 }

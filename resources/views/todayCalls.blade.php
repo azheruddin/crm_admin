@@ -12,9 +12,9 @@
       <div class="form-group col-md-3">
             <h4 class="card-title text-primary"> Today Call History</h4>
           </div>
-        <form action="{{ route('filter_call_history') }}" method="GET">
-       
 
+
+        <form action="{{ route('filter_call_history') }}" method="GET">
           <div class="form-row">
             <div class="form-group col-md-3">
               
@@ -23,12 +23,13 @@
           value="{{ request('from_date') }}">
           
               <label for="to_date">To Date</label>
-              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}">
+              <input type="date" class="form-control" id="to_date" name="to_date"
+          value="{{ request('to_date') }}">
             </div>
 
             <div class="form-group col-md-3">
-
             </div>
+
             <div class="form-group col-md-4">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-primary btn-block">Filter</button>
@@ -63,7 +64,7 @@
     <td></td>
   @endif
 
-        <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i
+        <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i>
             class="fa fa-eye"></i></a></a>
 
 
