@@ -9,7 +9,7 @@ use App\Http\Controllers\Excel;
 
 class LeadsController extends Controller
 {
-    //
+    
 
     // public function showLeadsFeedback()
     // {
@@ -25,7 +25,7 @@ class LeadsController extends Controller
         
     }
 
-//   
+  
 
 
 public function leadsFeedbackByEmployee(Request $request)
@@ -88,9 +88,5 @@ public function todayLeads()
         // Pass the leads and date range inputs to the view
         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
     }
-
-
-
-
 
 }
