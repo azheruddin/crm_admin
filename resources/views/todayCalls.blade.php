@@ -56,7 +56,12 @@
         <tr>
         <td>{{ $calls->phone }}</td>
         <td>{{ $calls->type }}</td>
-        <td>{{ $calls->call_duration }}</td>
+        @php
+    $totalSeconds = $calls->call_duration;
+    $minutes = floor($totalSeconds / 60);
+    $seconds = $totalSeconds % 60;
+    @endphp
+<td>{{ $minutes }} min {{ $seconds }} sec</td>
         <td>{{ $calls->created_at }}</td>
         @if(isset($calls->employee->name) && $calls->employee->name != null)
       <td>{{ $calls->employee->name }}</td>
@@ -64,8 +69,8 @@
     <td></td>
   @endif
 
-        <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i>
-            class="fa fa-eye"></i></a></a>
+        <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info">
+          <i class="fa fa-eye"></i></a></a>
 
 
 

@@ -31,7 +31,12 @@
                           </tr>
                           <tr>
                             <td>DURATION</td>
-                            <td>{{ $calls->duration }}</td>
+                            @php
+    $totalSeconds = $calls->call_duration;
+    $minutes = floor($totalSeconds / 60);
+    $seconds = $totalSeconds % 60;
+    @endphp
+<td>{{ $minutes }} min {{ $seconds }} sec</td>
                           </tr>
                           <tr>
                             <td>CALL DATE</td>
