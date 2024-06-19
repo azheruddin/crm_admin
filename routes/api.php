@@ -29,14 +29,18 @@ Route::post('/lead_feedback', [LeadController::class, 'lead_feedback']);
 
 
 
-Route::post('/add_calls',[ApiController::class,'add_calls'])->name('add_calls');
-Route::post('/add_call_logs',[ApiController::class,'add_call_logs'])->name('add_call_logs');
+Route::post('/add_calls', [ApiController::class, 'add_calls'])->name('add_calls');
+Route::post('/add_call_logs', [ApiController::class, 'add_call_logs'])->name('add_call_logs');
 
-Route::post('/lead_calls',[ApiController::class,'lead_calls'])->name('lead_calls');
+Route::post('/lead_calls', [ApiController::class, 'lead_calls'])->name('lead_calls');
 
 Route::post('/login', [ApiController::class, 'login']);
 
 Route::get('/lead_by_employee', [ApiController::class, 'lead_by_employee']);
+Route::get('/lead_by_id', [ApiController::class, 'lead_by_id']);
+
+Route::put('lead/{id}', [ApiController::class, 'update_lead']);
+
 
 Route::get('/leads_Count', [ApiController::class, 'leads_Count']);
 
@@ -47,4 +51,4 @@ Route::get('/leads_Count', [ApiController::class, 'leads_Count']);
 
 
 
- 
+

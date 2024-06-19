@@ -54,7 +54,7 @@ Route::get('/employees/{id}/toggle', [EmployeeController::class, 'toggleActive']
 
 
 
-Route::get('/call_history',[CallHistoryController::class, 'showCallHistory'])->name('call_history');
+Route::get('/call_history',[CallHistoryController::class, 'filterCallHistoryByEmployee'])->name('call_history');
 
 Route::get('/call_history_detail', [CallHistoryController::class, 'callHistoryDetail'])->name('call_history_detail');
 
@@ -62,7 +62,7 @@ Route::get('/call_history_detail', [CallHistoryController::class, 'callHistoryDe
 
 Route::get('/employee_call_history',[CallHistoryController::class, 'callHistoryByEmployee'])->name('employee_call_history');
 
-Route::get('/leads_feedback',[LeadsController::class, 'showLeadsFeedback'])->name('leads_feedback');
+Route::get('/leads_feedback',[LeadsController::class, 'filterLeadsByEmployee'])->name('leads_feedback');
 
 Route::get('/leadsfeedback_detail', [LeadsController::class, 'leadsFeedbackDetail'])->name('leadsfeedback_detail');
 
@@ -79,6 +79,10 @@ Route::get('/today_call_history_detail', [CallHistoryController::class, 'todayca
 
 
 
+<<<<<<< HEAD
+=======
+Route::get('/filter_call_history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
+>>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
 
 Route::get('/filter_leads', [LeadsController::class, 'filterLeads'])->name('filter_leads');
 Route::get('/today_leads', [LeadsController::class, 'todayLeads'])->name('today_leads');

@@ -6,6 +6,38 @@
                 <div class="card">
                   <div class="card-body">
                   <h4 class="card-title text-primary">Leads Feedback</h4><hr>
+                  <form action="{{ route('leads_feedback') }}" method="GET">
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              
+              <label for="from_date">From Date</label>
+              <input type="date" class="form-control" id="from_date" name="from_date"
+          value="{{ request('from_date') }}">
+          
+              <label for="to_date">To Date</label>
+              <input type="date" class="form-control" id="to_date" name="to_date"
+          value="{{ request('to_date') }}">
+            </div>
+
+            
+            <div class="form-group col-md-3">
+                            <label for="employee_id">Employee</label>
+                            <select class="form-control" id="employee_id" name="employee_id">
+                                <option value="">Select Employee</option>
+                                @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                                    {{ $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+            <div class="form-group col-md-4">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                        </div>
+          </div>
+        </form>
+                    
                    
                     <!-- table goes here -->
                     

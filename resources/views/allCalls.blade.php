@@ -6,7 +6,41 @@
                 <div class="card">
                   <div class="card-body">
                   <h4 class="card-title text-primary">Call History</h4><hr>
+<<<<<<< HEAD
 
+=======
+                  <form action="{{ route('call_history') }}" method="GET">
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              
+              <label for="from_date">From Date</label>
+              <input type="date" class="form-control" id="from_date" name="from_date"
+          value="{{ request('from_date') }}">
+          
+              <label for="to_date">To Date</label>
+              <input type="date" class="form-control" id="to_date" name="to_date"
+          value="{{ request('to_date') }}">
+            </div>
+
+            
+            <div class="form-group col-md-3">
+                            <label for="employee_id">Employee</label>
+                            <select class="form-control" id="employee_id" name="employee_id">
+                                <option value="">Select Employee</option>
+                                @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                                    {{ $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+            <div class="form-group col-md-4">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                        </div>
+          </div>
+        </form>
+>>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
                     <!-- table goes here -->
                     
 
@@ -22,11 +56,20 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($CallHistory as $calls)
+        @foreach($callHistories as $calls)
         <tr>
          <td>{{ $calls->phone }}</td>
             <td>{{ $calls->type }}</td>
+<<<<<<< HEAD
             <td>{{ $calls->call_duration }}</td> 
+=======
+            @php
+    $totalSeconds = $calls->call_duration;
+    $minutes = floor($totalSeconds / 60);
+    $seconds = $totalSeconds % 60;
+    @endphp
+<td>{{ $minutes }} min {{ $seconds }} sec</td>
+>>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
              <td>{{ $calls->created_at }}</td> 
             @if(isset($calls->employee->name) && $calls->employee->name != null)
              <td>{{ $calls->employee->name  }}</td> 

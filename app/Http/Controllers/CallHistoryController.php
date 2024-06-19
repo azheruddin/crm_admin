@@ -21,7 +21,7 @@ class CallHistoryController extends Controller
         //    return blade
     }
 
-   
+    
 
     public function callHistoryByEmployee(Request $request)
 {
@@ -75,6 +75,48 @@ class CallHistoryController extends Controller
         return view('todayCalls', compact('callHistories'));
     }
 
+
+
+// filter by employee
+public function filterCallHistoryByEmployee(Request $request)
+
+{
+    // Validate incoming request data
+    $validatedData = $request->validate([
+        'from_date' => 'nullable|date',
+        'to_date' => 'nullable|date',
+        'employee_id' => 'nullable|integer',
+    ]);
+
+    // Start query with eager loading of employee
+    $query = CallHistory::with('employee');
+
+    // Filter by from_date if provided
+    if ($request->filled('from_date')) {
+        $query->whereDate('created_at', '>=', $validatedData['from_date']);
+    }
+
+    // Filter by to_date if provided
+    if ($request->filled('to_date')) {
+        $query->whereDate('created_at', '<=', $validatedData['to_date']);
+    }
+
+    // Filter by employee_id if provided
+    if ($request->filled('employee_id')) {
+        $query->where('employee_id', $validatedData['employee_id']);
+    }
+
+    // Retrieve filtered call histories ordered by id desc
+    $callHistories = $query->orderBy('id', 'desc')->get();
+
     
-  
+
+    // Load active callers
+    $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
+
+    // Return view with filtered call histories and active employees
+    return view('allCalls', compact('callHistories', 'employees'));
+}
+
+
 }

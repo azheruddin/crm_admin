@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Leads;
+use App\Models\Employee;
 use App\Http\Controllers\Excel;
 
 
@@ -77,6 +78,7 @@ public function todayLeads()
         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
     }
 
+<<<<<<< HEAD
     public function createLeads(Request $request)
     {
         // Validate the request data
@@ -105,6 +107,52 @@ public function todayLeads()
     
 
     
+=======
+    public function filterLeadsByEmployee(Request $request)
+    {
+        $validatedData = $request->validate([
+            'from_date' => 'nullable|date',
+            'to_date' => 'nullable|date',
+            'employee_id' => 'nullable|integer',
+        ]);
+    $query = Leads::with('employee');
+
+    // Filter by from_date if provided
+    if ($request->filled('from_date')) {
+        $query->whereDate('created_at', '>=', $validatedData['from_date']);
+    }
+
+    // Filter by to_date if provided
+    if ($request->filled('to_date')) {
+        $query->whereDate('created_at', '<=', $validatedData['to_date']);
+    }
+
+    // Filter by employee_id if provided
+    if ($request->filled('employee_id')) {
+        $query->where('employee_id', $validatedData['employee_id']);
+    }
+
+    // Retrieve filtered call histories ordered by id desc
+    $LeadsFeedback = $query->orderBy('id', 'desc')->get();
+
+    
+
+    // Load active callers
+    $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
+
+    // Return view with filtered call histories and active employees
+    return view('LeadsFeedback', compact('LeadsFeedback', 'employees'));
+}
+
+
+
+
+
+
+
+
+
+>>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
 }
 
 
