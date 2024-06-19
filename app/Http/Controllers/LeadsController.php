@@ -78,7 +78,6 @@ public function todayLeads()
         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
     }
 
-<<<<<<< HEAD
     public function createLeads(Request $request)
     {
         // Validate the request data
@@ -107,7 +106,6 @@ public function todayLeads()
     
 
     
-=======
     public function filterLeadsByEmployee(Request $request)
     {
         $validatedData = $request->validate([
@@ -152,7 +150,6 @@ public function todayLeads()
 
 
 
->>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
 }
 
 
