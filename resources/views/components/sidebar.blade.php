@@ -47,6 +47,20 @@
                 <span class="menu-title">Leads</span>
                 <i class="menu-arrow"></i>
               </a>
+
+              <!-- <div class="collapse" id="charts">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/add_leads">Add Leads</a></li>
+                </ul>
+              </div>
+             -->
+
+             <div class="collapse" id="charts">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/add_leads">Add Leads</a></li>
+                </ul>
+              </div>
+
               <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="/leads_feedback">Leads Feedback</a></li>
@@ -71,6 +85,7 @@
                 </ul>
               </div>
             </li> 
+
 
 
             

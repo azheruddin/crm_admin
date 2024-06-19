@@ -142,4 +142,6 @@ public function countEmployees()
         return redirect()->route('dashboard')->with('success', 'Employee status updated successfully');
     }
 
+    
+
 }

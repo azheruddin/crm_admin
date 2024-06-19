@@ -10,7 +10,7 @@
     <div class="card">
       <div class="card-body">
       <div class="form-group col-md-3">
-            <h4 class="card-title text-primary"> Today Call History</h4>
+            <h4 class="card-title text-primary">Today Call History</h4>
           </div>
 
 
@@ -20,22 +20,27 @@
               
               <label for="from_date">From Date</label>
               <input type="date" class="form-control" id="from_date" name="from_date"
+
           value="{{ request('from_date') }}">
           
               <label for="to_date">To Date</label>
               <input type="date" class="form-control" id="to_date" name="to_date"
+
           value="{{ request('to_date') }}">
+
             </div>
 
             <div class="form-group col-md-3">
+
             </div>
 
             <div class="form-group col-md-4">
-                            <label>&nbsp;</label>
-                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
+             <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary btn-block">Filter</button>
+
                         </div>
-          </div>
-        </form>
+                         </div>
+                         </form>
 
         <!-- table goes here -->
 
@@ -57,19 +62,15 @@
         <td>{{ $calls->phone }}</td>
         <td>{{ $calls->type }}</td>
         <td>{{ $calls->call_duration }}</td>
-        <td>{{ $calls->created_at }}</td>
+        <td>{{ $calls->created_at }}</td> ``                                                                              
         @if(isset($calls->employee->name) && $calls->employee->name != null)
       <td>{{ $calls->employee->name }}</td>
     @else
     <td></td>
   @endif
 
-        <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i>
-            class="fa fa-eye"></i></a></a>
-
-
-
-
+        <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info">
+          <i class="fa fa-eye"></i></a></td>
 
         </tr>
       @endforeach
@@ -81,6 +82,9 @@
 </div>
 @endsection
 
-
-
 <tbody>
+
+
+
+
+

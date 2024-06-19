@@ -11,13 +11,6 @@ class LeadsController extends Controller
 {
     
 
-    // public function showLeadsFeedback()
-    // {
-    //     $leadsFeedback = LeadsFeedback::orderBy('id','desc')->get();
-    //     return view('lead_calls')->with('LeadsFeedback' , $leadsFeedback);
-    // } 
-
-
     public function showLeadsFeedback()
     {
         $leadsFeedback = Leads::orderBy('id','desc')->get(); // Use the Leads model here
@@ -25,17 +18,12 @@ class LeadsController extends Controller
         
     }
 
-  
-
-
+   
 public function leadsFeedbackByEmployee(Request $request)
 {
     $leadsFeedbackByEmployee = Leads::where('employee_id', $request->employee_id)->orderBy('id', 'desc');
     return view('LeadsFeedbackByEmployee')->with('LeadsFeedbackByEmployee', $leadsFeedbackByEmployee);
 }
-
-
-
 
 
 
@@ -89,4 +77,38 @@ public function todayLeads()
         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
     }
 
+    public function createLeads(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'required|string|email|max:255|unique:leads',
+            'phone' => 'nullable|string|max:20',
+            'lead_stage' => 'required|string|max:255',
+            
+            // Add validation rules for other fields here
+        ]);
+
+        // Create a new employee instance with the validated data
+        $leads = Leads::create($validatedData);
+
+        // Redirect or return a response as needed
+        $request->session()->flash('success', 'Leads added successfully.');
+        return view('addLeads')->with('success', 'Leads added successfully.');
+
+    }
+
+    
+
+
+
+    
+
+    
 }
+
+
+    
+       
+    
+

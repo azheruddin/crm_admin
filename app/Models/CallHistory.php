@@ -24,6 +24,8 @@ class CallHistory extends Model
     // Assuming there's a belongsTo relationship with the Employee model
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id');
+
+
     }
 }

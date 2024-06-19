@@ -38,6 +38,9 @@ Route::post('/login', [ApiController::class, 'login']);
 
 Route::get('/lead_by_employee', [ApiController::class, 'lead_by_employee']);
 
+Route::get('/leads_Count', [ApiController::class, 'leads_Count']);
+
+
                                               
 
 

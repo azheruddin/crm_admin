@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CallHistory;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Carbon\Carbon; // Import Carbon class
 
@@ -20,12 +21,7 @@ class CallHistoryController extends Controller
         //    return blade
     }
 
-    // public function callHistoryByEmployee(Request $request)
-    // {
-    //     $CallHistory = CallHistory::where('employee_id', $request->employee_id)->orderBy('id', 'desc')->get();
-    //     // return view('callsByEmployee')->with('CallHistoryByEmployee', $CallHistoryByEmployee);
-    //     return view('callsByEmployee')->with('CallHistoryByEmployee', $CallHistoryByEmployee);
-    // }
+   
 
     public function callHistoryByEmployee(Request $request)
 {
@@ -79,14 +75,6 @@ class CallHistoryController extends Controller
         return view('todayCalls', compact('callHistories'));
     }
 
-
-
-
-
-
-
-
-
-
-
+    
+  
 }

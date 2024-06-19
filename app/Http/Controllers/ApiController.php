@@ -191,4 +191,23 @@ public function lead_by_employee(Request $request){
        return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
    }
 }
+
+
+//leads counter
+public function leads_Count(Request $request )
+{
+
+    $totalLeads = Leads::all()->count();
+    $hotLeads = Leads::where('lead_stage', 'hot')->count();
+    $interestedLeads = Leads::where('lead_stage', 'interested')->count();
+    $notInterestedLeads = Leads::where('lead_stage', 'not_interested')->count();
+
+    return response()->json([
+        'status' => 'S',
+        'totalLeads' => $totalLeads,
+        'hotLeads' => $hotLeads,
+        'interestedLeads' => $interestedLeads,
+        'notInterestedLeads' => $notInterestedLeads,
+    ]);
+}
 }
