@@ -64,6 +64,8 @@ class CallHistoryController extends Controller
     {
         $query = CallHistory::with('employee');
 
+        
+
         if ($request->filled('from_date')) {
             $query->whereDate('created_at', '>=', $request->input('from_date'));
         }
