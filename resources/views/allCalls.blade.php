@@ -6,9 +6,6 @@
                 <div class="card">
                   <div class="card-body">
                   <h4 class="card-title text-primary">Call History</h4><hr>
-<<<<<<< HEAD
-
-=======
                   <form action="{{ route('call_history') }}" method="GET">
           <div class="form-row">
             <div class="form-group col-md-3">
@@ -40,7 +37,6 @@
                         </div>
           </div>
         </form>
->>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
                     <!-- table goes here -->
                     
 
@@ -60,16 +56,12 @@
         <tr>
          <td>{{ $calls->phone }}</td>
             <td>{{ $calls->type }}</td>
-<<<<<<< HEAD
-            <td>{{ $calls->call_duration }}</td> 
-=======
             @php
     $totalSeconds = $calls->call_duration;
     $minutes = floor($totalSeconds / 60);
     $seconds = $totalSeconds % 60;
     @endphp
 <td>{{ $minutes }} min {{ $seconds }} sec</td>
->>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
              <td>{{ $calls->created_at }}</td> 
             @if(isset($calls->employee->name) && $calls->employee->name != null)
              <td>{{ $calls->employee->name  }}</td> 
