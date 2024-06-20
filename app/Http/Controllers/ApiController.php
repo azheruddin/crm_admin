@@ -162,7 +162,7 @@ class ApiController extends Controller
     // show leads by employee
     public function lead_by_employee(Request $request)
     {
-        $leads = Leads::where('employee_id', $request->employee_id)->orderBy('id', 'desc')->get();
+        $leads = Leads::where('employee_id', $request->employee_id)->where('is_deleted', 0)->orderBy('id', 'desc')->get();
         $data_record = array();
         foreach ($leads as $row) {
 
@@ -192,4 +192,130 @@ class ApiController extends Controller
        return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
    }
 }
+
+public function lead_by_id(Request $request){
+    $leads = Leads::where('id', $request->id)->where('is_deleted', 0)->first();
+    $data_record = []; // Initialize data record array
+    
+    if($leads){
+        $data_record = [
+            'id' => $leads->id,
+            'customer_name' => $leads->customer_name,
+            'customer_email' => $leads->customer_email,
+            'phone' => $leads->phone,
+            'lead_stage' => $leads->lead_stage,
+            'feedback' => $leads->feedback,
+            'expected_revenue' => $leads->expected_revenue,
+            'notes' => $leads->notes,
+            'next_follow_up' => $leads->next_follow_up,
+            'employee_id' => $leads->employee_id,
+        ];
+      
+    }
+   
+    if ($leads != null && $request->id != null) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $data_record,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
+    }
+}
+
+public function update_lead(Request $request, $id)
+{
+    // Find the lead by ID
+    $lead = Leads::find($id);
+
+    // If lead does not exist, return error response
+    if (!$lead) {
+        return response()->json(['error' => 'Lead not found'], 404);
+    }
+
+    // Update lead properties with request data
+    $lead->customer_name = $request->input('customer_name');
+    $lead->customer_email = $request->input('customer_email');
+    $lead->phone = $request->input('phone');
+    $lead->employee_id = $request->input('employee_id');
+    $lead->notes = $request->input('notes');
+    $lead->lead_stage = $request->input('lead_stage');
+    $lead->feedback = $request->input('feedback');
+    $lead->expected_revenue = $request->input('expected_revenue');
+    $lead->next_follow_up = $request->input('next_follow_up');
+
+    // Save the updated lead
+    $lead->save();
+
+    // Return success response
+    return response()->json([
+        'message' => 'Lead updated successfully',
+        'data' => $lead
+    ], 200);
+}
+
+
+public function delete_lead(Request $request, $id)
+{
+    // Find the lead by ID
+    $lead = Leads::find($id);
+
+    // If lead does not exist, return error response
+    if (!$lead) {
+        return response()->json(['error' => 'Lead not found'], 404);
+    }
+
+    $lead->delete_reason = $request->input('reason');
+    $lead->employee_id = $request->input('employee_id');
+    $lead->is_deleted = 1;
+
+    // Save the updated lead
+    $lead->save();
+
+    // Return success response
+    return response()->json([
+        'message' => 'Lead Delete successfully'
+    ], 200);
+}
+
+
+public function leads_count(Request $request)
+{
+    $employee_id = $request->input('employee_id');
+
+    // leads
+    $totalLeads = Leads::where('employee_id', $employee_id)
+                       ->where('is_deleted', 0)
+                       ->count();
+
+    $newLeads = Leads::where('employee_id', $employee_id)
+                     ->where('lead_stage', 'new')
+                     ->where('is_deleted', 0)
+                     ->count();
+
+    $hotLeads = Leads::where('employee_id', $employee_id)
+                     ->where('lead_stage', 'hot')
+                     ->where('is_deleted', 0)
+                     ->count();
+
+    $interested = Leads::where('employee_id', $employee_id)
+                       ->where('lead_stage', 'interested')
+                       ->where('is_deleted', 0)
+                       ->count();
+
+    $notInterested = Leads::where('employee_id', $employee_id)
+                          ->where('lead_stage', 'not_interested')
+                          ->where('is_deleted', 0)
+                          ->count();
+
+    // Return the counts as JSON response
+    return response()->json([
+        'totalLeads' => $totalLeads,
+        'newLeads' => $newLeads,
+        'hotLeads' => $hotLeads,
+        'interested' => $interested,
+        'notInterested' => $notInterested,
+    ]);
+}
+
 }

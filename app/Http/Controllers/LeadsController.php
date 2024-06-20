@@ -102,6 +102,10 @@ public function todayLeads()
     
 
 
+
+    
+
+    
     public function filterLeadsByEmployee(Request $request)
     {
         $validatedData = $request->validate([
@@ -178,10 +182,5 @@ public function deleteLeads(Request $request)
         // Redirect back with success message
         return redirect()->back()->with('success', 'Lead deleted successfully!');
     }
-
-
-
-
-    
 
 }
