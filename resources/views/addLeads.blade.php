@@ -14,12 +14,12 @@
                     <h4 class="card-title text-primary">Add New Leads</h4>
                
                     <hr>
-                    <form class="forms-sample" method="POST" action="{{ route('leads.store') }}">
+                    <form class="forms-sample" method="POST" action="{{ route('leads.store') }}"> 
             @csrf
                     
                       <div class="form-group">
                         <label for="exampleInputUsername1">Name</label>
-                        <input type="text" class="form-control" id="exampleInputUsername1" name="customer_name" placeholder="Leads">
+                        <input type="text" class="form-control" id="exampleInputUsername1" name="customer_name" placeholder="Leads"> 
                       </div>
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
@@ -29,17 +29,20 @@
                         <label for="exampleInputEmail1">Phone Number</label>
                         <input type="number" class="form-control" id="exampleInputEmail1" name="phone" placeholder="Enter Phone Number">
                       </div>
+
                       <div class="form-group">
-                      <label>Lead Stage</label>
-                      <select class="form-control" name="lead_stage">
-                        <option value="hot">Hot</option>
-                        <option value="interested">Interested</option>
-                        <option value="notinterested">NotInterested</option>
-                      </select>
+                      <label>State</label>
+                      <select onchange="print_city('state', this.selectedIndex);" id="city" class="form-control"  name="state" required></select>
+
                     </div>
-                      
-                     
-                      <div class="form-check form-check-flat form-check-primary">
+
+                      <div class="form-group">
+                      <label>City</label>
+                      <select id ="state" class="form-control" required name="city"></select> 
+
+                    </div>
+
+                      <div class="form-check form-check-flat form-check-primary"> 
                         <label class="form-check-label">
                       </div>
                       <button type="submit" class="btn btn-primary me-2">Add Leads</button>

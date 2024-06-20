@@ -8,14 +8,12 @@
                   
                     <h4 class="card-title text-primary">LeadsFeedback Details 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">    
-                    <!-- <a href="/leadsfeedback_detail"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a> -->
                     <a href="/leads_feedback"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a>
 
                     </div>
                     <hr></h4>  
                     
                    
-                    <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
                     </p>
                     <div class="table-responsive">
                       <table class="table table-hover">
@@ -48,9 +46,14 @@
 
                           <tr>
                             <td>Employee</td>
-                            <td>{{ $leads->employee->name }}</td>
-                          </tr>
-                          
+                            <td>
+                                @if ($leads->employee)
+                                    {{ $leads->employee->name }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+                        </tr>
                           
                         </tbody>
                       </table>

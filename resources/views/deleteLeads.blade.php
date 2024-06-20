@@ -5,7 +5,7 @@
               <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                  <h4 class="card-title text-primary">Leads Feedback</h4><hr>
+                  <h4 class="card-title text-primary">Deleted Leads</h4><hr>
                   <form action="{{ route('leads_feedback') }}" method="GET">
           <div class="form-row">
             <div class="form-group col-md-3">
@@ -48,11 +48,7 @@
                 <th>CUSTOMER NAME</th>
                 <th>EMAIL</th>
                 <th>PHONE</th>
-                 <th>LEAD STAGE</th>
-               <th>LEAD DATE</th>
-               <!-- <th>EXPECTED REVENUE</th> -->
-               <th>NEXT FOLLOW UP</th>
-               <!-- <th>NOTES</th> -->
+                 <th>DELETE REASON</th>
                <th>EMPLOYEE</th>
                <th>ACTION</th>
 
@@ -64,11 +60,7 @@
             <td>{{ $leads->customer_name }}</td>
             <td>{{ $leads->customer_email }}</td>
             <td>{{ $leads->phone }}</td>
-            <td>{{ $leads->lead_stage }}</td> 
-             <td>{{ $leads->created_at }}</td> 
-             <!-- <td>{{ $leads->expected_revenue }}</td>  -->
-             <td>{{ $leads->next_follow_up }}</td> 
-             <!-- <td>{{ $leads->notes }}</td>  -->
+            <td>{{ $leads->delete_reason }}</td>  
              <td>{{ $leads->employee_id }}</td> 
 
              
@@ -78,10 +70,13 @@
              <td></td> 
              @endif
 
-             
+             <td><a href="{{ route('leads_delete', ['lead_id' => $leads->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
 
-             <td><a href="{{ route('leadsfeedback_detail', ['lead_id' => $leads->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
 
+
+           
+
+           
         </tr>
         @endforeach
 </tbody>

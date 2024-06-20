@@ -62,8 +62,7 @@ public function todayLeads()
         return view('todayLeads', compact('todayLeads'));
     }
 
-
-
+ 
     public function filterLeads(Request $request)
     {
         // Get the date range from the request
@@ -78,7 +77,6 @@ public function todayLeads()
         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
     }
 
-<<<<<<< HEAD
     public function createLeads(Request $request)
     {
         // Validate the request data
@@ -86,7 +84,8 @@ public function todayLeads()
             'customer_name' => 'required|string|max:255',
             'customer_email' => 'required|string|email|max:255|unique:leads',
             'phone' => 'nullable|string|max:20',
-            'lead_stage' => 'required|string|max:255',
+            'state' => 'required|string|max:255', // Add validation rule for state
+            'city' => 'required|string|max:255', // Add validation rule for city
             
             // Add validation rules for other fields here
         ]);
@@ -103,11 +102,6 @@ public function todayLeads()
     
 
 
-
-    
-
-    
-=======
     public function filterLeadsByEmployee(Request $request)
     {
         $validatedData = $request->validate([
@@ -133,7 +127,7 @@ public function todayLeads()
     }
 
     // Retrieve filtered call histories ordered by id desc
-    $LeadsFeedback = $query->orderBy('id', 'desc')->get();
+    $LeadsFeedback = $query->where('is_deleted', 0)->orderBy('id', 'desc')->get();
 
     
 
@@ -144,19 +138,50 @@ public function todayLeads()
     return view('LeadsFeedback', compact('LeadsFeedback', 'employees'));
 }
 
+//code for delete leads
+
+
+public function deleteLeads(Request $request)
+    {
+        // Retrieve all employees for the filter dropdown
+        $employees = Employee::all();
+
+        // Prepare the base query for fetching leads
+        $query = Leads::query()->where('is_deleted', 1);
+
+        // Apply filters if provided in the request
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        if ($request->filled('employee_id')) {
+            $query->where('employee_id', $request->employee_id);
+            
+        }
+
+        // Fetch the leads with employee relations
+        $LeadsFeedback = $query->with('employee')->get();
+
+        // Return the view with leads and employees data
+        return view('deleteLeads', compact('LeadsFeedback', 'employees'));
+    }
+
+    public function deleteLead($lead_id)
+    {
+        // Soft delete the lead
+        Leads::findOrFail($lead_id)->delete();
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Lead deleted successfully!');
+    }
 
 
 
 
+    
 
-
-
-
->>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
 }
-
-
-    
-       
-    
-

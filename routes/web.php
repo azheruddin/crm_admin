@@ -79,10 +79,9 @@ Route::get('/today_call_history_detail', [CallHistoryController::class, 'todayca
 
 
 
-<<<<<<< HEAD
-=======
+
 Route::get('/filter_call_history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
->>>>>>> 8a5ed4c670b9fb836099f3ebad1f23f2bc43b505
+
 
 Route::get('/filter_leads', [LeadsController::class, 'filterLeads'])->name('filter_leads');
 Route::get('/today_leads', [LeadsController::class, 'todayLeads'])->name('today_leads');
@@ -90,6 +89,10 @@ Route::get('/today_leads', [LeadsController::class, 'todayLeads'])->name('today_
 Route::get('/dashboard', [CommonController::class, 'dashBoardCounts'])->name('dashboard');
 
 Route::post('/add_leads', [LeadsController::class, 'createLeads'])->name('leads.store');
+
+
+Route::get('/leads_delete', [LeadsController::class, 'deleteLeads'])->name('leads_delete');
+
 
 
 

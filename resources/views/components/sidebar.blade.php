@@ -84,6 +84,13 @@
                   <li class="nav-item"> <a class="nav-link" href="upload">Upload Leads</a></li>
                 </ul>
               </div>
+             
+
+            <div class="collapse" id="charts">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="leads_delete">Deleted Leads</a></li>
+                </ul>
+              </div>
             </li> 
 
 
