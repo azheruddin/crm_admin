@@ -40,9 +40,13 @@ Route::get('/lead_by_employee', [ApiController::class, 'lead_by_employee']);
 Route::get('/lead_by_id', [ApiController::class, 'lead_by_id']);
 
 Route::put('lead/{id}', [ApiController::class, 'update_lead']);
+Route::put('lead_delete/{id}', [ApiController::class, 'delete_lead']);
 
 
-Route::get('/leads_Count', [ApiController::class, 'leads_Count']);
+// Route::get('/leads_Count', [ApiController::class, 'leads_Count']);
+
+
+Route::get('/leads_count', [ApiController::class, 'leads_count']);
 
 
                                               
