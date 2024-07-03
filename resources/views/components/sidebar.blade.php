@@ -130,10 +130,24 @@
               </div>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="/">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <a class="nav-link" :href="route('logout')" onclick="event.preventDefault();this.closest('form').submit();">
+                  <i class="menu-icon mdi mdi-file-document"></i>
+                  <span class="menu-title">Logout</span>
+                </a>
+
+                <!-- <x-dropdown-link :href="route('logout')"
+                        onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                    {{ __('Log Out') }}
+                </x-dropdown-link> -->
+            </form>
+              <!-- <a class="nav-link" href="/">
                 <i class="menu-icon mdi mdi-file-document"></i>
                 <span class="menu-title">Logout</span>
-              </a>
+              </a> -->
             </li>
           </ul>
         </nav>
