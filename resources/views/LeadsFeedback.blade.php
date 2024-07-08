@@ -69,8 +69,7 @@
              <!-- <td>{{ $leads->expected_revenue }}</td>  -->
              <td>{{ $leads->next_follow_up }}</td> 
              <!-- <td>{{ $leads->notes }}</td>  -->
-             <td>{{ $leads->employee_id }}</td> 
-
+ 
              
              @if(isset($leads->employee->name) && $leads->employee->name != null)
              <td>{{ $leads->employee->name }}</td> 

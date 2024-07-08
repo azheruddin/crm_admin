@@ -6,13 +6,16 @@
                 <div class="card">
                   <div class="card-body">
                   
-                    <h4 class="card-title text-primary">LeadsFeedback Details 
+                    <h4 class="card-title text-primary">Show Delete Leads Details 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">    
-                    <a href="/leads_feedback"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a>
+                    <!-- <a href="/leadsdelete_detail"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a> -->
+                    <a href='/leads_delete'button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a>
+
 
                     </div>
                     <hr></h4>  
                     
+                   
                     </p>
                     <div class="table-responsive">
                       <table class="table table-hover">
@@ -30,18 +33,12 @@
                             <td>Phone</td>
                             <td>{{ $leads->phone }}</td>
                           </tr>
+                          
+                         
                           <tr>
-                            <td>Lead Stage</td>
-                            <td>{{ $leads->lead_stage }}</td>
-                          </tr>
-                          <tr>
-                            <td>Lead Date</td>
-                            <td>{{ $leads->created_at }}</td>
-                          </tr>
-                          <tr>
-                            <td>Next_Follow_Up</td>
-                            <td>{{ $leads->next_follow_up }}</td>
-                          </tr>
+                            <td>Delete Reason</td>
+                            <td>{{ $leads->delete_reason }}</td>  
+                            </tr>
 
                           <tr>
                             <td>Employee</td>
@@ -62,21 +59,6 @@
               </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                       
+                   
                  
 @endsection

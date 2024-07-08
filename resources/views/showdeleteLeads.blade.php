@@ -5,7 +5,7 @@
               <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                  <h4 class="card-title text-primary">Deleted Leads</h4><hr>
+                  <h4 class="card-title text-primary">Show Deleted Leads</h4><hr>
                   <form action="{{ route('leads_feedback') }}" method="GET">
           <div class="form-row">
             <div class="form-group col-md-3">
@@ -61,7 +61,6 @@
             <td>{{ $leads->customer_email }}</td>
             <td>{{ $leads->phone }}</td>
             <td>{{ $leads->delete_reason }}</td>  
-             <td>{{ $leads->employee_id }}</td> 
 
              
              @if(isset($leads->employee->name) && $leads->employee->name != null)
@@ -70,7 +69,11 @@
              <td></td> 
              @endif
 
-             <td><a href="{{ route('leads_delete', ['lead_id' => $leads->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
+             <td>
+    <a href="{{ route('showleadsdelete_detail', ['lead_id' => $leads->id]) }}" class="btn btn-info">
+        <i class="fa fa-eye"></i>
+    </a>
+</td>
 
 
 

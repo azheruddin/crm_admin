@@ -119,4 +119,46 @@ public function filterCallHistoryByEmployee(Request $request)
 }
 
 
+
+    // Method to fetch today's call history
+    public function outgoingCall()
+    {
+        // Fetch today's date
+        $today = now()->format('Y-m-d');
+        
+        // Fetch call histories for today
+        $callHistories = CallHistory::whereDate('created_at', $today)->where('type', 'outgoing')->get();
+        
+        
+        return view('outgoing', compact('callHistories',));
+    }
+
+   
+
+    public function incomingCall()
+    {
+        // Fetch today's date
+        $today = now()->format('Y-m-d');
+        
+        // Fetch call histories for today
+        $callHistories = CallHistory::whereDate('created_at', $today)->where('type', 'incoming')->get();
+        
+        
+        return view('incoming', compact('callHistories',));
+    }
+
+
+    public function missedCall()
+    {
+        // Fetch today's date
+        $today = now()->format('Y-m-d');
+        
+        // Fetch call histories for today
+        $callHistories = CallHistory::whereDate('created_at', $today)->where('type', 'missed')->get();
+        
+        
+        return view('missed', compact('callHistories',));
+    }
+
+
 }

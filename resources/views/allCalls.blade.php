@@ -57,12 +57,8 @@
         <tr>
          <td>{{ $calls->phone }}</td>
             <td>{{ $calls->type }}</td>
-            @php
-    $totalSeconds = $calls->call_duration;
-    $minutes = floor($totalSeconds / 60);
-    $seconds = $totalSeconds % 60;
-    @endphp
-<td>{{ $minutes }} min {{ $seconds }} sec</td>
+            <td>{{ $calls->call_duration }}</td>
+          
              <td>{{ $calls->created_at }}</td> 
             @if(isset($calls->employee->name) && $calls->employee->name != null)
              <td>{{ $calls->employee->name  }}</td> 

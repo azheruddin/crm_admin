@@ -11,10 +11,26 @@ class Leads extends Model
 
 
 {
-    use HasFactory;
+    use HasFactory; 
+
+    
 
     protected $table = "leads";
-    protected $fillable = ['customer_name', 'customer_email', 'phone', 'state','city'];
+    
+    protected $fillable = ['customer_name', 'customer_email', 'phone', 'state','city']; 
+
+    
+
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 
 
     
@@ -23,16 +39,8 @@ class Leads extends Model
         return $this->belongsTo(Employee::class);
     }
 
-
-    // {
-    //     use SoftDeletes;
+         
     
-    //     // Other model properties and methods
-    // }
-
-
-
-
-
-
 }
+
+

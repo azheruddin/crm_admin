@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-              <div class="col-md-6 grid-margin stretch-card">
+              <!-- <div class="col-md-6 grid-margin stretch-card"> -->
     
                 <div class="card">
                 @if(session('success'))
@@ -14,7 +14,7 @@
                     <h4 class="card-title text-primary">Add New Leads</h4>
                
                     <hr>
-                    <form class="forms-sample" method="POST" action="{{ route('leads.store') }}"> 
+                    <form class="forms-sample" method="POST" action="{{ route('leads.store') }} "> 
             @csrf
                     
                       <div class="form-group">
@@ -31,25 +31,49 @@
                       </div>
 
                       <div class="form-group">
-                      <label>State</label>
-                      <select onchange="print_city('state', this.selectedIndex);" id="city" class="form-control"  name="state" required></select>
-
+                    <label for="state">State</label>
+                    <select class="form-control" id="state" name="state" onchange="fetchCities(this.value)">
+                        <option value="">Select State</option>
+                        @foreach($States as $state)
+                            <option value="{{ $state->state_id }}">{{ $state->state_name }}</option>  
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                        <label for="city">City</label>
+                        <select class="form-control" id="city" name="city">
+                            <option value="">Select City</option>
+                            @foreach($Cities as $city)
+                                <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>  
+                            @endforeach
+                        </select>
                     </div>
-
-                      <div class="form-group">
-                      <label>City</label>
-                      <select id ="state" class="form-control" required name="city"></select> 
-
-                    </div>
-
-                      <div class="form-check form-check-flat form-check-primary"> 
-                        <label class="form-check-label">
-                      </div>
+               
                       <button type="submit" class="btn btn-primary me-2">Add Leads</button>
                       <button class="btn btn-light">Cancel</button>
                     </form>
                   </div>
                 </div>
-              </div>
+              <!-- </div> -->
 </div>
+
+<script>
+function fetchCities(stateId) {
+    if (stateId) {
+        alert(stateId);
+        fetch(`/get-cities/${stateId}`)
+            .then(response => response.json())
+            .then(data => {
+                const citySelect = document.getElementById('city');
+                citySelect.innerHTML = '<option value="">Select City</option>';
+                data.forEach(city => {
+                    citySelect.innerHTML += `<option value="${city.city_id}">${city.city_name}</option>`;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById('city').innerHTML = '<option value="">Select City</option>';
+    }
+}
+</script>
 @endsection
