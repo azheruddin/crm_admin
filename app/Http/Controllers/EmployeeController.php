@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Leads;
 use App\Models\CallHistory;
+use App\Models\State;
+use App\Models\City;
 use Carbon\Carbon;
 
 
@@ -16,12 +18,20 @@ class EmployeeController extends Controller
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:employees',
+            'email' => 'required|string|email|max:255',
             'phone' => 'nullable|string|max:20',
             'type' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             // Add validation rules for other fields here
         ]);
+
+        
+    $existEmployee = Employee::where('phone', $validatedData['phone'])->first();
+    if($existEmployee){
+
+        $request->session()->flash('success', 'Phone number already exist.');
+        return view('addEmployee')->with('success', 'Employee added successfully.');
+    }else{
 
         // Create a new employee instance with the validated data
         $employee = Employee::create($validatedData);
@@ -29,7 +39,7 @@ class EmployeeController extends Controller
         // Redirect or return a response as needed
         $request->session()->flash('success', 'Employee added successfully.');
         return view('addEmployee')->with('success', 'Employee added successfully.');
-
+    }
     }
 
 
@@ -103,34 +113,6 @@ public function destroy($id)
 }
 
 
-// Controller: EmployeeController.php
-public function countEmployees()
-    {
-        // Fetch the counts for total, active, and deactivated employees
-        $totalEmployees = Employee::count();
-        $activeEmployees = Employee::where('is_active', 1)->count();
-        $deactivatedEmployees = Employee::where('is_active', 0)->count();
-    
-        // Get today's date
-        $today = Carbon::today();
-    
-        // Fetch the counts for different call types created today
-        $incomingCallsToday = CallHistory::where('call_type', 'Incoming')->whereDate('created_at', $today)->count();
-        $outgoingCallsToday = CallHistory::where('call_type', 'Outgoing')->whereDate('created_at', $today)->count();
-        $missedCallsToday = CallHistory::where('call_type', 'Missed')->whereDate('created_at', $today)->count();
-        $todayCalls = CallHistory::whereDate('created_at', $today)->count();
-
-        // leads
-        $totalLeads = Leads::whereDate('created_at', $today)->count();
-        $hotLeads = Leads::where('lead_stage', 'hot')->whereDate('created_at', $today)->count();
-        $interested = Leads::where('lead_stage', 'hot')->whereDate('created_at', $today)->count();
-        $notInterested = Leads::where('lead_stage', 'hot')->whereDate('created_at', $today)->count();
-       
-    
-        // Return the view with the counts
-        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees', 'incomingCallsToday', 'outgoingCallsToday', 'missedCallsToday', 'todayCalls', 'totalLeads', 'hotLeads', 'interested', 'notInterested'));
-    }
-
     public function toggleActives($id)
     {
         // Find the employee by ID and toggle the active status
@@ -143,5 +125,44 @@ public function countEmployees()
     }
 
     
+    public function showCallerEmployee(Request $request)
+    {
+    
+    $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
+
+    $States = State::get(); 
+    // Return view with filtered call histories and active employees
+    $Cities = City::get(); // Fetch all cities from the database
+
+    return view( 'assignLeads', compact( 'employees', 'States','Cities'));
+    }
+
+    
+/////////////////
+public function editPassword($id)
+{
+    $employee = Employee::findOrFail($id);
+    return view('updatePassword', compact('employee'));
+}
+
+public function updatePassword(Request $request, $id)
+{
+    $validatedData = $request->validate([
+     
+        'password' => 'nullable|string',
+    ]);
+
+    $employee = Employee::findOrFail($id);
+    
+    $employee->password =  $validatedData['password'];
+
+    
+
+    $employee->save();
+    $request->session()->flash('success', 'Password Change successfully.');
+    return redirect()->route('show_employee')->with('success', 'Password Change successfully.');
+}
+
+/////////////////////////////////////
 
 }

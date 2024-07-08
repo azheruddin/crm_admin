@@ -46,6 +46,9 @@
             @method('DELETE')
             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');"><i class="fa fa-trash"></i></button>
           </form>
+
+          <a href="{{ route('edit_password', ['id' => $employee->id]) }}" class="btn btn-secondary"><i class="fa fa-key"></i></a> 
+
         </td>
         </tr>
         @endforeach

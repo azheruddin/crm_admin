@@ -14,11 +14,10 @@
             <div class="form-group col-md-3">
               
               <label for="from_date">From Date</label>
-              <input type="date" class="form-control" id="from_date" name="from_date"
-          value="{{ request('from_date') }}">
+              <input type="date" class="form-control" id="from_date" name="from_date" value="{{ request('from_date') }}">
           
               <label for="to_date">To Date</label>
-              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}">
+              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}"> 
             </div>
 
             <div class="form-group col-md-3">

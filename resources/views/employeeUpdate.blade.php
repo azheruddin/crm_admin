@@ -30,10 +30,10 @@
                             <option value="other" {{ $employee->type == 'other' ? 'selected' : '' }}>Other</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="exampleInputPassword1">Password (leave blank to keep current password)</label>
                         <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
-                    </div>
+                    </div> -->
                     <button type="submit" class="btn btn-primary me-2">Update Employee</button> 
                     <button class="btn btn-light">Cancel</button>
                 </form>

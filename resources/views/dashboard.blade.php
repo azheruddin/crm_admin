@@ -79,7 +79,7 @@
                   <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
                 </div>
                 <div>
-                  <p class="text-small mb-2"><span class="text-primary">Outgoing</span></p>
+                  <p class="text-small mb-2"><span class="text-primary"> <a href="{{ route('outgoing_call_history') }}">Outgoing</a></span></p>
                   <h4 class="mb-0 fw-bold">{{ $outgoingCallsToday}}</h4>
                 </div>
               </div>
@@ -90,7 +90,7 @@
                   <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
                 </div>
                 <div>
-                  <p class="text-small mb-2"><span class="text-primary">Incoming</span></p>
+                  <p class="text-small mb-2"><a href="{{ route('incoming_call_history') }}"><span class="text-primary">Incoming</a></span></p>
                   <h4 class="mb-0 fw-bold">{{ $incomingCallsToday}}</h4>
                 </div>
               </div>
@@ -102,7 +102,7 @@
                   <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
                 </div>
                 <div>
-                  <p class="text-small mb-2"><span class="text-primary">Missed</span></p>
+                  <p class="text-small mb-2"><a href="{{ route('missed_call_history') }}"><span class="text-primary">Missed</a></span></p>
                   <h4 class="mb-0 fw-bold">{{ $missedCallsToday}}</h4>
                 </div>
               </div>
