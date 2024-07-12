@@ -85,20 +85,43 @@ public function todayLeads()
 
     
 
-    public function createLeads(Request $request)
-    
-    {
+    // public function createLeads(Request $request)
+    // {
+    //     $States = State::get(); 
                 
-        // $validatedData = $request->validate([
-        //     'customer_name' => 'required|string|max:255',
-        //     'customer_email' => 'required|email|max:255',
-        //     'phone' => 'required|numeric',
-        //     'state_id' => 'required|exists:state,id',
-        //     'city_id' => 'required|exists:city,id',
-        // ]);
+    //     // $validatedData = $request->validate([
+    //     //     'customer_name' => 'required|string|max:255',
+    //     //     'customer_email' => 'required|email|max:255',
+    //     //     'phone' => 'required|numeric',
+    //     //     'state_id' => 'required|exists:state,id',
+    //     //     'city_id' => 'required|exists:city,id',
+    //     // ]);
 
-        // $lead = Leads::create($validatedData);
+    //     // $lead = Leads::create($validatedData);
         
+    //     $lead = Leads::create([
+    //         'customer_name' => $request['customer_name'],
+    //         'customer_email' => $request['customer_email'],
+    //         'phone' => $request['phone'],
+    //         'state' => $request['state'],
+    //         'city' => $request['city'],
+    //     ]);
+        
+
+    //     $request->session()->flash('success', 'Leads added successfully.');
+
+    //     return view('addLeads', compact('States'))->with('success', 'Leads added successfully.');
+
+        
+    // }
+
+
+    public function createLeads(Request $request)
+    {
+        // Assuming you fetch States from your database
+        $States = State::get(); // Fetch states here
+    
+        // Proceed with your code
         $lead = Leads::create([
             'customer_name' => $request['customer_name'],
             'customer_email' => $request['customer_email'],
@@ -106,14 +129,20 @@ public function todayLeads()
             'state' => $request['state'],
             'city' => $request['city'],
         ]);
-        $States = State::get(); 
-
+    
         $request->session()->flash('success', 'Leads added successfully.');
-
-        return view('addLeads', compact('States'))->with('success', 'Leads added successfully.');
-
-        
+    
+        // Pass $States to the view
+        return view('addLeads', compact('States'));
     }
+
+
+
+
+
+
+
+
 
     
     public function filterLeadsByEmployee(Request $request)
@@ -213,14 +242,16 @@ public function assignleadsToEmployee(Request $request)
         'city' => 'required|string|max:255',
     ]);
 
-    // Find the leads that match the given city and state
+    // Find the leads that match the given city and state and employee id is null
     $leads = Leads::where('city', $validatedData['city'])
                   ->where('state', $validatedData['state'])
+                  ->where('employee_id', null)
                   ->get();
 
     // Check if any leads are found
     if ($leads->isEmpty()) {
-        return redirect()->back()->with('error', 'No leads found for the specified city and state.');
+        $request->session()->flash('success', 'No leads found found.');
+        return redirect()->back()->with('error', 'No leads found found.');
     }
 
     // Update the employee_id for each lead found
@@ -234,12 +265,12 @@ public function assignleadsToEmployee(Request $request)
     return redirect()->back()->with('success', 'Leads updated successfully.');
 }
 
-public function assignLeads(Request $request)
-{
-    // Handle the lead assignment logic here
-    // Example: Lead::create($request->all());
-    return redirect()->route('assign_leads')->with('success', 'Lead assigned successfully');
-}
+// public function assignLeads(Request $request)
+// {
+//     // Handle the lead assignment logic here
+//     // Example: Lead::create($request->all());
+//     return redirect()->route('assign_leads')->with('success', 'Lead assigned successfully');
+// }
 
 
 

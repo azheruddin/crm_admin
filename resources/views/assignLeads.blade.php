@@ -12,7 +12,7 @@
             <div class="card-body">
                 <h4 class="card-title text-primary">Assign Leads</h4>
                 <hr>
-                <form class="forms-sample" method="POST" action=" "> 
+                <form class="forms-sample" method="POST" action="assign_leads_employee"> 
                     @csrf
                     <div class="form-group">
                         <label for="state">State</label>

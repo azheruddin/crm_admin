@@ -14,7 +14,7 @@
                     <h4 class="card-title text-primary">Add New Leads</h4>
                
                     <hr>
-                    <form class="forms-sample" method="POST" action="{{ route('leads.store') }} "> 
+                    <form class="forms-sample" method="POST" action="{{ route('add_leads_store') }} "> 
             @csrf
                     
                       <div class="form-group">
@@ -43,9 +43,6 @@
                         <label for="city">City</label>
                         <select class="form-control" id="city" name="city">
                             <option value="">Select City</option>
-                            @foreach($Cities as $city)
-                                <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>  
-                            @endforeach
                         </select>
                     </div>
                
@@ -60,7 +57,7 @@
 <script>
 function fetchCities(stateId) {
     if (stateId) {
-        alert(stateId);
+        // alert(stateId);
         fetch(`/get-cities/${stateId}`)
             .then(response => response.json())
             .then(data => {
