@@ -68,7 +68,7 @@
                   <div id="totalVisitors1" class="progressbar-js-circle pr-2"></div>
                 </div>
                 <div>
-                  <p class="text-small mb-2"><span class="text-primary">Total</span></p>
+                  <p class="text-small mb-2"><span class="text-primary"><a href="{{ route('filter_call_history') }}">Total</a></span></p>
                   <h4 class="mb-0 fw-bold">{{ $todayCalls}}</h4>
                 </div>
               </div>

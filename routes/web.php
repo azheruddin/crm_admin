@@ -127,6 +127,10 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     
     Route::post('/add_leads_store', [LeadsController::class, 'createLeads'])->name('add_leads_store');
     Route::get('/add_leads', [LeadsController::class, 'showLeads'])->name('leads.store');
+
+    Route::get('/leads_count{$stateId}', [LeadsController::class, 'getleadsCountByState'])->name('leads_count');
+
+
 });
 
 require __DIR__.'/auth.php';

@@ -51,7 +51,7 @@
 <script>
 function fetchCities(stateId) {
     if (stateId) {
-        alert(stateId);
+        // alert(stateId);
         fetch(`/get-cities/${stateId}`)
             .then(response => response.json())
             .then(data => {

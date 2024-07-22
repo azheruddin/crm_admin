@@ -49,6 +49,17 @@ Route::put('lead_delete/{id}', [ApiController::class, 'delete_lead']);
 Route::get('/leads_count', [ApiController::class, 'leads_count']);
 
 
+
+
+Route::get('/calls_count', [ApiController::class, 'calls_count']);
+
+Route::get('/today_Call_History', [ApiController::class, 'today_Call_History']);
+
+
+
+
+
+
                                               
 
 

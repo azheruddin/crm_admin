@@ -10,7 +10,7 @@
         {{ session('success') }}
     </div>
 @endif
-                  <div class="card-body">
+                  <div class="card-body"> 
                     <h4 class="card-title text-primary">Add New Leads</h4>
                
                     <hr>

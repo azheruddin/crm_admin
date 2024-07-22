@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;  // read about this on google
 // use Illuminate\Support\Facades\Hash;
 
+use Carbon\Carbon;
+
 
 class ApiController extends Controller
 {
@@ -359,4 +361,67 @@ public function lead_by_employee(Request $request)
         ], 200);
     }
 }
+
+
+///
+
+public function calls_count(Request $request)
+{
+    $employee_id = $request->input('employee_id');
+    
+   // Get today's date
+   $today = Carbon::today();
+
+   // Fetch the counts for different call types created today
+   $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
+
+   
+
+
+     return response()->json([
+            'total' => $todayCalls,
+            'outgoing' => $outgoingCallsToday,
+            'incoming' => $incomingCallsToday,
+            'missed' => $missedCallsToday,
+        ]);
+        
+
 }
+
+
+public function today_Call_History(Request $request)
+{
+    $today = Carbon::today();
+    $employee_id = $request->input('employee_id');
+    
+    $query = CallHistory::where('employee_id', $employee_id);
+
+              //Filter by date range if provided 
+    if ($request->has('from_date') && $request->has('to_date')) {
+        $fromDate = Carbon::parse($request->input('from_date'))->startOfDay();
+        $toDate = Carbon::parse($request->input('to_date'))->endOfDay();
+        $query->whereBetween('created_at', [$fromDate, $toDate]);
+    }
+
+    // Optionally, eager load employee data if needed
+    $callHistories = $query->whereDate('created_at', $today)->get();
+
+    if (!$callHistories->isEmpty()) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $callHistories,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json([
+            'status' => 'F',
+            'errorMsg' => 'Data not found',
+        ], 200);
+    }
+}
+
+}
+
+

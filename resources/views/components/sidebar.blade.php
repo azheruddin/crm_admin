@@ -65,6 +65,13 @@
 
               <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href='/assign_leads'>Assign Leads</a></li>
+                </ul>
+              </div>
+            </li> 
+
+              <div class="collapse" id="charts">
+                <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="/leads_feedback">Leads Feedback</a></li>
                 </ul>
               </div>
@@ -94,13 +101,13 @@
                 </ul>
               </div>
 
-
               <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href='/assign_leads'>Assign Leads</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/leads_count{stateId}">Leads Count</a></li>
                 </ul>
               </div>
-            </li> 
+
+             
 
 
 
