@@ -47,6 +47,7 @@ Route::put('lead_delete/{id}', [ApiController::class, 'delete_lead']);
 
 
 Route::get('/leads_count', [ApiController::class, 'leads_count']);
+Route::get('/followup_leads', [ApiController::class, 'followup_leads']);
 
 
                                               

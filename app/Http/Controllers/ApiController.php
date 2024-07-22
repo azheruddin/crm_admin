@@ -359,4 +359,46 @@ public function lead_by_employee(Request $request)
         ], 200);
     }
 }
+
+public function followup_leads(Request $request)
+{
+    $query = Leads::where('employee_id', $request->employee_id)
+                  ->where('is_deleted', 0)
+                  ->whereNotNull('next_follow_up')
+                  ->where('next_follow_up', '>=', now())
+                  ->orderBy('id', 'desc')
+                  ->get();
+
+    $data_record = [];
+
+    foreach ($query as $row) {
+        $data_record[] = [
+            'id' => $row->id,
+            'customer_name' => $row->customer_name,
+            'customer_email' => $row->customer_email,
+            'phone' => $row->phone,
+            'lead_stage' => $row->lead_stage,
+            'feedback' => $row->feedback,
+            'expected_revenue' => $row->expected_revenue,
+            'notes' => $row->notes,
+            'next_follow_up' => $row->next_follow_up,
+            'employee_id' => $row->employee_id,
+        ];
+    }
+
+    if (!empty($data_record)) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $data_record,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json([
+            'status' => 'F',
+            'errorMsg' => 'Data not found',
+        ], 200);
+    }
+}
+
+
+
 }
