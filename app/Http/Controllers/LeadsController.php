@@ -9,6 +9,8 @@ use App\Http\Controllers\Excel;
 use App\Models\State;
 use App\Models\City;
 use Carbon\Carbon; // Import Carbon class
+use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -288,13 +290,35 @@ return view( 'addLeads', compact(  'States','Cities'));
 
 
 
-/////////////////////////////////////////////////////////////////////
 
 public function getCities($state_id)
 {
     $cities = City::where('state_id', $state_id)->get();
     return response()->json($cities);
 }
+
+
+
+public function index()
+{
+    // Fetch all states to populate the dropdown
+    $states = State::all(); // Assuming you have a State model and table
+    return view('leadsCount', compact('states'));
+}
+
+
+public function getleadsCountByState($stateId)
+{
+    // Fetch leads count for the given state
+    $leadsCount = Leads::where('state_id', $stateId)->count();
+
+
+    return response()->json([
+        'state' => $stateId, // Optional: You can include the state name if needed
+        'count' => $leadsCount,
+    ]);
+}
+
 
 
 }

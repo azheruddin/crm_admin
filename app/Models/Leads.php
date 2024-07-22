@@ -19,28 +19,31 @@ class Leads extends Model
     
     protected $fillable = ['customer_name', 'customer_email', 'phone', 'state','city']; 
 
+    protected $primaryKey = 'lead_id'; // Specify your actual primary key name if different
+
+
     
 
 
     public function state()
     {
-        return $this->belongsTo(State::class);
+        return $this->belongsTo(State::class, 'state_id');
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class, 'city_id');
     }
 
 
     
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 
-         
-    
+   
+     
 }
 
 
