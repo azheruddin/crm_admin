@@ -36,4 +36,13 @@ class CommonController extends Controller
         // Return the view with the counts
         return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees', 'incomingCallsToday', 'outgoingCallsToday', 'missedCallsToday', 'todayCalls', 'totalLeads', 'hotLeads', 'interested', 'notInterested'));
     }
+
+
+    
+
+
+   
+
+    
 }
+

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\CallHistory;
 use App\Models\Leads;
 use App\Models\Employee;
+use App\Models\State;
+use App\Models\City;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;  // read about this on google
 // use Illuminate\Support\Facades\Hash;
@@ -161,39 +164,6 @@ class ApiController extends Controller
     }
 
 
-    // show leads by employee
-//     public function lead_by_employee(Request $request)
-//     {
-//         $leads = Leads::where('employee_id', $request->employee_id)->where('is_deleted', 0)->orderBy('id', 'desc')->get();
-//         $data_record = array();
-//         foreach ($leads as $row) {
-
-//             $data_record[] = [
-//                 'id' => $row->id,
-//                 'customer_name' => $row->customer_name,
-//                 'customer_email' => $row->customer_email,
-//                 'phone' => $row->phone,
-//                 'lead_stage' => $row->lead_stage,
-//                 'feedback' => $row->feedback,
-//                 'expected_revenue' => $row->expected_revenue,
-//                 'notes' => $row->notes,
-//                 'next_follow_up' => $row->next_follow_up,
-//                 'employee_id' => $row->employee_id,
-//             ];
-
-//         }
-//         $array = json_encode($data_record);
-//         $array = json_decode($array);
-//         if ($leads != null && $request->employee_id != null) {
-//             return response()->json([
-//                 'status' => 'S',
-//                 'data' => $array,
-
-//        ], 200, [], JSON_NUMERIC_CHECK);
-//    } else {
-//        return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
-//    }
-// }
 
 public function lead_by_id(Request $request){
     $leads = Leads::where('id', $request->id)->where('is_deleted', 0)->first();
@@ -422,6 +392,86 @@ public function today_Call_History(Request $request)
     }
 }
 
+
+
+
+public function getStates()
+{
+    $states = State::all();
+    return response()->json($states);
 }
+
+
+public function getCities($state_id)
+    {
+        $cities = City::where('state_id', $state_id)->get();
+        return response()->json($cities);
+    }
+
+
+
+
+
+
+    // public function Addsales(Request $request)
+    // {$employee = Employee::find($request->id);
+
+    //     // Check if the employee exists
+    //     if (!$employee) {
+    //         return response()->json(['error' => 'not found']);
+    //     }
+    
+    //     $validated = $request->validate([
+    //         'customer_name' => 'required|string|max:255',
+    //         'business_name' => 'required|string|max:255',
+    //         'keys' => 'required|string|max:255',
+    //         'free' => 'required|boolean',
+    //         'amount' => 'required|numeric',
+    //         'transaction' => 'required|string|max:255',
+    //         'balance' => 'required|numeric',
+    //         'state' => 'required|string|max:255',
+    //         'city' => 'required|string|max:255',
+    //         'employee_id' => $employee->employee_id,
+
+    //     ]);
+
+    //     // Process the form data (e.g., save to database)
+    //     // For demonstration, we'll just return the validated data
+    //     return response()->json([
+    //         'message' => 'Form submitted successfully',
+    //         'data' => $validated
+    //     ]);
+    // }
+
+
+
+    public function add_sales(Request $request)
+    {
+
+
+        $sale = new Sale();
+        $sale->customer_name = $request->customer_name;
+        $sale->business_name = $request->business_name;
+        $sale->keys = $request->keys;
+        $sale->free = $request->free;
+        $sale->amount = $request->amount;
+        $sale->transaction = $request->transaction;
+        $sale->balance = $request->balance;
+        $sale->state = $request->state;
+        $sale->city = $request->city;
+        $sale->employee_id = $request->employee_id;
+        //            
+        $sale->save();
+
+
+        return response()->json([
+            'message' => 'Sales inserted successfully',
+            // 'data' => $sale 
+        ], 201);
+    }
+}
+
+
+
 
 
