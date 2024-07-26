@@ -411,6 +411,44 @@ public function today_Call_History(Request $request)
     }
 }
 
+
+
+
+public function getCities($state_id)
+    {
+        $cities = City::where('state_id', $state_id)->get();
+        return response()->json($cities);
+    }
+
+
+
+    public function add_sales(Request $request)
+    {
+
+
+        $sale = new Sale();
+        $sale->customer_name = $request->customer_name;
+        $sale->business_name = $request->business_name;
+        $sale->keys = $request->keys;
+        $sale->free = $request->free;
+        $sale->amount = $request->amount;
+        $sale->transaction = $request->transaction;
+        $sale->balance = $request->balance;
+        $sale->state = $request->state;
+        $sale->city = $request->city;
+        $sale->employee_id = $request->employee_id;
+        //            
+        $sale->save();
+
+
+        return response()->json([
+            'message' => 'Sales inserted successfully',
+            // 'data' => $sale 
+        ], 201);
+    }
 }
+
+
+
 
 
