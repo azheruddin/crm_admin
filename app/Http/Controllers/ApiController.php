@@ -410,41 +410,6 @@ public function getCities($state_id)
 
 
 
-
-
-
-    // public function Addsales(Request $request)
-    // {$employee = Employee::find($request->id);
-
-    //     // Check if the employee exists
-    //     if (!$employee) {
-    //         return response()->json(['error' => 'not found']);
-    //     }
-    
-    //     $validated = $request->validate([
-    //         'customer_name' => 'required|string|max:255',
-    //         'business_name' => 'required|string|max:255',
-    //         'keys' => 'required|string|max:255',
-    //         'free' => 'required|boolean',
-    //         'amount' => 'required|numeric',
-    //         'transaction' => 'required|string|max:255',
-    //         'balance' => 'required|numeric',
-    //         'state' => 'required|string|max:255',
-    //         'city' => 'required|string|max:255',
-    //         'employee_id' => $employee->employee_id,
-
-    //     ]);
-
-    //     // Process the form data (e.g., save to database)
-    //     // For demonstration, we'll just return the validated data
-    //     return response()->json([
-    //         'message' => 'Form submitted successfully',
-    //         'data' => $validated
-    //     ]);
-    // }
-
-
-
     public function add_sales(Request $request)
     {
 
