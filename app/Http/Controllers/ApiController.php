@@ -420,7 +420,11 @@ public function getCities($state_id)
         return response()->json($cities);
     }
 
-
+    public function getStates()
+{
+    $states = State::all();
+    return response()->json($states);
+}
 
     public function add_sales(Request $request)
     {
