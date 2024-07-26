@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\CallHistory;
 use App\Models\Leads;
 use App\Models\Employee;
+use App\Models\State;
+use App\Models\City;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;  // read about this on google
 // use Illuminate\Support\Facades\Hash;
@@ -161,39 +164,6 @@ class ApiController extends Controller
     }
 
 
-    // show leads by employee
-//     public function lead_by_employee(Request $request)
-//     {
-//         $leads = Leads::where('employee_id', $request->employee_id)->where('is_deleted', 0)->orderBy('id', 'desc')->get();
-//         $data_record = array();
-//         foreach ($leads as $row) {
-
-//             $data_record[] = [
-//                 'id' => $row->id,
-//                 'customer_name' => $row->customer_name,
-//                 'customer_email' => $row->customer_email,
-//                 'phone' => $row->phone,
-//                 'lead_stage' => $row->lead_stage,
-//                 'feedback' => $row->feedback,
-//                 'expected_revenue' => $row->expected_revenue,
-//                 'notes' => $row->notes,
-//                 'next_follow_up' => $row->next_follow_up,
-//                 'employee_id' => $row->employee_id,
-//             ];
-
-//         }
-//         $array = json_encode($data_record);
-//         $array = json_decode($array);
-//         if ($leads != null && $request->employee_id != null) {
-//             return response()->json([
-//                 'status' => 'S',
-//                 'data' => $array,
-
-//        ], 200, [], JSON_NUMERIC_CHECK);
-//    } else {
-//        return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
-//    }
-// }
 
 public function lead_by_id(Request $request){
     $leads = Leads::where('id', $request->id)->where('is_deleted', 0)->first();
@@ -440,6 +410,7 @@ public function today_Call_History(Request $request)
         ], 200);
     }
 }
+
 }
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CallHistoryController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,14 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     Route::get('/add_leads', [LeadsController::class, 'showLeads'])->name('leads.store');
 
     Route::get('/leads_count{$stateId}', [LeadsController::class, 'getleadsCountByState'])->name('leads_count');
+
+
+
+    Route::get('/sales', [SalesController::class, 'showTodaySales'])->name('sales');
+
+    Route::get('/sales/{id}', [SalesController::class, 'showSaleDetails'])->name('sale_details');
+
+
 
 
 });

@@ -299,25 +299,7 @@ public function getCities($state_id)
 
 
 
-public function index()
-{
-    // Fetch all states to populate the dropdown
-    $states = State::all(); // Assuming you have a State model and table
-    return view('leadsCount', compact('states'));
-}
 
-
-public function getleadsCountByState($stateId)
-{
-    // Fetch leads count for the given state
-    $leadsCount = Leads::where('state_id', $stateId)->count();
-
-
-    return response()->json([
-        'state' => $stateId, // Optional: You can include the state name if needed
-        'count' => $leadsCount,
-    ]);
-}
 
 
 

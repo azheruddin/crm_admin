@@ -61,6 +61,14 @@ Route::get('/today_Call_History', [ApiController::class, 'today_Call_History']);
 
 
 
+Route::get('/states', [ApiController::class, 'getStates']);
+Route::get('/cities/{state_id}', [ApiController::class, 'getCities']);
+
+
+Route::post('/add_sales', [ApiController::class, 'add_sales']);
+
+
+
                                               
 
 
