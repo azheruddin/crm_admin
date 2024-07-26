@@ -364,34 +364,74 @@ public function lead_by_employee(Request $request)
 
 public function followup_leads(Request $request)
 {
-    $query = Leads::where('employee_id', $request->employee_id)
-                  ->where('is_deleted', 0)
-                  ->whereNotNull('next_follow_up')
-                  ->where('next_follow_up', '>=', now())
-                  ->orderBy('id', 'desc')
-                  ->get();
+    $employee_id = $request->input('employee_id');
+    
+   // Get today's date
+   $today = Carbon::today();
 
-    $data_record = [];
+   // Fetch the counts for different call types created today
+   $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
 
-    foreach ($query as $row) {
-        $data_record[] = [
-            'id' => $row->id,
-            'customer_name' => $row->customer_name,
-            'customer_email' => $row->customer_email,
-            'phone' => $row->phone,
-            'lead_stage' => $row->lead_stage,
-            'feedback' => $row->feedback,
-            'expected_revenue' => $row->expected_revenue,
-            'notes' => $row->notes,
-            'next_follow_up' => $row->next_follow_up,
-            'employee_id' => $row->employee_id,
-        ];
+   
+
+
+     return response()->json([
+            'total' => $todayCalls,
+            'outgoing' => $outgoingCallsToday,
+            'incoming' => $incomingCallsToday,
+            'missed' => $missedCallsToday,
+        ]);
+        
+
+}
+
+
+public function today_Call_History(Request $request)
+{
+    $today = Carbon::today();
+    $employee_id = $request->input('employee_id');
+    
+    $query = CallHistory::where('employee_id', $employee_id);
+
+    // Filter by date range if provided 
+    if ($request->has('from_date') && $request->has('to_date')) {
+        $fromDate = Carbon::parse($request->input('from_date'))->startOfDay();
+        $toDate = Carbon::parse($request->input('to_date'))->endOfDay();
+        $query->whereBetween('created_at', [$fromDate, $toDate]);
     }
 
-    if (!empty($data_record)) {
+    // Fetch call histories for today
+    $callHistories = $query->whereDate('created_at', $today)
+    ->orderByDesc('created_at')
+    ->get();
+
+    // Format call duration to human-readable format
+    $formattedCallHistories = $callHistories->map(function ($history) {
+        $seconds = $history->call_duration;
+        $minutes = floor($seconds / 60);
+        $seconds %= 60;
+        $formattedDuration = sprintf('%dmin %dsec', $minutes, $seconds);
+
+        return [
+            'id' => $history->id,
+            'customer_name' => $history->customer_name,
+            'phone' => $history->phone,
+            'type' => $history->type,
+            'call_duration' => $formattedDuration,
+            'created_at' => $history->created_at,
+            'updated_at' => $history->updated_at,
+            'employee_id' => $history->employee_id,
+            'call_date' => $history->call_date,
+        ];
+    });
+
+    if (!$formattedCallHistories->isEmpty()) {
         return response()->json([
             'status' => 'S',
-            'data' => $data_record,
+            'data' => $formattedCallHistories,
         ], 200, [], JSON_NUMERIC_CHECK);
     } else {
         return response()->json([
@@ -400,7 +440,6 @@ public function followup_leads(Request $request)
         ], 200);
     }
 }
-
-
-
 }
+
+
