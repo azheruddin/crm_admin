@@ -10,7 +10,7 @@
           <div class="form-row">
             <div class="form-group col-md-3">
               
-              <label for="from_date">From Date</label>
+            <label for="from_date">From Date</label>
               <input type="date" class="form-control" id="from_date" name="from_date"
           value="{{ request('from_date') }}">
           
@@ -20,7 +20,7 @@
             </div>
 
             
-                             <div class="form-group col-md-3">
+            <div class="form-group col-md-3">
                             <label for="employee_id">Employee</label>
                             <select class="form-control" id="employee_id" name="employee_id">
                                 <option value="">Select Employee</option>
@@ -30,6 +30,7 @@
                                 @endforeach
                             </select>
                         </div>
+
    
 
 

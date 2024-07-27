@@ -138,15 +138,6 @@ public function todayLeads()
         return view('addLeads', compact('States'));
     }
 
-
-
-
-
-
-
-
-
-    
     public function filterLeadsByEmployee(Request $request)
     {
         $validatedData = $request->validate([
@@ -249,7 +240,7 @@ public function assignleadsToEmployee(Request $request)
                   ->where('state', $validatedData['state'])
                   ->where('employee_id', null)
                   ->get();
-
+                                       
     // Check if any leads are found
     if ($leads->isEmpty()) {
         $request->session()->flash('success', 'No leads found found.');
@@ -280,7 +271,6 @@ public function assignleadsToEmployee(Request $request)
 public function showLeads(Request $request)
 { 
 
-
 $States = State::get(); 
 // Return view with filtered call histories and active employees
 $Cities = City::get(); // Fetch all cities from the database
@@ -296,11 +286,5 @@ public function getCities($state_id)
     $cities = City::where('state_id', $state_id)->get();
     return response()->json($cities);
 }
-
-
-
-
-
-
 
 }

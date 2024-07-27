@@ -32,17 +32,7 @@ class SalesController extends Controller
     }
      
 
-    // public function showSaleDetails($id)
-    // {
-    //     // Retrieve the sale details by ID with the employee relationship
-    //     $sale = Sale::with('employee')->findOrFail($id);
-
-    //     // Pass the sale details to the view
-    //     return view('salesDetails', [
-    //         'sale' => $sale
-    //     ]);
-    // }
-
+    
 
 
     public function showSaleDetails(Request $request)
