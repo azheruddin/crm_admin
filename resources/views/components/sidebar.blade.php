@@ -107,20 +107,7 @@
                 </ul>
               </div>
                     
-              <!-- <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="charts">
-                <i class="menu-icon mdi mdi-chart-line"></i>
-                <span class="menu-title">Sales</span>
-                <i class="menu-arrow"></i>
-              </a>                                          
-
-              <div class="collapse" id="sales">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/sales"> Show Sales</a></li>
-                </ul>
-              </div> -->
-
-              <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="charts">
                 <i class="menu-icon mdi mdi-chart-line"></i>
                 <span class="menu-title">Sales</span>
