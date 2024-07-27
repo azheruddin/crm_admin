@@ -63,8 +63,8 @@
           <!-- partial:partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a href="" target="_blank"></a>HBT CREATIONS PVT LTD</span>
-              <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights reserved.</span>
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block"> <a href="" target="_blank"></a>HBT CREATIONS PVT LTD</span>
+              <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © 2024. All rights reserved.</span>
             </div>
           </footer>
           <!-- partial -->
@@ -80,38 +80,38 @@
     
 
     <!-- Bootstrap JS -->
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('public/js/bootstrap.min.js') }}"></script>
     
     <!-- Vendor JS -->
-    <script src="{{ asset('assets/vendors/js/vendor.bundle.base.js') }}"></script>
-    <script src="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('public/assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <script src="{{ asset('public/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     
     <!-- Plugin JS for this page -->
-    <script src="{{ asset('assets/vendors/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ asset('assets/vendors/progressbar.js/progressbar.min.js') }}"></script>
+    <script src="{{ asset('public/assets/vendors/chart.js/chart.umd.js') }}"></script>
+    <script src="{{ asset('public/assets/vendors/progressbar.js/progressbar.min.js') }}"></script>
     
     <!-- Your custom JS -->
-    <script src="{{ asset('assets/js/off-canvas.js') }}"></script>
-    <script src="{{ asset('assets/js/template.js') }}"></script>
-    <script src="{{ asset('assets/js/settings.js') }}"></script>
-    <script src="{{ asset('assets/js/hoverable-collapse.js') }}"></script>
-    <script src="{{ asset('assets/js/todolist.js') }}"></script>
+    <script src="{{ asset('public/assets/js/off-canvas.js') }}"></script>
+    <script src="{{ asset('public/assets/js/template.js') }}"></script>
+    <script src="{{ asset('public/assets/js/settings.js') }}"></script>
+    <script src="{{ asset('public/assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ asset('public/assets/js/todolist.js') }}"></script>
     
     <!-- Custom JS for this page -->
-    <script src="{{ asset('assets/js/jquery.cookie.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+    <script src="{{ asset('public/assets/js/jquery.cookie.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/js/dashboard.js') }}"></script>
 
       <!-- DataTables JS -->
-      <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
+      <script src="{{ asset('public/js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ asset('public/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/js/dataTables.bootstrap5.min.js') }}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
 
     <!-- for stATE CITY  -->
-    <script src="{{ asset('assets/myjs/cities.js') }}"></script>
+    <script src="{{ asset('public/assets/myjs/cities.js') }}"></script>
     <script language="javascript">print_state("sts");</script>
     <!-- <script src="assets/myjs/cities.js"></script>  -->
 

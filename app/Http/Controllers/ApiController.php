@@ -332,10 +332,7 @@ public function lead_by_employee(Request $request)
     }
 }
 
-
-///
-
-public function calls_count(Request $request)
+public function followup_leads(Request $request)
 {
     $employee_id = $request->input('employee_id');
     
@@ -369,20 +366,42 @@ public function today_Call_History(Request $request)
     
     $query = CallHistory::where('employee_id', $employee_id);
 
-              //Filter by date range if provided 
+    // Filter by date range if provided 
     if ($request->has('from_date') && $request->has('to_date')) {
         $fromDate = Carbon::parse($request->input('from_date'))->startOfDay();
         $toDate = Carbon::parse($request->input('to_date'))->endOfDay();
         $query->whereBetween('created_at', [$fromDate, $toDate]);
     }
 
-    // Optionally, eager load employee data if needed
-    $callHistories = $query->whereDate('created_at', $today)->get();
+    // Fetch call histories for today
+    $callHistories = $query->whereDate('created_at', $today)
+    ->orderByDesc('created_at')
+    ->get();
 
-    if (!$callHistories->isEmpty()) {
+    // Format call duration to human-readable format
+    $formattedCallHistories = $callHistories->map(function ($history) {
+        $seconds = $history->call_duration;
+        $minutes = floor($seconds / 60);
+        $seconds %= 60;
+        $formattedDuration = sprintf('%dmin %dsec', $minutes, $seconds);
+
+        return [
+            'id' => $history->id,
+            'customer_name' => $history->customer_name,
+            'phone' => $history->phone,
+            'type' => $history->type,
+            'call_duration' => $formattedDuration,
+            'created_at' => $history->created_at,
+            'updated_at' => $history->updated_at,
+            'employee_id' => $history->employee_id,
+            'call_date' => $history->call_date,
+        ];
+    });
+
+    if (!$formattedCallHistories->isEmpty()) {
         return response()->json([
             'status' => 'S',
-            'data' => $callHistories,
+            'data' => $formattedCallHistories,
         ], 200, [], JSON_NUMERIC_CHECK);
     } else {
         return response()->json([
@@ -395,55 +414,17 @@ public function today_Call_History(Request $request)
 
 
 
-public function getStates()
-{
-    $states = State::all();
-    return response()->json($states);
-}
-
-
 public function getCities($state_id)
     {
         $cities = City::where('state_id', $state_id)->get();
         return response()->json($cities);
     }
 
-
-
-
-
-
-    // public function Addsales(Request $request)
-    // {$employee = Employee::find($request->id);
-
-    //     // Check if the employee exists
-    //     if (!$employee) {
-    //         return response()->json(['error' => 'not found']);
-    //     }
-    
-    //     $validated = $request->validate([
-    //         'customer_name' => 'required|string|max:255',
-    //         'business_name' => 'required|string|max:255',
-    //         'keys' => 'required|string|max:255',
-    //         'free' => 'required|boolean',
-    //         'amount' => 'required|numeric',
-    //         'transaction' => 'required|string|max:255',
-    //         'balance' => 'required|numeric',
-    //         'state' => 'required|string|max:255',
-    //         'city' => 'required|string|max:255',
-    //         'employee_id' => $employee->employee_id,
-
-    //     ]);
-
-    //     // Process the form data (e.g., save to database)
-    //     // For demonstration, we'll just return the validated data
-    //     return response()->json([
-    //         'message' => 'Form submitted successfully',
-    //         'data' => $validated
-    //     ]);
-    // }
-
-
+    public function getStates()
+{
+    $states = State::all();
+    return response()->json($states);
+}
 
     public function add_sales(Request $request)
     {
