@@ -12,11 +12,10 @@ class City extends Model
     protected $primaryKey = 'city_id';
 
     protected $fillable = [
+        'city_id',
         'city_name',
-        'state_id',
-        // Add other columns as needed
+        'state_id', // Foreign key to State
     ];
-
 
     public function state()
     {

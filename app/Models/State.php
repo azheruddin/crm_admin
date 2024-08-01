@@ -9,17 +9,24 @@ class State extends Model
 {
     use HasFactory;
     protected $table = "state";
-    protected $fillable = ['state_name'];
+    // protected $fillable = ['state_name'];
+    protected $primaryKey = 'state_id'; // Set primary key column
 
-    public function cities()
+    // public $incrementing = false; // Use if primary key is not auto-incrementing
+
+    // protected $keyType = 'string'; // Adjust if the primary key is not a string
+
+    protected $fillable = [
+        'state_id',
+        'state_name',
+    ];
+
+    public function city()
     {
         return $this->hasMany(City::class);
     }
 
-    public function sales()
-    {
-        return $this->hasMany(Sale::class, 'state_id');
-    }
+   
 
 
     

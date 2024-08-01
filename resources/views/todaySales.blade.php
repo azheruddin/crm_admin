@@ -6,9 +6,7 @@
                 <div class="card">
                   <div class="card-body">
                   <h4 class="card-title text-primary">Today Sales</h4><hr>
-                  <form action="{{ route('leads_feedback') }}" method="GET">
-         
-        </form>
+               
                     
                    
                     <!-- table goes here -->
@@ -39,15 +37,20 @@
             <td>{{ $sale->amount }}</td> 
             <td>{{ $sale->transaction }}</td> 
             <td>{{ $sale->balance }}</td> 
-            <!-- <td>{{ $sale->state }}</td>   -->
             @if(isset($sale->state->state_name) && $sale->state->state_name != null)
-             <td>{{ $sale->state->state_name }}</td> 
+             <td> {{ $sale->state->state_name }}</td> 
              @else
-             <td>NA</td> 
-             @endif
+             <td></td> 
+           @endif
 
-
-            <td>{{ $sale->city }}</td> 
+           <td>
+                                @if($sale->city) {{-- Ensure city relationship is loaded --}}
+                                    {{ $sale->city->city_name }} {{-- Display city_name --}}
+                                @else
+                                    NA
+                                @endif
+                            </td>
+            
              @if(isset($sale->employee->name) && $sale->employee->name != null)
              <td>{{ $sale->employee->name }}</td> 
              @else

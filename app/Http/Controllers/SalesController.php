@@ -21,14 +21,17 @@ public function showTodaySales()
     $today = Carbon::today()->toDateString();
 
     // Fetch sales records for the current date
-    $Sales = Sale::whereDate('created_at', $today)->get();
+    // $Sales = Sale::whereDate('created_at', $today)->get();
+    $Sales = Sale::with(['state', 'city', 'employee'])->whereDate('created_at', $today)->get();
+
 
     // Return the view with the sales records
     // return view('todaySales', compact('Sales'));
     $employees = Employee::all();
     $state = State::all();
+    $city = City::all();
 
-    return view('todaySales', compact('Sales', 'employees', 'state'));
+    return view('todaySales', compact('Sales', 'employees', 'state', 'city' ));
 }
 
 

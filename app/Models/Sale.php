@@ -20,9 +20,10 @@ class Sale extends Model
         'amount',
         'transaction',
         'balance',
-        'state',
+        'state_id',
         'city',
     ];
+    
 
     public function employee()
     {
@@ -32,11 +33,11 @@ class Sale extends Model
 
     public function state()
     {
-        return $this->belongsTo(State::class, 'state_id');
+        return $this->belongsTo(State::class, 'state_id'); // Correctly reference foreign key
     }
 
     public function city()
     {
-        return $this->belongsTo(State::class, 'city_id');
+        return $this->belongsTo(City::class, 'city_id'); // Correct foreign key
     }
 }

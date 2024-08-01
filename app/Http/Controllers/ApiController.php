@@ -440,8 +440,8 @@ public function getCities($state_id)
         $sale->amount = $request->amount;
         $sale->transaction = $request->transaction;
         $sale->balance = $request->balance;
-        $sale->state = $request->state;
-        $sale->city = $request->city;
+        $sale->state_id = $request->state;
+        $sale->city_id = $request->city;
         $sale->employee_id = $request->employee_id;
         //            
         $sale->save();
@@ -453,17 +453,6 @@ public function getCities($state_id)
         ], 201);
     }
 
-
-//     public function get_Top_Sales()
-// {
-//     // Fetch the top 5 sales across all employees
-//     $topSales = Sale::orderBy('amount', 'desc')
-//                     ->take(5)
-//                     ->get();
-
-//     // Return the sales data as a JSON response
-//     return response()->json($topSales);  
-// }
 
 public function getTopSalesToday()
 {
