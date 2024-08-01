@@ -23,4 +23,9 @@ class City extends Model
         return $this->belongsTo(State::class);
     }
 
+    public function sales()
+    {
+        return $this->hasMany(Sale::class, 'city_id');
+    }
+
 }

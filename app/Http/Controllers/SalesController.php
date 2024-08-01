@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use App\Models\Employee;
+use App\Models\State;
+use App\Models\City;
 use Carbon\Carbon;
 
 
@@ -22,7 +24,11 @@ public function showTodaySales()
     $Sales = Sale::whereDate('created_at', $today)->get();
 
     // Return the view with the sales records
-    return view('todaySales', compact('Sales'));
+    // return view('todaySales', compact('Sales'));
+    $employees = Employee::all();
+    $state = State::all();
+
+    return view('todaySales', compact('Sales', 'employees', 'state'));
 }
 
 
@@ -65,8 +71,9 @@ public function allSales(Request $request) {
 
     // Get list of employees
     $employees = Employee::all();
+    $state = State::all();
 
-    return view('allSales', compact('Sales', 'employees'));
+    return view('allSales', compact('Sales', 'employees', 'state'));
 }
 
 

@@ -25,7 +25,7 @@
               <th>BALANCE</th>
               <th>STATE</th>
               <th>CITY</th>
-              <th>EMPLOYEE ID</th>
+              <th>EMPLOYEE</th>
               <th>ACTION</th>
 
             </tr>
@@ -39,11 +39,15 @@
             <td>{{ $sale->amount }}</td> 
             <td>{{ $sale->transaction }}</td> 
             <td>{{ $sale->balance }}</td> 
-            <td>{{ $sale->state }}</td>  
-             <td>{{ $sale->city }}</td> 
- 
-             
-             
+            <!-- <td>{{ $sale->state }}</td>   -->
+            @if(isset($sale->state->state_name) && $sale->state->state_name != null)
+             <td>{{ $sale->state->state_name }}</td> 
+             @else
+             <td>NA</td> 
+             @endif
+
+
+            <td>{{ $sale->city }}</td> 
              @if(isset($sale->employee->name) && $sale->employee->name != null)
              <td>{{ $sale->employee->name }}</td> 
              @else

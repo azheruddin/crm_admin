@@ -28,4 +28,15 @@ class Sale extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(State::class, 'city_id');
+    }
 }
