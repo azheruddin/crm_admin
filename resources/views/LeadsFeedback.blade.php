@@ -77,7 +77,7 @@
              <td></td> 
              @endif
 
-             
+              
 
              <td><a href="{{ route('leadsfeedback_detail', ['lead_id' => $leads->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
 

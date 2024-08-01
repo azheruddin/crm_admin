@@ -10,6 +10,8 @@ use App\Models\City;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;  // read about this on google
+
+use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\Hash;
 
 use Carbon\Carbon;
@@ -450,7 +452,101 @@ public function getCities($state_id)
             // 'data' => $sale 
         ], 201);
     }
+
+
+//     public function get_Top_Sales()
+// {
+//     // Fetch the top 5 sales across all employees
+//     $topSales = Sale::orderBy('amount', 'desc')
+//                     ->take(5)
+//                     ->get();
+
+//     // Return the sales data as a JSON response
+//     return response()->json($topSales);  
+// }
+
+public function getTopSalesToday()
+{
+    $today = Carbon::today()->toDateString();  // Ensure the format matches your database
+
+    $topSales = Sale::select('employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+    ->join('employees', 'sales.employee_id', '=', 'employees.id')
+    ->whereDate('sales.created_at', $today)
+    ->groupBy('employees.name')  // Group by employee name
+    ->orderBy('total_sales', 'desc')  // Order by the aggregated column
+    ->limit(5)
+    ->get();
+
+    return response()->json($topSales);
 }
+
+ public function getTopSalesThisMonth()
+    {
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        $topSales = Sale::select('employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+        ->join('employees', 'sales.employee_id', '=', 'employees.id')
+        ->whereBetween('sales.created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('employees.name')  // Group by employee name
+        ->orderBy('total_sales', 'desc')  // Order by the aggregated column
+        ->limit(5)
+        ->get();
+        return response()->json($topSales);
+    }
+
+// today sale by employee
+public function todaySalesByEmployee(Request $request)
+{
+    // Retrieve employee_id from request parameter
+    $employeeId = $request->employee_id;
+    $today = Carbon::today()->toDateString();  // Ensure the format matches your database
+
+    // Validate the employee_id (optional but recommended)
+    if (!$employeeId) {
+        return response()->json(['error' => 'Employee ID is required.'], 400);
+    }
+
+    // Fetch top sales for the specified employee
+    $topSales = Sale::select('sales.employee_id', 'employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+        ->join('employees', 'sales.employee_id', '=', 'employees.id')
+        ->whereDate('sales.created_at', $today)
+        ->where('sales.employee_id', $employeeId)  // Filter by employee_id
+        ->groupBy('sales.employee_id', 'employees.name')  // Group by employee ID and name
+        ->orderBy('total_sales', 'desc')  // Order by the aggregated total sales
+        ->limit(5)
+        ->get();
+
+    return response()->json($topSales);
+}
+
+
+// month sale by employee
+public function monthSalesByEmployee(Request $request)
+{
+    // Retrieve employee_id from request parameter
+    $employeeId = $request->employee_id;
+    $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+    // Validate the employee_id (optional but recommended)
+    if (!$employeeId) {
+        return response()->json(['error' => 'Employee ID is required.'], 400);
+    }
+
+    // Fetch top sales for the specified employee
+    $topSales = Sale::select('sales.employee_id', 'employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+        ->join('employees', 'sales.employee_id', '=', 'employees.id')
+        ->whereBetween('sales.created_at', [$startOfMonth, $endOfMonth])
+        ->where('sales.employee_id', $employeeId)  // Filter by employee_id
+        ->groupBy('sales.employee_id', 'employees.name')  // Group by employee ID and name
+        ->orderBy('total_sales', 'desc')  // Order by the aggregated total sales
+        ->limit(5)
+        ->get();
+
+    return response()->json($topSales);
+}
+} 
 
 
 

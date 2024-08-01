@@ -5,12 +5,12 @@
               <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                  <h4 class="card-title text-primary">Sales</h4><hr>
-                  <form action="{{ route('sales') }}" method="GET">
+                  <h4 class="card-title text-primary">All Sales</h4><hr>
+                  <form action="{{ route('leads_feedback') }}" method="GET">
           <div class="form-row">
             <div class="form-group col-md-3">
               
-            <label for="from_date">From Date</label>
+              <label for="from_date">From Date</label>
               <input type="date" class="form-control" id="from_date" name="from_date"
           value="{{ request('from_date') }}">
           
@@ -31,9 +31,6 @@
                             </select>
                         </div>
 
-   
-
-
             <div class="form-group col-md-4">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-primary btn-block">Filter</button>
@@ -45,7 +42,7 @@
                     <!-- table goes here -->
                     
 
-<table id="example" class="table table-striped" style="width:100%">
+                    <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
               <th>CUSTOMER NAME</th>
@@ -86,7 +83,7 @@
         </tr>
         @endforeach
 </tbody>
-</table>     
+</table>      
                   </div>
                 </div> 
               </div>

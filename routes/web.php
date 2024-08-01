@@ -133,9 +133,16 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
 
 
-    Route::get('/sales', [SalesController::class, 'showTodaySales'])->name('sales');
+    Route::get('/today_sales', [SalesController::class, 'showTodaySales'])->name('today_sales');
+    // Route::get('/sales', [SalesController::class, 'filterSales'])->name('sales');
 
     Route::get('/sales/{id}', [SalesController::class, 'showSaleDetails'])->name('sale_details');
+
+
+    Route::get('/all_sale', [SalesController::class, 'allSales'])->name('all_sale');
+
+
+
 
 
 

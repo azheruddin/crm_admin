@@ -112,14 +112,23 @@
                 <i class="menu-icon mdi mdi-chart-line"></i>
                 <span class="menu-title">Sales</span>
                 <i class="menu-arrow"></i>
-              </a>                                          
-
+              </a>    
+              
               <div class="collapse" id="sales">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/sales"> Show Sales</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/all_sale">All Sales</a></li>
                 </ul>
               </div>
 
+              <div class="collapse" id="sales">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/today_sales">Today Sales</a></li>
+                </ul>
+              </div>
+            
+
+
+              
              
 
 
