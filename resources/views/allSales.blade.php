@@ -6,7 +6,7 @@
                 <div class="card">
                   <div class="card-body">
                   <h4 class="card-title text-primary">All Sales</h4><hr>
-                  <form action="{{ route('leads_feedback') }}" method="GET">
+                  <form action="{{ route('all_sale') }}" method="GET">
           <div class="form-row">
             <div class="form-group col-md-3">
               
@@ -67,9 +67,20 @@
             <td>{{ $sale->amount }}</td> 
             <td>{{ $sale->transaction }}</td> 
             <td>{{ $sale->balance }}</td> 
-            <td>{{ $sale->state }}</td>  
-             <td>{{ $sale->city }}</td> 
- 
+            <td>
+                                @if($sale->state && $sale->state->state_name)
+                                    {{ $sale->state->state_name }}
+                                @else
+                                    NA
+                                @endif
+                            </td>
+                            <td>
+                                @if($sale->city && $sale->city->city_name)
+                                    {{ $sale->city->city_name }}
+                                @else
+                                    NA
+                                @endif
+                            </td>
              
              @if(isset($sale->employee->name) && $sale->employee->name != null)
              <td>{{ $sale->employee->name }}</td> 

@@ -21,7 +21,8 @@ class Sale extends Model
         'transaction',
         'balance',
         'state_id',
-        'city',
+        'city_id',
+        'employee_id',
     ];
     
 

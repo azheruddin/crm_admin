@@ -8,7 +8,7 @@
                   
                     <h4 class="card-title text-primary">Sales Details 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">    
-                    <a href="/sales"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a>
+                    <a href="/all_sale"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a>
 
                     </div>
                     <hr></h4>  
@@ -45,11 +45,11 @@
 
                           <tr>
                             <td>State</td>
-                            <td>{{ $sale->state }}</td>
+                            <td>{{ $sale->state->state_name }}</td>
                           </tr>
                           <tr>
                             <td>City</td>
-                            <td>{{ $sale->city  }}</td>
+                            <td>{{ $sale->city->city_name  }}</td>
                           </tr>
 
                           <tr>
