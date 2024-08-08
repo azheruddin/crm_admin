@@ -53,7 +53,7 @@
               <th>BALANCE</th>
               <th>STATE</th>
               <th>CITY</th>
-              <th>EMPLOYEE ID</th>
+              <th>EMPLOYEE</th>
               <th>ACTION</th>
 
             </tr>

@@ -54,7 +54,7 @@ public function allSales(Request $request)
         // Initialize the query builder
         $salesQuery = Sale::query(); // Correct initialization
 
-        // Apply date range filters
+        // Apply date range filters  
         if ($fromDate) {
             $salesQuery->whereDate('created_at', '>=', $fromDate);
         }
