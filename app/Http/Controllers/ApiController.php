@@ -514,13 +514,13 @@ public function todaySalesByEmployee(Request $request)
 public function monthSalesByEmployee(Request $request)
 {
     // Retrieve employee_id from request parameter
-    $employeeId = $request->employee_id;
+    $employeeId = $request->employee_id; 
     $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
     // Validate the employee_id (optional but recommended)
     if (!$employeeId) {
-        return response()->json(['error' => 'Employee ID is required.'], 400);
+        return response()->json(['error' => 'Employee ID is required.'], 400);  
     }
 
     // Fetch top sales for the specified employee
@@ -536,42 +536,46 @@ public function monthSalesByEmployee(Request $request)
     return response()->json($topSales);  
 }
 
-public function getTopCallsToday()
+public function TopCallsToday()
 {
-    $today = Carbon::today()->toDateString();  // Ensure the format matches your database
+    // Get the start and end of today
+    $startOfDay = Carbon::now()->startOfDay();
+    $endOfDay = Carbon::now()->endOfDay();
 
-    $topCalls = CallHistory::select('employees.name as employee_name', DB::raw('COUNT(calls.id) as total_calls'))
-    ->join('employees', 'calls.employee_id', '=', 'employees.id') 
-    ->whereDate('calls.created_at', $today)
-    ->groupBy('employees.name')  // Group by employee name
-    ->orderBy('total_calls', 'desc')  // Order by the aggregated column
-    ->limit(5)
-    ->get();
+    // Query to get the top 5 employees based on the number of calls made today
+    $topEmployeesToday = DB::table('call_history AS calls')
+        ->join('employees', 'calls.employee_id', '=', 'employees.id')
+        ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))
+        ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
+        ->groupBy('employees.name')
+        ->orderBy('total_calls', 'desc')
+        ->limit(5)
+        ->get();
 
-    return response()->json($topCalls);
+    // Return the result as a JSON response
+    return response()->json($topEmployeesToday);
 }
 
 
-public function getTopCallsThisMonth()
+public function TopCallsThisMonth()
 { 
     $startOfMonth = Carbon::now()->startOfMonth(); 
     $endOfMonth = Carbon::now()->endOfMonth();
 
-    $topEmployees = DB::table('call_history AS calls')
+     $topEmployees = DB::table('call_history AS calls')
     ->join('employees', 'calls.employee_id', '=', 'employees.id')
-    ->select('employees.name as employee_name', DB::raw('SUM(calls.amount) as total_calls'))
+    ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))   
     ->whereBetween('calls.created_at', ['2024-08-01 00:00:00', '2024-08-31 23:59:59'])
     ->groupBy('employees.name')
-    ->orderBy('total_calls', 'desc')
+    ->orderBy('total_calls', 'desc')  
     ->limit(5)
     ->get();
 
-    return response()->json($topCalls);  
-
-
+    return response()->json($topEmployees);      
 } 
 
 
 } 
 
 
+ 
