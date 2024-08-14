@@ -7,6 +7,8 @@ use App\Models\Employee;
 use App\Models\State;
 use App\Models\City;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 
 use Illuminate\Http\Request;
@@ -78,9 +80,71 @@ public function allSales(Request $request)
         // Return the view with the filtered sales data
         return view('allSales', compact('Sales', 'employees', 'states'));
     }
+
+
+    // public function showSales()
+    // {
+    //     // Get today's date and the start of the month
+    //     $today = Carbon::today();
+    //     $startOfMonth = Carbon::now()->startOfMonth();
+    //     $endOfMonth = Carbon::now()->endOfMonth();
+
+    //     // Retrieve sales data for today
+    //     // $todaySales = Sale::whereDate('created_at', $today)->get(['customer_name', 'amount']);
+
+    //     $topSalesMonth = Sale::select('sales.employee_id', 'employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+    //     ->join('employees', 'sales.employee_id', '=', 'employees.id')
+    //     ->whereBetween('sales.created_at', [$startOfMonth, $endOfMonth])
+    //     ->groupBy('sales.employee_id', 'employees.name')  // Group by employee ID and name
+    //     ->orderBy('total_sales', 'desc')  // Order by the aggregated total sales
+    //     ->get();
+
+
+    //     $topSalesToday = Sale::select('sales.employee_id', 'employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+    //     ->join('employees', 'sales.employee_id', '=', 'employees.id')
+    //     ->whereDate('sales.created_at', $today)
+    //     ->groupBy('sales.employee_id', 'employees.name')  // Group by employee ID and name
+    //     ->orderBy('total_sales', 'desc')  // Order by the aggregated total sales
+    //     ->get();
+    //     // Retrieve sales data for the current month
+    //     // $monthlySales = Sale::whereBetween('created_at', [$startOfMonth, $today])
+    //     //     ->get(['customer_name', 'amount']);
+
+    //     // Pass data to the view
+    //     return view('highestSale', [
+    //         'todaySales' => $topSalesToday,
+    //         'monthlySales' => $topSalesMonth,
+    //     ]);
+    // }
+
+    public function highestSales()
+{
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $endOfMonth = Carbon::now()->endOfMonth();
+    $today = Carbon::today();
+
+    $topSalesMonth = Sale::select('employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+        ->join('employees', 'sales.employee_id', '=', 'employees.id')
+        ->whereBetween('sales.created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('employees.name')
+        ->orderBy('total_sales', 'desc')
+        ->get();
+
+    $topSalesToday = Sale::select('employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
+        ->join('employees', 'sales.employee_id', '=', 'employees.id')
+        ->whereDate('sales.created_at', $today)
+        ->groupBy('employees.name')
+        ->orderBy('total_sales', 'desc')
+        ->get();
+
+    return view('highestSale', ['topSales' => $topSalesMonth, 'topSalesToday' => $topSalesToday]);
 }
 
-   
 
+
+
+
+   
+}
 
 

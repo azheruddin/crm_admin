@@ -252,6 +252,7 @@ public function assignleadsToEmployee(Request $request)
         $lead->employee_id = $validatedData['employee_id'];
         $lead->save();
     }
+    
 
     // Redirect or return a response as needed
     $request->session()->flash('success', 'Leads updated successfully.');

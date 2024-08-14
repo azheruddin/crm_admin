@@ -140,6 +140,8 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
 
     Route::get('/all_sale', [SalesController::class, 'allSales'])->name('all_sale');
+    Route::get('/show_sale', [SalesController::class, 'highestSales'])->name('show_sale');
+    Route::get('/show_call', [CallHistoryController::class, 'highestCalls'])->name('show_call');
 
 
 

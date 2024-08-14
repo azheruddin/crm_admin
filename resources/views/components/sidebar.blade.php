@@ -38,6 +38,15 @@
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Call History</a></li>
                 </ul>
+               
+
+                <div class="collapse" id="form-elements">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"><a class="nav-link" href="/show_call">Highest Calls</a></li>
+                </ul>
+
+
+               
                 <!-- <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="#">Call History By Employee</a></li>
                 </ul>
@@ -126,7 +135,11 @@
                 </ul>
               </div>
             
-
+              <div class="collapse" id="sales">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/show_sale">Highest Sales</a></li>
+                </ul>
+              </div>
 
               
              
