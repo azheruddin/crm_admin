@@ -558,7 +558,6 @@ public function getTopSalesToday()
     ->whereDate('sales.created_at', $today)
     ->groupBy('employees.name')  // Group by employee name
     ->orderBy('total_sales', 'desc')  // Order by the aggregated column
-    ->limit(5)
     ->get();
 
     return response()->json($topSales);
@@ -574,7 +573,6 @@ public function getTopSalesToday()
         ->whereBetween('sales.created_at', [$startOfMonth, $endOfMonth])
         ->groupBy('employees.name')  // Group by employee name
         ->orderBy('total_sales', 'desc')  // Order by the aggregated column
-        ->limit(5)
         ->get();
         return response()->json($topSales);
     }
@@ -644,7 +642,6 @@ public function TopCallsToday()
         ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
         ->groupBy('employees.name')
         ->orderBy('total_calls', 'desc')
-        ->limit(5)
         ->get();
 
     // Return the result as a JSON response
@@ -663,7 +660,6 @@ public function TopCallsThisMonth()
     ->whereBetween('calls.created_at', ['2024-08-01 00:00:00', '2024-08-31 23:59:59'])
     ->groupBy('employees.name')
     ->orderBy('total_calls', 'desc')  
-    ->limit(5)
     ->get();
 
     return response()->json($topEmployees);      
