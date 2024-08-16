@@ -80,6 +80,9 @@ Route::get('/today_top_calls', [ApiController::class, 'TopCallsToday']);
 Route::get('/month_top_calls', [ApiController::class, 'TopCallsThisMonth']);
 
 
+Route::post('/logout', [ApiController::class, 'logout']);
+
+
 
 
 

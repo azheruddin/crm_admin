@@ -66,59 +66,154 @@ class ApiController extends Controller
         ], 201);
     }
 
+/////////////////////////////////
+public function login(Request $request)
+{
+    // Validate the request
+    $validator = Validator::make($request->all(), [
+        'phone' => 'required|digits:10', // Ensure phone is exactly 10 digits
+        'password' => 'required|string',
+    ]);
 
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    // Fetch employee by phone number
+    $employee = Employee::where('phone', $request->phone)->first();
+
+    // Check if the employee exists
+    if (!$employee) {
+        return response()->json([
+            'status' => 'F',
+            'message' => 'User not found',
+        ], 404);
+    }
+
+    // Check if the password matches
+    if ($request->password != $employee->password) {
+        return response()->json([
+            'status' => 'F',
+            'message' => 'Invalid phone or password'
+        ], 401);
+    }
+
+    // Check if the employee is active
+    if ($employee->is_active == 0) {
+        return response()->json([
+            'status' => 'F',
+            'message' => 'Account not active, please contact admin'
+        ], 401);
+    }
+
+    // Check if the user is already logged in
+    if ($employee->is_login == 1) {
+        return response()->json([
+            'status' => 'F',
+            'message' => 'User already logged in on another device'
+        ], 403);
+    }
+
+    // Set is_login column to 1 to indicate the user is now logged in
+    $employee->is_login = 1;
+    $employee->save();
+
+    // Return employee data on successful login
+    return response()->json([
+        'status' => 'S',
+        'message' => 'Login successful',
+        'data' => $employee
+    ]);
+}
+
+public function logout(Request $request)
+{
+    // Assuming $employee is fetched from the database based on the user's ID or token
+    $employee = Employee::where('phone', $request->phone)->first();
+    
+    // Check if the employee exists
+    if (!$employee) {
+        return response()->json([
+            'status' => 'F',
+            'message' => 'Employee not found'
+        ], 404);
+    }
+
+    // Check if the account is active
+    if (!$employee->is_active) {
+        return response()->json([
+            'status' => 'F',
+            'message' => 'Account not active, please contact admin'
+        ], 401);
+    }
+
+    // Set is_login column to 0 to indicate the user has logged out
+    $employee->is_login = 0;
+    $employee->save();
+
+    // Return success message on successful logout
+    return response()->json([
+        'status' => 'S',
+        'message' => 'Logout successful'
+    ]);
+}
+/////////////////////////////////////////
 
 
 
     // Employee login
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required|digits:10', // Ensure phone is exactly 10 digits
-            'password' => 'required|string',
-        ]);
+    // public function login(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'phone' => 'required|digits:10', // Ensure phone is exactly 10 digits
+    //         'password' => 'required|string',
+    //     ]);
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+    //     // Check if validation fails
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'message' => 'Validation error',
+    //             'errors' => $validator->errors()
+    //         ], 422);
+    //     }
 
-        // Fetch employee by phone number
-        $employee = Employee::where('phone', $request->phone)->first();
+    //     // Fetch employee by phone number
+    //     $employee = Employee::where('phone', $request->phone)->first();
 
-        if (!$employee) {
-            return response()->json([
-                'status' => 'F',
-                'message' => 'User not found',
-            ], 404);
-        }
+    //     if (!$employee) {
+    //         return response()->json([
+    //             'status' => 'F',
+    //             'message' => 'User not found',
+    //         ], 404);
+    //     }
 
-        // Check if employee exists and if password matches
-        if ($request->password != $employee->password) {
-            return response()->json([
-                'status' => 'F',
-                'message' => 'Invalid phone or password'
-            ], 401);
-        }
+    //     // Check if employee exists and if password matches
+    //     if ($request->password != $employee->password) {
+    //         return response()->json([
+    //             'status' => 'F',
+    //             'message' => 'Invalid phone or password'
+    //         ], 401);
+    //     }
 
-        // Check if employee is active
-        if ($employee->is_active == 0) {
-            return response()->json([
-                'status' => 'F',
-                'message' => 'Account not active, please contact admin'
-            ], 401);
-        }
+    //     // Check if employee is active
+    //     if ($employee->is_active == 0) {
+    //         return response()->json([
+    //             'status' => 'F',
+    //             'message' => 'Account not active, please contact admin'
+    //         ], 401);
+    //     }
 
-        // Return employee data on successful login
-        return response()->json([
-            'status' => 'S',
-            'message' => 'Login successful',
-            'data' => $employee
-        ]);
-    }
+    //     // Return employee data on successful login
+    //     return response()->json([
+    //         'status' => 'S',
+    //         'message' => 'Login successful',
+    //         'data' => $employee
+    //     ]);
+    // }
 
 
     public function add_call_logs(Request $request)
