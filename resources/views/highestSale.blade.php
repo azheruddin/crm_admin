@@ -129,7 +129,7 @@
     <div id="today-sales" class="tab-content active">
     <table border="1" class="table">
         <thead>
-            <tr>
+            <tr> 
                 <th>Rank</th>
                 <th>Employee Name</th>
                 <th>Total Sales</th>
@@ -166,7 +166,7 @@
                 <tr>
                     <td>{{ $rank++ }}</td> <!-- Increment rank with each iteration -->
                     <td>{{ $sale->employee_name }}</td>
-                    <td>RS {{ number_format($sale->total_sales, 2) }}</td>
+                    <td>₹ {{ number_format($sale->total_sales, 2) }}</td>
                 </tr>
             @endforeach
         </tbody>

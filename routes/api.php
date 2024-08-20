@@ -79,6 +79,11 @@ Route::get('/month_sales_by_employee', [ApiController::class, 'monthSalesByEmplo
 Route::get('/today_top_calls', [ApiController::class, 'TopCallsToday']);
 Route::get('/month_top_calls', [ApiController::class, 'TopCallsThisMonth']);
 
+Route::get('/get_message', [ApiController::class, 'getMessage']);
+
+
+
+
 
 
 

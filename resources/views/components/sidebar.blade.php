@@ -68,7 +68,7 @@
 
              <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/add_leads">Add Leads</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/add_leads">Add Leads</a></li>
                 </ul>
               </div>
 
@@ -81,7 +81,7 @@
 
               <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/leads_feedback">Leads Feedback</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/leads_feedback">Leads Feedback</a></li>
                 </ul>
               </div>
 
@@ -110,11 +110,11 @@
                 </ul>
               </div>
 
-              <div class="collapse" id="charts">
+              <!-- <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="/leads_count{stateId}">Leads Count</a></li>
                 </ul>
-              </div>
+              </div> -->
                     
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="charts">
@@ -141,7 +141,24 @@
                 </ul>
               </div>
 
+              <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#message" aria-expanded="false" aria-controls="charts">
+                <i class="menu-icon mdi mdi-chart-line"></i>
+                <span class="menu-title">Messages</span>
+                <i class="menu-arrow"></i>
+              </a>    
               
+              <div class="collapse" id="message">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/add_message">Add Message</a></li>
+                </ul>
+              </div>
+
+              <div class="collapse" id="message">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/show_message">Show Message</a></li>
+                </ul>
+              </div>
              
 
 
@@ -198,7 +215,7 @@
 
                 <!-- <x-dropdown-link :href="route('logout')"
                         onclick="event.preventDefault();
-                                    this.closest('form').submit();">
+                          this.closest('form').submit();">
                     {{ __('Log Out') }}
                 </x-dropdown-link> -->
             </form>

@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Sale;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;  // read about this on google
 
@@ -568,10 +569,49 @@ public function TopCallsThisMonth()
     ->get();
 
     return response()->json($topEmployees);      
-} 
-
 
 } 
 
 
- 
+
+public function getMessage(Request $request)
+{
+    try {
+        // Check if 'id' is provided in the request
+        $id = $request->input('id');
+
+        if ($id) {
+            // Fetch a single message by ID
+            $message = Message::find($id);
+
+            if (!$message) {
+                return response()->json([
+                    'status' => 'F',
+                    'message' => 'Message not found'
+                ], 404); // 404 Not Found
+            }
+
+            return response()->json([
+                'status' => 'S',
+                'data' => $message  
+            ], 200); // 200 OK
+        } else {
+            // Fetch all messages
+            $messages = Message::all();
+
+            return response()->json([
+                'status' => 'S',
+                'data' => $messages
+            ], 200); // 200 OK
+        }
+    } catch (\Exception $e) {
+        // Return general error
+        return response()->json([
+            'status' => 'F',
+            'message' => 'An error occurred',
+            'error' => $e->getMessage()
+        ], 500); // 500 Internal Server Error
+    }
+}
+}
+        
