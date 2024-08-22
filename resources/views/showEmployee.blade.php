@@ -9,7 +9,7 @@
         {{ session('success') }}
     </div>
     @endif
-                  <div class="card-body">
+                  <div class="card-body"> 
                   <h4 class="card-title text-primary">Show Employees</h4><hr>
                    
                     <!-- table goes here -->
@@ -30,13 +30,13 @@
         <tbody>
         @foreach($employees as $employee)
         <tr>
-            <td>{{ $employee->name }}</td>
+            <td>{{ $employee->name }}</td> 
             <td>{{ $employee->email }}</td>
             <td>{{ $employee->phone }}</td>
             <td>{{ $employee->type }}</td>
             <td>
             <a href="{{ route('employees.toggle', ['id' => $employee->id]) }}" class="btn btn-{{ $employee->is_active ? 'danger' : 'success' }}" onclick="return confirm('Are you sure you want to {{ $employee->is_active ? 'deactivate' : 'activate' }} this employee?');">
-             {{ $employee->is_active ? 'Deactivate' : 'Activate' }}
+             {{ $employee->is_active ? 'Deactivate' : 'Activate' }}     
             </a>
             </td>
             <td>              

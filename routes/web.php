@@ -7,6 +7,7 @@ use App\Http\Controllers\CallHistoryController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,41 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     Route::get('/all_sale', [SalesController::class, 'allSales'])->name('all_sale');
     Route::get('/show_sale', [SalesController::class, 'highestSales'])->name('show_sale');
     Route::get('/show_call', [CallHistoryController::class, 'highestCalls'])->name('show_call');
+
+
+    Route::post('/add_message', [ MessageController::class, 'addMessage'])->name('message.store');
+   
+    Route::get('/add_message', function () {
+        return view('addMessage');
+    });
+    
+
+    Route::get('/show_message', [MessageController::class, 'showMessage'])->name('show_message');
+
+    Route::get('/message_detail/{id}', [MessageController::class, 'messageDetail'])->name('message_detail');
+    
+    Route::get('/message/{id}/edit', [MessageController::class, 'editMessage'])->name('message.edit');
+
+
+
+    Route::post('/message/{id}/update', [MessageController::class, 'update'])->name('message.update');
+    // Route::post('/employees/{id}/update', [EmployeeController::class, 'update'])->name('employees.update');
+
+
+
+    Route::delete('/messages/{id}', [MessageController::class, 'destroyMessage'])->name('messages.destroy');
+    
+
+
+    
+
+
+
+
+
+
+
+
 
 
 

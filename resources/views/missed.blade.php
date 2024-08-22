@@ -36,7 +36,7 @@
         <td>{{ $calls->type }}</td>
 
         <td>{{ $calls->call_duration }}</td>
-        <td>{{ $calls->created_at }}</td> ``                                                                              
+        <td>{{ $calls->created_at }}</td>                                                                               
 
         <!-- @php
                     // Ensure that $calls->call_duration is numeric

@@ -140,7 +140,7 @@ public function filterCallHistoryByEmployee(Request $request)
     public function incomingCall()
     {
         // Fetch today's date
-        $today = now()->format('Y-m-d');
+        $today = now()->format('Y-m-d'); 
         
         // Fetch call histories for today
         $callHistories = CallHistory::whereDate('created_at', $today)->where('type', 'incoming')->get();
