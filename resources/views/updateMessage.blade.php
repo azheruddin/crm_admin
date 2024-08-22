@@ -8,28 +8,31 @@
                 <h4 class="card-title text-primary">Edit Message</h4>
                 <hr>
                 <form class="forms-sample" method="POST" action="{{ route('message.update', $message->id) }}">
-                    @method('PUT')
+                @csrf
+
+
+                <div class="form-group">
+              <label for="category">Category</label>
+              <select class="form-control" id="category" name="category" required>
+        <option value="Offer" {{ $message->category == 'Offer' ? 'selected' : '' }}>Offer</option>
+        <option value="Announcement" {{ $message->category == 'Announcement' ? 'selected' : '' }}>Announcement</option>
+        <option value="Normal" {{ $message->category == 'Normal' ? 'selected' : '' }}>Normal</option>
+        <option value="Other" {{ $message->category == 'Other' ? 'selected' : '' }}>Other</option>
+    </select>
+</div>
+                   
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" id="title" name="title" class="form-control" value="{{ old('title', $message->title) }}" required>
-                        @error('title')
-                            <div class="text-danger">{{ $title }}</div>
-                        @enderror
+                        <input type="text" id="title" name="title" class="form-control" value="{{  $message->title }}" required>
+                      
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" class="form-control" rows="5" required>{{ old('message', $message->message) }}</textarea>
-                        @error('message')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <textarea id="message" name="message" class="form-control" rows="10" style="height:100%;" required>{{ $message->message }}</textarea>
+                       
                     </div>
-                    <div class="form-group"> 
-                        <label for="category">Category</label>
-                        <input type="text" id="category" name="category" class="form-control" value="{{ old('category', $message->category) }}" required>
-                        @error('category')
-                            <div class="text-danger">{{ $category }}</div>
-                        @enderror
-                    </div>
+                   
+
                     <button type="submit" class="btn btn-primary">Update Message</button>
                 </form>
             </div>

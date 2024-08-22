@@ -14,11 +14,11 @@
                 <i class="menu-arrow"></i>
               </a>
                     
-              <div class="collapse" id="ui-basic">
+              <div class="collapse" id="ui-basic"> 
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="/add_employee">Add Employee</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/show_employee">Show Employee</a></li>
-                  <!-- <li class="nav-item"> <a class="nav-link" href="#">Typography</a></li> -->
+                    <!-- <li class="nav-item"> <a class="nav-link" href="#">Typography</a></li> -->                                               
                 </ul>
               </div>
             </li>
@@ -116,12 +116,14 @@
                 </ul>
               </div> -->
                     
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="charts">
-                <i class="menu-icon mdi mdi-chart-line"></i>
-                <span class="menu-title">Sales</span>
-                <i class="menu-arrow"></i>
-              </a>    
+                    <li class="nav-item">
+                     <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="charts">
+                     <i class="menu-icon mdi mdi-cash"></i>
+                     <span class="menu-title">Sales</span>
+                    <i class="menu-arrow"></i>
+                      </a>  
+                        </li>
+
               
               <div class="collapse" id="sales">
                 <ul class="nav flex-column sub-menu">
@@ -141,12 +143,14 @@
                 </ul>
               </div>
 
-              <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#message" aria-expanded="false" aria-controls="charts">
-                <i class="menu-icon mdi mdi-chart-line"></i>
-                <span class="menu-title">Messages</span>
-                <i class="menu-arrow"></i>
-              </a>    
+            <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#message" aria-expanded="false" aria-controls="charts">
+            <i class="menu-icon mdi mdi-comment-text"></i>
+            <span class="menu-title">Messages</span>
+             <i class="menu-arrow"></i>
+             </a>
+             </li>
+
               
               <div class="collapse" id="message">
                 <ul class="nav flex-column sub-menu">
@@ -207,7 +211,7 @@
             <li class="nav-item">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-
+ 
                 <a class="nav-link" :href="route('logout')" onclick="event.preventDefault();this.closest('form').submit();">
                   <i class="menu-icon mdi mdi-file-document"></i>
                   <span class="menu-title">Logout</span>

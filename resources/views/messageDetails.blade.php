@@ -6,7 +6,7 @@
                 <div class="card">
                   <div class="card-body">
                   
-                    <h4 class="card-title text-primary">Employee Details 
+                    <h4 class="card-title text-primary">Message Details 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">    
                     <a href="{{ route('show_message', ['message_id' => $message->id]) }}"button type="button" class="btn btn-primary justify-content-md-end" >Back</button></a>
                     </div>
@@ -31,11 +31,7 @@
                             <td>Category</td>
                             <td>{{ $message->category }}</td>
                           </tr>
-                          
-
-                          
-                          
-                          
+                        
                         </tbody>
                       </table>
                     </div>

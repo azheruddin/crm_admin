@@ -16,7 +16,15 @@
                     @csrf
 
                     <!-- New Category Dropdown -->
-                    
+                    <div class="form-group">
+                        <label for="exampleInputCategory">Category</label>
+                        <select class="form-control" id="exampleInputCategory" name="category"  placeholder="Enter Category">
+                            <option value="Offer">Offer</option>
+                            <option value="Announcement">Announcement</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
 
                     <!-- New Title Field -->
                     <div class="form-group">
@@ -27,19 +35,11 @@
                     <!-- New Message Field -->
                     <div class="form-group">
                         <label for="exampleInputMessage">Message</label>
-                        <textarea class="form-control" id="exampleInputMessage" name="message" rows="3" placeholder="Enter Message"></textarea>
+                        <textarea class="form-control" id="" name="message" rows="10" style="height:100%;"  placeholder="Enter Message"></textarea>
                     </div>
 
 
-                    <div class="form-group">
-                        <label for="exampleInputCategory">Category</label>
-                        <select class="form-control" id="exampleInputCategory" name="category"  placeholder="Enter Category">
-                            <option value="Offer">Offer</option>
-                            <option value="Announcement">Announcement</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                    
 
                     <button type="submit" class="btn btn-primary me-2">Add Message</button>
                     <button type="reset" class="btn btn-light">Cancel</button>

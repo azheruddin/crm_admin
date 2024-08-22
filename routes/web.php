@@ -154,13 +154,13 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
     Route::get('/show_message', [MessageController::class, 'showMessage'])->name('show_message');
 
-    Route::get('/message_/{id}', [MessageController::class, 'messageDetail'])->name('message_detail');
+    Route::get('/message_detail/{id}', [MessageController::class, 'messageDetail'])->name('message_detail');
     
     Route::get('/message/{id}/edit', [MessageController::class, 'editMessage'])->name('message.edit');
 
 
 
-    Route::put('/message/{id}/update', [MessageController::class, 'update'])->name('message.update');
+    Route::post('/message/{id}/update', [MessageController::class, 'update'])->name('message.update');
     // Route::post('/employees/{id}/update', [EmployeeController::class, 'update'])->name('employees.update');
 
 

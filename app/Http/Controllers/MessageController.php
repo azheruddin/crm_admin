@@ -46,7 +46,7 @@ class MessageController extends Controller
         $message = Message::findOrFail($id);
     
         // Return the view with the message
-        return view('messageDetails', compact('message'));
+        return view('messageDetails', compact('message')); 
     }
 
 public function editMessage($id)
@@ -55,15 +55,25 @@ public function editMessage($id)
     return view('updateMessage', compact('message'));
 }
 
+
 public function update(Request $request, $id)
 {
-    // Find and update the message
-    $message = Message::findOrFail($id);
-    $message->update($request->all());
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'message' => 'required|string|max:255',
+        'category' => 'required|string|max:20',
+    ]);
 
-    // Redirect or return a response
-    return redirect()->route('/messages/{id}')->with('success', 'Message updated successfully');
+    $msg = Message::findOrFail($id);
+    $msg->title = $validatedData['title'];
+    $msg->message = $validatedData['message'];
+    $msg->category = $validatedData['category'];
+
+    $msg->save();
+    $request->session()->flash('success', 'message update successfully.');
+    return redirect()->route('show_message')->with('success', 'message updated successfully.');
 }
+
 
     public function destroyMessage($id)
 {
@@ -72,10 +82,6 @@ public function update(Request $request, $id)
 
     return redirect()->route('show_message')->with('success', 'message deleted successfully');
 }
-
-
-
-
 
 
 }

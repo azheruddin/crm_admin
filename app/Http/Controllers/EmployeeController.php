@@ -74,7 +74,7 @@ public function update(Request $request, $id)
         'email' => 'required|email|max:255|unique:employees,email,' . $id,
         'phone' => 'required|string|max:20',
         'type' => 'required|string',
-        'password' => 'nullable|string|min:8',
+
     ]);
 
     $employee = Employee::findOrFail($id);
@@ -82,7 +82,6 @@ public function update(Request $request, $id)
     $employee->email = $validatedData['email'];
     $employee->phone = $validatedData['phone'];
     $employee->type = $validatedData['type'];
-    $employee->password =  $validatedData['password'];
 
     
     // if ($request->filled('password')) {
