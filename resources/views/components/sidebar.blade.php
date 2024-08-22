@@ -110,11 +110,11 @@
                 </ul>
               </div>
 
-              <div class="collapse" id="charts">
+              <!-- <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="/leads_count{stateId}">Leads Count</a></li>
                 </ul>
-              </div>
+              </div> -->
                     
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="charts">

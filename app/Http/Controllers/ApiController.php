@@ -429,7 +429,7 @@ public function lead_by_employee(Request $request)
     }
 }
 
-public function followup_leads(Request $request)
+public function calls_count(Request $request)
 {
     $employee_id = $request->input('employee_id');
     
@@ -440,6 +440,7 @@ public function followup_leads(Request $request)
    $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
    $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
    $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+   $unknownCallsToday = CallHistory::where('type', 'unknown')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
    $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
 
    
@@ -450,6 +451,7 @@ public function followup_leads(Request $request)
             'outgoing' => $outgoingCallsToday,
             'incoming' => $incomingCallsToday,
             'missed' => $missedCallsToday,
+            'unknown' => $unknownCallsToday,
         ]);
         
 
