@@ -52,6 +52,7 @@ Route::get('/filter_call_history', [CallHistoryController::class, 'filterCallHis
 Route::get('/outgoing_call_history', [CallHistoryController::class, 'outgoingCall'])->name('outgoing_call_history');
 Route::get('/incoming_call_history', [CallHistoryController::class, 'incomingCall'])->name('incoming_call_history');
 Route::get('/missed_call_history', [CallHistoryController::class, 'missedCall'])->name('missed_call_history');
+Route::get('/unknown_call_history', [CallHistoryController::class, 'unknownCall'])->name('unknown_call_history');
 
 
 
@@ -161,9 +162,8 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
 
     Route::post('/message/{id}/update', [MessageController::class, 'update'])->name('message.update');
-    // Route::post('/employees/{id}/update', [EmployeeController::class, 'update'])->name('employees.update');
 
-
+ 
 
     Route::delete('/messages/{id}', [MessageController::class, 'destroyMessage'])->name('messages.destroy');
     

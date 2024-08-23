@@ -24,6 +24,8 @@ class CommonController extends Controller
         $incomingCallsToday = CallHistory::where('type', 'Incoming')->whereDate('created_at', $today)->count();
         $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->whereDate('created_at', $today)->count();
         $missedCallsToday = CallHistory::where('type', 'Missed')->whereDate('created_at', $today)->count();
+        $unknownCallsToday = CallHistory::where('type', 'Unknown')->whereDate('created_at', $today)->count();
+
         $todayCalls = CallHistory::whereDate('created_at', $today)->count();
 
         // leads
@@ -34,7 +36,7 @@ class CommonController extends Controller
        
     
         // Return the view with the counts
-        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees', 'incomingCallsToday', 'outgoingCallsToday', 'missedCallsToday', 'todayCalls', 'totalLeads', 'hotLeads', 'interested', 'notInterested'));
+        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees', 'incomingCallsToday', 'outgoingCallsToday', 'missedCallsToday','unknownCallsToday', 'todayCalls', 'totalLeads', 'hotLeads', 'interested', 'notInterested'));
     }
 
 

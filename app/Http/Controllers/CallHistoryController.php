@@ -150,6 +150,20 @@ public function filterCallHistoryByEmployee(Request $request)
     }
 
 
+    public function unknownCall()
+    {
+        // Fetch today's date
+        $today = now()->format('Y-m-d');
+        
+        // Fetch call histories for today
+        $callHistories = CallHistory::whereDate('created_at', $today)->where('type', 'unknown')->get();
+        
+        
+        return view('unknown', compact('callHistories',));
+    }
+
+
+
     public function missedCall()
     {
         // Fetch today's date

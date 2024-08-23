@@ -59,20 +59,14 @@
     <div class="col-md-6 col-lg- grid-margin stretch-card">
       <div class="card card-rounded">
         <div class="card-body">
-            <h4 class="text-primary"> Today Calls </h4><hr>
+        <div class="row">
 
-          <div class="row">
-            <div class="col-lg-3">
-              <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
-                <div class="circle-progress-width">
-                  <div id="totalVisitors1" class="progressbar-js-circle pr-2"></div>
-                </div>
-                <div>
-                  <p class="text-small mb-2"><span class="text-primary"><a href="{{ route('filter_call_history') }}">Total</a></span></p>
-                  <h4 class="mb-0 fw-bold">{{ $todayCalls}}</h4>
-                </div>
-              </div>
-            </div>
+        <h4 class="text-primary">
+    <a href="{{ route('filter_call_history') }}"><span class="text-primary">
+    Today Calls</span><span class="text-dark">   - {{ $todayCalls }}</span>
+    </a>
+</h4><hr>
+
             <div class="col-lg-3">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="circle-progress-width">
@@ -107,6 +101,20 @@
                 </div>
               </div>
             </div>
+  
+            <div class="col-lg-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="circle-progress-width">
+                  <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
+                </div>
+                <div>
+                  <p class="text-small mb-2"><a href="{{ route('unknown_call_history') }}"><span class="text-primary">Unknown</a></span></p>
+                  <h4 class="mb-0 fw-bold">{{ $unknownCallsToday }}</h4>
+                </div>
+              </div>
+            </div>
+
+
             </div>
             </div>
             </div>

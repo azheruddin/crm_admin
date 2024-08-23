@@ -12,7 +12,6 @@
                 </div>
              
                 <h6 class="fw-light">Sign in to continue.</h6>
-                <!-- <form class="pt-3" method="POST" action=""> -->
                 <form class="pt-3" method="POST" action="">
                 @csrf
                   <div class="form-group">
