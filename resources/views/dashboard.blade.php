@@ -33,7 +33,7 @@
                 <div>
                   <p class="text-small mb-2"><span class="text-primary">Active</span></p>
                   <h4 class="mb-0 fw-bold">{{ $activeEmployees }}</h4>
-
+ 
                   <!-- <h4 class="mb-0 fw-bold">26.80</h4> -->
                 </div>
               </div>
