@@ -17,9 +17,9 @@ class Leads extends Model
 
     protected $table = "leads";
     
-    protected $fillable = ['customer_name', 'customer_email', 'phone', 'state','city']; 
+    // protected $fillable = ['customer_name', 'customer_email', 'phone', 'state','city']; 
 
-    protected $primaryKey = 'lead_id'; // Specify your actual primary key name if different
+    // protected $primaryKey = 'lead_id'; // Specify your actual primary key name if different
 
 
     
@@ -43,6 +43,11 @@ class Leads extends Model
     }
 
    
+    public function feedback()
+{
+    return $this->hasOne(Feedback::class, 'lead_id');
+}
+
      
 }
 

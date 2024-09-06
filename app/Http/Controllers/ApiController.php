@@ -8,165 +8,198 @@ use App\Models\Employee;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Sale;
-use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;  // read about this on google
-
-use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use App\Models\Message;
 
 class ApiController extends Controller
 {
     //
-
+    
 
     public function add_calls(Request $request)
+
     {
-
-
-        $callHistory = new CallHistory();
-        $callHistory->customer_name = $request->customer_name;
-        $callHistory->phone = $request->phone;
-        $callHistory->call_type = $request->call_type;
-        $callHistory->duration = $request->duration;
-        $callHistory->employee_id = $request->employee_id;
-        $callHistory->save();
+        
+    
+            $callHistory = new CallHistory();
+            $callHistory->customer_name = $request->customer_name;
+            $callHistory->contact_name = $request->contact_name;
+            $callHistory->phone = $request->phone;
+            $callHistory->call_type = $request->call_type;
+            $callHistory->duration = $request->duration;           
+            $callHistory->employee_id = $request->employee_id;           
+            $callHistory->save();
 
         return response()->json([
             'message' => 'Data insert successfully',
-            'data' => $callHistory
+            // 'data' => $callHistory
         ], 201);
     }
-
-
+    
+    
 
     public function lead_calls(Request $request)
     {
-
-
+        
+    
         $leads = new Leads();
-        $leads->customer_name = $request->customer_name;
-        $leads->customer_email = $request->customer_email;
-        $leads->phone = $request->phone;
-        $leads->employee_id = $request->employee_id;
-        $leads->notes = $request->notes;
-        $leads->lead_stage = $request->lead_stage;
-        $leads->feedback = $request->feedback;
-        $leads->expected_revenue = $request->expected_revenue;
-        $leads->next_follow_up = $request->next_follow_up;
-        //            
-        $leads->save();
-
+            $leads->customer_name = $request->customer_name;
+            $leads->customer_email = $request->customer_email;
+            $leads->phone = $request->phone;
+            $leads->employee_id = $request->employee_id;
+            $leads->notes = $request->notes;
+            $leads->lead_stage = $request->lead_stage;           
+            $leads->feedback = $request->feedback;           
+            $leads->expected_revenue = $request->expected_revenue;          
+            $leads->next_follow_up = $request->next_follow_up;           
+            //            
+            $leads->save();
+         
 
         return response()->json([
             'message' => 'Leads inserted successfully',
             'data' => $leads
         ], 201);
     }
+    
+    
 
 
+    
+// Employee login
+public function login(Request $request)
+{
+ $validator = Validator::make($request->all(), [
+    'phone' => 'required|digits:10', // Ensure phone is exactly 10 digits
+    'password' => 'required|string',
+]);
 
+// Check if validation fails
+if ($validator->fails()) {
+    return response()->json([
+        'message' => 'Validation error',
+        'errors' => $validator->errors()
+    ], 422);
+}
 
+// Fetch employee by phone number
+$employee = Employee::where('phone', $request->phone)->first();
 
-    // Employee login
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required|digits:10', // Ensure phone is exactly 10 digits
-            'password' => 'required|string',
-        ]);
+if (!$employee) {
+    return response()->json([
+        'status' => 'F',
+        'message' => 'User not found',
+    ], 404);
+}
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
+// Check if employee exists and if password matches
+if ($request->password != $employee->password) {
+    return response()->json([
+        'status' => 'F',
+        'message' => 'Invalid phone or password'
+    ], 401);
+}
+
+// Check if employee is active
+if ($employee->is_active == 0) {
+    return response()->json([
+        'status' => 'F',
+        'message' => 'Account not active, please contact admin'
+    ], 401);
+}
+
+// Return employee data on successful login
+return response()->json([
+    'status' => 'S',
+    'message' => 'Login successful',
+    'data' => $employee
+]);
+}
+ 
+
+public function add_call_logs(Request $request)
+{
+    // Retrieve employee_id from the request
+    $employeeId = $request->employee_id;
+
+    // Array to store unique call logs
+    $uniqueCallLogs = [];
+    $requestCallLogs = $request->call_logs;
+
+    foreach ($requestCallLogs as $data) {
+        // Check if the call log already exists
+        $existingCallLog = CallHistory::where('employee_id', $employeeId)
+            ->where('call_date', $data['call_date'])
+            ->exists();
+
+        if (!$existingCallLog) {
+            // Create a new call log
+            $uniqueCallLogs[] = [
+                'employee_id' => $employeeId,
+                'phone' => $data['phone'],
+                'type' => $data['type'],
+                'call_date' => $data['call_date'],
+                'call_duration' => $data['call_duration'],
+                'contact_name' => $data['contact_name']
+                // Add other fields as needed
+            ];
         }
+    }
 
-        // Fetch employee by phone number
-        $employee = Employee::where('phone', $request->phone)->first();
-
-        if (!$employee) {
-            return response()->json([
-                'status' => 'F',
-                'message' => 'User not found',
-            ], 404);
-        }
-
-        // Check if employee exists and if password matches
-        if ($request->password != $employee->password) {
-            return response()->json([
-                'status' => 'F',
-                'message' => 'Invalid phone or password'
-            ], 401);
-        }
-
-        // Check if employee is active
-        if ($employee->is_active == 0) {
-            return response()->json([
-                'status' => 'F',
-                'message' => 'Account not active, please contact admin'
-            ], 401);
-        }
-
-        // Return employee data on successful login
+    if (count($uniqueCallLogs) == 0) {
+        // All records are duplicates
         return response()->json([
-            'status' => 'S',
-            'message' => 'Login successful',
-            'data' => $employee
-        ]);
+            'message' => 'All records are duplicates'
+        ], 400);
+    } else {
+        // Bulk insert unique call logs
+        CallHistory::insert($uniqueCallLogs);
+
+        // Return message with count of unique records added
+        return response()->json([
+            'message' => count($uniqueCallLogs) . ' records added successfully'
+        ], 201);
     }
+}
 
 
-    public function add_call_logs(Request $request)
-    {
-        // Retrieve employee_id from the request
-        $employeeId = $request->employee_id;
+    // show leads by employee
+//     public function lead_by_employee(Request $request)
+//     {
+//         $leads = Leads::where('employee_id', $request->employee_id)->where('is_deleted', 0)->orderBy('id', 'desc')->get();
+//         $data_record = array();
+//         foreach ($leads as $row) {
 
-        // Array to store unique call logs
-        $uniqueCallLogs = [];
-        $requestCallLogs = $request->call_logs;
+//             $data_record[] = [
+//                 'id' => $row->id,
+//                 'customer_name' => $row->customer_name,
+//                 'customer_email' => $row->customer_email,
+//                 'phone' => $row->phone,
+//                 'lead_stage' => $row->lead_stage,
+//                 'feedback' => $row->feedback,
+//                 'expected_revenue' => $row->expected_revenue,
+//                 'notes' => $row->notes,
+//                 'next_follow_up' => $row->next_follow_up,
+//                 'employee_id' => $row->employee_id,
+//             ];
 
-        foreach ($requestCallLogs as $data) {
-            // Check if the call log already exists
-            $existingCallLog = CallHistory::where('employee_id', $employeeId)
-                ->where('call_date', $data['call_date'])
-                ->exists();
+//         }
+//         $array = json_encode($data_record);
+//         $array = json_decode($array);
+//         if ($leads != null && $request->employee_id != null) {
+//             return response()->json([
+//                 'status' => 'S',
+//                 'data' => $array,
 
-            if (!$existingCallLog) {
-                // Create a new call log
-                $uniqueCallLogs[] = [
-                    'employee_id' => $employeeId,
-                    'phone' => $data['phone'],
-                    'type' => $data['type'],
-                    'call_date' => $data['call_date'],
-                    'call_duration' => $data['call_duration']
-                    // Add other fields as needed
-                ];
-            }
-        }
-
-        if (count($uniqueCallLogs) == 0) {
-            // All records are duplicates
-            return response()->json([
-                'message' => 'All records are duplicates'
-            ], 400);
-        } else {
-            // Bulk insert unique call logs
-            CallHistory::insert($uniqueCallLogs);
-
-            // Return message with count of unique records added
-            return response()->json([
-                'message' => count($uniqueCallLogs) . ' records added successfully'
-            ], 201);
-        }
-    }
-
-
+//       ], 200, [], JSON_NUMERIC_CHECK);
+//   } else {
+//       return response()->json(['status' => 'F', 'errorMsg' => 'data Not found'], 200);
+//   }
+// }
 
 public function lead_by_id(Request $request){
     $leads = Leads::where('id', $request->id)->where('is_deleted', 0)->first();
@@ -215,7 +248,7 @@ public function update_lead(Request $request, $id)
     $lead->employee_id = $request->input('employee_id');
     $lead->notes = $request->input('notes');
     $lead->lead_stage = $request->input('lead_stage');
-    $lead->feedback = $request->input('feedback');
+    // $lead->feedback = $request->input('feedback');
     $lead->expected_revenue = $request->input('expected_revenue');
     $lead->next_follow_up = $request->input('next_follow_up');
 
@@ -261,6 +294,7 @@ public function leads_count(Request $request)
     // leads
     $totalLeads = Leads::where('employee_id', $employee_id)
                        ->where('is_deleted', 0)
+                       ->where('lead_stage','!=', 'new')
                        ->count();
 
     $newLeads = Leads::where('employee_id', $employee_id)
@@ -282,6 +316,10 @@ public function leads_count(Request $request)
                           ->where('lead_stage', 'not_interested')
                           ->where('is_deleted', 0)
                           ->count();
+    $notAnswered = Leads::where('employee_id', $employee_id)
+                          ->where('lead_stage', 'not_answered')
+                          ->where('is_deleted', 0)
+                          ->count();
 
     // Return the counts as JSON response
     return response()->json([
@@ -290,11 +328,13 @@ public function leads_count(Request $request)
         'hotLeads' => $hotLeads,
         'interested' => $interested,
         'notInterested' => $notInterested,
+        'notAnswered' => $notAnswered,
+        
     ]);
 }
 
 
-public function lead_by_employee(Request $request)
+  public function lead_by_employee(Request $request)
 {
     $query = Leads::where('employee_id', $request->employee_id)
                   ->where('is_deleted', 0);
@@ -302,6 +342,11 @@ public function lead_by_employee(Request $request)
     if ($request->has('lead_type')) {
         $query->where('lead_stage', $request->lead_type);
     }
+    // if ($request->has('lead_type')) {
+    //     $query->where('lead_stage', '!=', $request->lead_type);
+    // }
+    
+   
 
     $leads = $query->orderBy('id', 'desc')->get();
 
@@ -335,32 +380,231 @@ public function lead_by_employee(Request $request)
     }
 }
 
+
+ public function new_lead_by_employee(Request $request)
+{
+    $leads = Leads::where('employee_id', $request->employee_id)
+                  ->where('is_deleted', 0)
+                  ->where('lead_stage', 'new')
+                  ->orderBy('id', 'desc')->get();
+
+    
+
+    $data_record = [];
+
+    foreach ($leads as $row) {
+        $data_record[] = [
+            'id' => $row->id,
+            'customer_name' => $row->customer_name,
+            'customer_email' => $row->customer_email,
+            'phone' => $row->phone,
+            'lead_stage' => $row->lead_stage,
+            'feedback' => $row->feedback,
+            'expected_revenue' => $row->expected_revenue,
+            'notes' => $row->notes,
+            'next_follow_up' => $row->next_follow_up,
+            'employee_id' => $row->employee_id,
+        ];
+    }
+
+    if (!empty($data_record)) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $data_record,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json([
+            'status' => 'F',
+            'errorMsg' => 'Data not found',
+        ], 200);
+    }
+}
+
+// public function followup_leads(Request $request)
+// {
+//     $query = Leads::where('employee_id', $request->employee_id)
+//                   ->where('is_deleted', 0)
+//                   ->whereNotNull('next_follow_up')
+//                   ->where('next_follow_up', '>', now())
+//                   ->orderBy('id', 'desc')
+//                   ->get();
+
+//     $data_record = [];
+
+//     foreach ($query as $row) {
+//         $data_record[] = [
+//             'id' => $row->id,
+//             'customer_name' => $row->customer_name,
+//             'customer_email' => $row->customer_email,
+//             'phone' => $row->phone,
+//             'lead_stage' => $row->lead_stage,
+//             'feedback' => $row->feedback,
+//             'expected_revenue' => $row->expected_revenue,
+//             'notes' => $row->notes,
+//             'next_follow_up' => $row->next_follow_up,
+//             'employee_id' => $row->employee_id,
+//         ];
+//     }
+
+//     if (!empty($data_record)) {
+//         return response()->json([
+//             'status' => 'S',
+//             'data' => $data_record,
+//         ], 200, [], JSON_NUMERIC_CHECK);
+//     } else {
+//         return response()->json([
+//             'status' => 'F',
+//             'errorMsg' => 'Data not found',
+//         ], 200);
+//     }
+// }
+
+
+//////////////
 public function followup_leads(Request $request)
 {
-    $employee_id = $request->input('employee_id');
+    // $query = Leads::where('employee_id', $request->employee_id)
+    //               ->where('is_deleted', 0)
+    //               ->whereNotNull('next_follow_up')
+    //             //   ->where('next_follow_up', '>=', now())
+                
+    //               ->orderBy('id', 'desc')
+    //               ->get();
     
-   // Get today's date
-   $today = Carbon::today();
+     $employeeId = $request->employee_id;
 
-   // Fetch the counts for different call types created today
-   $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-   $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-   $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-   $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
+    // Perform the raw query with conversion
+    $query = Leads::where('employee_id', $request->employee_id)
+              ->where('is_deleted', 0)
+              ->whereNotNull('next_follow_up')
+              ->where('next_follow_up', '>=', now())
+              ->orderBy('id', 'desc')
+              ->get();
+
+    // Log::info('Query executed:', ['query' => $query->toArray()]); // Log the result of the query
+
+    $data_record = [];
+
+    foreach ($query as $row) {
+        $data_record[] = [
+            'id' => $row->id,
+            'customer_name' => $row->customer_name,
+            'customer_email' => $row->customer_email,
+            'phone' => $row->phone,
+            'lead_stage' => $row->lead_stage,
+            'feedback' => $row->feedback,
+            'expected_revenue' => $row->expected_revenue,
+            'notes' => $row->notes,
+            'next_follow_up' => $row->next_follow_up,
+            'employee_id' => $row->employee_id,
+        ];
+    }
+
+    // Log::info('Data records:', ['data_record' => $data_record]); // Log the final data record
+
+    if (!empty($data_record)) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $data_record,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json([
+            'status' => 'F',
+            'errorMsg' => 'Data not found',
+        ], 200);
+    }
+}
+//////////////////////
+
+//   public function calls_count(Request $request)
+// {
+//     $employee_id = $request->input('employee_id');
+    
+//   // Get today's date
+//   $today = Carbon::today();
+
+//   // Fetch the counts for different call types created today
+//   $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $unknownCallsToday = CallHistory::where('type', 'unknown')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
 
    
 
 
+//      return response()->json([
+//             'total' => $todayCalls,
+//             'outgoing' => $outgoingCallsToday,
+//             'incoming' => $incomingCallsToday,
+//             'missed' => $missedCallsToday,
+//             'unknown' => $unknownCallsToday,
+//         ]);
+// }
+
+
+public function calls_count(Request $request)
+{
+    $employee_id = $request->input('employee_id');
+    
+  // Get today's date
+  $today = Carbon::today();
+
+  // Fetch the counts for different call types created today
+ // $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//    $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $unknownCallsToday = CallHistory::where('type', 'unknown')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
+  
+  
+  $uniqueOutgoingCallsToday = CallHistory::where('type', 'Outgoing')
+  ->where('employee_id', $employee_id)
+  ->whereDate('created_at', $today)
+  ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+  ->pluck('unique_count')
+  ->first();
+  $incoming = CallHistory::where('type', 'incoming')
+  ->where('employee_id', $employee_id)
+  ->whereDate('created_at', $today)
+  ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+  ->pluck('unique_count')
+  ->first();
+//   $missed = CallHistory::where('type', 'missed')
+//   ->where('employee_id', $employee_id)
+//   ->whereDate('created_at', $today)
+//   ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+//   ->pluck('unique_count')
+//   ->first();
+ $missed = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+  $unknown = CallHistory::where('type', 'unknown')
+  ->where('employee_id', $employee_id)
+  ->whereDate('created_at', $today)
+  ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+  ->pluck('unique_count')
+  ->first();
+//   $total = CallHistory::where('employee_id', $employee_id)
+//   ->whereDate('created_at', $today)
+//   ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+//   ->pluck('unique_count')
+//   ->first();
+
+$total = $uniqueOutgoingCallsToday + $incoming + $missed + $unknown;
+   
+
+
      return response()->json([
-            'total' => $todayCalls,
-            'outgoing' => $outgoingCallsToday,
-            'incoming' => $incomingCallsToday,
-            'missed' => $missedCallsToday,
+            'total' => $total,
+            // 'outgoing' => $outgoingCallsToday,
+            'outgoing' => $uniqueOutgoingCallsToday,
+            'incoming' => $incoming,
+            'missed' => $missed,
+            'unknown' => $unknown,
         ]);
         
 
 }
-
+///////////////////////////////////////
 
 public function today_Call_History(Request $request)
 {
@@ -378,8 +622,8 @@ public function today_Call_History(Request $request)
 
     // Fetch call histories for today
     $callHistories = $query->whereDate('created_at', $today)
-    ->orderByDesc('created_at')
-    ->get();
+                           ->orderByDesc('created_at')
+                           ->get();
 
     // Format call duration to human-readable format
     $formattedCallHistories = $callHistories->map(function ($history) {
@@ -391,6 +635,7 @@ public function today_Call_History(Request $request)
         return [
             'id' => $history->id,
             'customer_name' => $history->customer_name,
+            'contact_name' => $history->contact_name,
             'phone' => $history->phone,
             'type' => $history->type,
             'call_duration' => $formattedDuration,
@@ -413,9 +658,6 @@ public function today_Call_History(Request $request)
         ], 200);
     }
 }
-
-
-
 
 public function getCities($state_id)
     {
@@ -444,17 +686,19 @@ public function getCities($state_id)
         $sale->state_id = $request->state;
         $sale->city_id = $request->city;
         $sale->employee_id = $request->employee_id;
+        $sale->lead_id = $request->lead_id;
         //            
         $sale->save();
 
 
         return response()->json([
             'message' => 'Sales inserted successfully',
-            // 'data' => $sale 
+            'data' => $sale 
         ], 201);
     }
-
-
+    
+    ///////////
+    
 public function getTopSalesToday()
 {
     $today = Carbon::today()->toDateString();  // Ensure the format matches your database
@@ -513,13 +757,13 @@ public function todaySalesByEmployee(Request $request)
 public function monthSalesByEmployee(Request $request)
 {
     // Retrieve employee_id from request parameter
-    $employeeId = $request->employee_id; 
+    $employeeId = $request->employee_id;
     $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
     // Validate the employee_id (optional but recommended)
     if (!$employeeId) {
-        return response()->json(['error' => 'Employee ID is required.'], 400);  
+        return response()->json(['error' => 'Employee ID is required.'], 400);
     }
 
     // Fetch top sales for the specified employee
@@ -532,19 +776,31 @@ public function monthSalesByEmployee(Request $request)
         ->limit(5)
         ->get();
 
-    return response()->json($topSales);  
+    return response()->json($topSales);
 }
+
 
 public function TopCallsToday()
 {
     // Get the start and end of today
     $startOfDay = Carbon::now()->startOfDay();
     $endOfDay = Carbon::now()->endOfDay();
+    //////
+    
+    ///////////////
 
     // Query to get the top 5 employees based on the number of calls made today
+    // $topEmployeesToday = DB::table('call_history AS calls')
+    //     ->join('employees', 'calls.employee_id', '=', 'employees.id')
+    //     ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))
+    //     ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
+    //     ->groupBy('employees.name')
+    //     ->orderBy('total_calls', 'desc')
+    //     ->get();
+    
     $topEmployeesToday = DB::table('call_history AS calls')
         ->join('employees', 'calls.employee_id', '=', 'employees.id')
-        ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))
+        ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, "-", calls.call_duration, "-", calls.created_at)) as total_calls'))
         ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
         ->groupBy('employees.name')
         ->orderBy('total_calls', 'desc')
@@ -565,16 +821,11 @@ public function TopCallsThisMonth()
     ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))   
     ->whereBetween('calls.created_at', ['2024-08-01 00:00:00', '2024-08-31 23:59:59'])
     ->groupBy('employees.name')
-    ->orderBy('total_calls', 'desc')  
+    ->orderBy('total_calls', 'desc') 
     ->get();
 
     return response()->json($topEmployees);      
-
-} 
-
-
-
-public function getMessage(Request $request)
+} public function getMessage(Request $request)
 {
     try {
         // Check if 'id' is provided in the request
@@ -592,26 +843,65 @@ public function getMessage(Request $request)
             }
 
             return response()->json([
-                'status' => 'S',
-                'data' => $message  
+                 'status' => 'S',
+                'data' => $message
             ], 200); // 200 OK
         } else {
             // Fetch all messages
             $messages = Message::all();
 
             return response()->json([
-                'status' => 'S',
+                  'status' => 'S',
                 'data' => $messages
             ], 200); // 200 OK
         }
     } catch (\Exception $e) {
         // Return general error
         return response()->json([
-            'status' => 'F',
+           'status' => 'F',
             'message' => 'An error occurred',
             'error' => $e->getMessage()
         ], 500); // 500 Internal Server Error
     }
 }
+
+public function show_sales_by_employee(Request $request)
+{
+    $sale = Sale::where('employee_id', $request->employee_id)
+                  ->orderBy('id', 'desc')->get();
+
+    
+
+    $data_record = [];
+
+    foreach ($sale as $row) {
+        $data_record[] = [
+            'id' => $row->id,
+            'customer_name' => $row->customer_name,
+            'business_name' => $row->business_name,
+            'keys' => $row->keys,
+            'free' => $row->free,
+            'transaction' => $row->transaction,
+            'balance' => $row->balance,
+            'state' => $row->state,
+            'city' => $row->city,
+            'employee_id' => $row->employee_id,
+            'lead_id' => $row->lead_id,
+        ];
+    }
+
+    if (!empty($data_record)) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $data_record,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json([
+            'status' => 'F',
+            'errorMsg' => 'Data not found',
+        ], 200);
+    }
 }
-        
+
+
+}

@@ -67,6 +67,7 @@ Route::get('/cities/{state_id}', [ApiController::class, 'getCities']);
 
 
 Route::post('/add_sales', [ApiController::class, 'add_sales']);
+Route::get('/show_sales_by_employee', [ApiController::class, 'show_sales_by_employee']);
 
  
 Route::get('/today_top_sales', [ApiController::class, 'getTopSalesToday']);
@@ -83,6 +84,9 @@ Route::get('/get_message', [ApiController::class, 'getMessage']);
 
 
 
+
+
+Route::post('/logout', [ApiController::class, 'logout']);
 
 
 
