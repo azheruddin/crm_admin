@@ -69,10 +69,8 @@
     $seconds = $totalSeconds % 60;
     @endphp
 <td>{{ $minutes }} min {{ $seconds }} sec</td>
-        <td>{{ $calls->created_at }}</td>                                                                             
 
-       
-        <td>{{ $calls->created_at }}</td>
+        <td>{{ $calls->call_date }}</td>     
 
         @if(isset($calls->employee->name) && $calls->employee->name != null)
       <td>{{ $calls->employee->name }}</td>

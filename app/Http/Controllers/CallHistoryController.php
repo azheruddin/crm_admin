@@ -41,12 +41,29 @@ class CallHistoryController extends Controller
     }
 
 
+    // public function todayCallHistory()
+    // {
+    //     $today = Carbon::today();
+    //     $callHistories = CallHistory::with('employee')
+    //     ->whereDate('created_at', $today)
+    //     ->selectRaw('CONCAT(phone, "-", call_duration)')
+    //     ->groupBy('phone', 'call_duration')
+    //     ->orderBy('id', 'desc')->get();
+    //     return view('todayCalls', compact('callHistories'));
+    // }
     public function todayCallHistory()
-    {
-        $today = Carbon::today();
-        $callHistories = CallHistory::with('employee')->whereDate('created_at', $today)->orderBy('id', 'desc')->get();
-        return view('todayCalls', compact('callHistories'));
-    }
+{
+    $today = Carbon::today();
+    $callHistories = CallHistory::with('employee')
+        ->whereDate('created_at', $today)
+        
+        ->selectRaw('MAX(id) as id, CONCAT(phone, "-", call_duration) as phone_duration, phone, call_duration, employee_id, type ,  MAX(call_date) as call_date   ') // Select specific columns
+        ->groupBy('phone', 'call_duration', 'employee_id','type') // Group by necessary columns
+        ->orderBy('call_date', 'desc')
+        ->get();
+
+    return view('todayCalls', compact('callHistories'));
+}
 
 
 

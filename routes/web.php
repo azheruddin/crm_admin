@@ -166,6 +166,11 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
  
 
     Route::delete('/messages/{id}', [MessageController::class, 'destroyMessage'])->name('messages.destroy');
+
+    // Route::get('/dashboard', [CommonController::class, 'calls_count'])->name('dashboard');
+
+
+
     
 
 
