@@ -14,45 +14,13 @@ class CallHistoryController extends Controller
 {
     
  
-    // public function showCallHistory()
-    // {
-    //     $CallHistory = CallHistory::orderBy('id', 'desc')->get();
-    //     return view('allCalls')->with('CallHistory', $CallHistory);
-
-    // }
-   
-    
-    public function showCallHistory(Request $request)
+    public function showCallHistory()
     {
-        // Fetch filters from the request
-        $fromDate = $request->input('from_date');
-        $toDate = $request->input('to_date');
-        $employeeId = $request->input('employee_id');
-    
-        // Query to get the filtered call history with relationships
-        $callHistories = CallHistory::with('employee')
-            ->when($fromDate, function ($query, $fromDate) {
-                return $query->whereDate('call_date', '>=', $fromDate);
-            })
-            ->when($toDate, function ($query, $toDate) {
-                return $query->whereDate('call_date', '<=', $toDate);
-            })
-            ->when($employeeId, function ($query, $employeeId) {
-                return $query->where('employee_id', $employeeId);
-            })
-            ->get();
-    
-        // Calculate total call duration per employee
-        $totalDurations = CallHistory::select('employee_id', DB::raw('SUM(call_duration) as total_duration'))
-            ->groupBy('employee_id')
-            ->pluck('total_duration', 'employee_id');
-    
-        // Fetch all employees for the dropdown
-        $employees = Employee::all();
-    
-        // Pass data to the view
-        return view('call_history', compact('callHistories', 'totalDurations', 'employees'));
+        $CallHistory = CallHistory::orderBy('id', 'desc')->get();
+        return view('allCalls')->with('CallHistory', $CallHistory);
+
     }
+   
     
     
 
