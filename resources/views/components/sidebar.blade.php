@@ -26,17 +26,17 @@
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
                 <i class="menu-icon mdi mdi-card-text-outline"></i>
-                <span class="menu-title">Call History</span>
+                <span class="menu-title">Calls</span>
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="/call_history">All Call Histroy</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/call_history">All Calls</a></li>
                 </ul>
 
                 <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Call History</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Calls</a></li>
                 </ul>
                
 

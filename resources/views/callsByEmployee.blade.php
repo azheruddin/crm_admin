@@ -28,7 +28,7 @@
 <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
-                <!-- <th>CUSTOMER NAME</th> -->
+                <!-- <th>CONTACT NAME</th> -->
                 <th>PHONE</th>
                 <th>CALL TYPE</th>
                 <th>CALL DURATION</th>

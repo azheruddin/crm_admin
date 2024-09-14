@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class CallHistoryController extends Controller
 {
     //
-
+ 
     // show employees method 
     public function showCallHistory()
     {
@@ -25,19 +25,19 @@ class CallHistoryController extends Controller
 
     
 
-    public function callHistoryByEmployee(Request $request)
+    public function callHistoryByEmployee(Request $request) 
 {
     $CallHistoryByEmployee = CallHistory::where('employee_id', $request->employee_id)->orderBy('id', 'desc')->get();
     return view('callsByEmployee')->with('CallHistoryByEmployee', $CallHistoryByEmployee);
 }
 
-
-
+                 
+    
     public function callHistoryDetail(Request $request)
     {
         $calls = CallHistory::findOrFail($request->call_id);
 
-        return view('callHistoryDetails')->with('calls', $calls);
+        return view('callHistoryDetails')->with('calls', $calls); 
     }
 
 
@@ -81,8 +81,8 @@ class CallHistoryController extends Controller
         }
 
         $callHistories = $query
-        ->selectRaw('MAX(id) as id, CONCAT(phone, "-", call_duration) as phone_duration, phone, call_duration, employee_id, type ,  MAX(call_date) as call_date   ') // Select specific columns
-        ->groupBy('phone', 'call_duration', 'employee_id','type') // Group by necessary columns
+        ->selectRaw('MAX(id) as id, CONCAT(phone, "-", call_duration) as phone_duration, phone, call_duration, employee_id, type, contact_name ,  MAX(call_date) as call_date   ') // Select specific columns
+        ->groupBy('phone', 'call_duration', 'employee_id','type', 'contact_name') // Group by necessary columns
         ->orderBy('call_date', 'desc')
         ->get();
 
@@ -223,4 +223,10 @@ public function filterCallHistoryByEmployee(Request $request)
         ]);
     }
     
-}
+
+   
+        // API for Adding Incoming Call
+       
+    }
+    
+

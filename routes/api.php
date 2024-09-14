@@ -82,11 +82,11 @@ Route::get('/month_top_calls', [ApiController::class, 'TopCallsThisMonth']);
 
 Route::get('/get_message', [ApiController::class, 'getMessage']);
 
-
-
-
-
 Route::post('/logout', [ApiController::class, 'logout']);
+
+
+Route::get('/call_duration', [ApiController::class, 'callDuration']);
+
 
 
 
