@@ -16,7 +16,7 @@
                     @csrf
                     <div class="form-group">
                         <label for="state">State</label>
-                        <select class="form-control" id="state" name="state" onchange="fetchCities(this.value)">
+                        <select class="form-control" id="state" name="state_id" onchange="fetchCities(this.value)">
                             <option value="">Select State</option>
                             @foreach($States as $state)
                                 <option value="{{ $state->state_id }}">{{ $state->state_name }}</option>  
@@ -26,7 +26,7 @@
 
                     <div class="form-group">
                         <label for="city">City</label>
-                        <select class="form-control" id="city" name="city">
+                        <select class="form-control" id="city" name="city_id">
                             <option value="">Select City</option>
                         </select>
                     </div>

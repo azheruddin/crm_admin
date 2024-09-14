@@ -8,6 +8,7 @@ use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NewLeadsUploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -168,6 +169,27 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     Route::delete('/messages/{id}', [MessageController::class, 'destroyMessage'])->name('messages.destroy');
 
     // Route::get('/dashboard', [CommonController::class, 'calls_count'])->name('dashboard');
+
+    
+    
+    ////////////////////
+    // Route::post('importscreate', 'NewLeadsUploadController@create')->name('importscreate');
+    // Route::post('importscreate', [NewLeadsUploadController::class, 'create'])->name('importscreate');
+    Route::post('/imports', [NewLeadsUploadController::class, 'create'])->name('importscreate');
+
+  
+    // Route::post('Sms', 'ImportController@sms_create')->name('importsSms');
+  
+    // Route::get('/imports','NewLeadsUploadController@index')->name('imports');
+
+    
+    // Route::get('/imports', [NewLeadsUploadController::class, 'index'])->name('imports');
+
+    Route::get('/imports', function () {
+        return view('NewLeadsUpload');
+    });
+
+    /////////////////////////
 
 
 

@@ -226,38 +226,38 @@ public function showdeleteLeads(Request $request)
 
 
 
-public function assignleadsToEmployee(Request $request)
-{
-    // Validate the request data
-    $validatedData = $request->validate([
-        'employee_id' => 'required|integer',
-        'state' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-    ]);
+// public function assignleadsToEmployee(Request $request)
+// {
+//     // Validate the request data
+//     $validatedData = $request->validate([
+//         'employee_id' => 'required|integer',
+//         'state' => 'required|string|max:255',
+//         'city' => 'required|string|max:255',
+//     ]);
 
-    // Find the leads that match the given city and state and employee id is null
-    $leads = Leads::where('city', $validatedData['city'])
-                  ->where('state', $validatedData['state'])
-                  ->where('employee_id', null)
-                  ->get();
+//     // Find the leads that match the given city and state and employee id is null
+//     $leads = Leads::where('city', $validatedData['city'])
+//                   ->where('state', $validatedData['state'])
+//                   ->where('employee_id', null)
+//                   ->get();
                                        
-    // Check if any leads are found
-    if ($leads->isEmpty()) {
-        $request->session()->flash('success', 'No leads found found.');
-        return redirect()->back()->with('error', 'No leads found found.');
-    }
+//     // Check if any leads are found
+//     if ($leads->isEmpty()) {
+//         $request->session()->flash('success', 'No leads found found.');
+//         return redirect()->back()->with('error', 'No leads found found.');
+//     }
 
-    // Update the employee_id for each lead found
-    foreach ($leads as $lead) {
-        $lead->employee_id = $validatedData['employee_id'];
-        $lead->save();
-    }
+//     // Update the employee_id for each lead found
+//     foreach ($leads as $lead) {
+//         $lead->employee_id = $validatedData['employee_id'];
+//         $lead->save();
+//     }
     
 
-    // Redirect or return a response as needed
-    $request->session()->flash('success', 'Leads updated successfully.');
-    return redirect()->back()->with('success', 'Leads updated successfully.');
-}
+//     // Redirect or return a response as needed
+//     $request->session()->flash('success', 'Leads updated successfully.');
+//     return redirect()->back()->with('success', 'Leads updated successfully.');
+// }
 
 // public function assignLeads(Request $request)
 // {
@@ -266,6 +266,44 @@ public function assignleadsToEmployee(Request $request)
 //     return redirect()->route('assign_leads')->with('success', 'Lead assigned successfully');
 // }
 
+public function assignleadsToEmployee(Request $request)
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'employee_id' => 'required|integer',
+        'state_id' => 'required|integer',
+        'city_id' => 'required|integer',
+    ]);
+
+    // Retrieve state and city names based on IDs
+    $state = State::find($validatedData['state_id']);
+    $city = City::find($validatedData['city_id']);
+
+    // Check if state and city exist
+    if (!$state || !$city) {
+        return redirect()->back()->with('error', 'Invalid state or city ID.');
+    }
+
+    // Find the leads that match the given city and state
+    $leads = Leads::where('city', $city->city_name)
+                  ->where('state', $state->state_name)
+                  ->where('employee_id', null)
+                  ->get();
+                                       
+    // Check if any leads are found
+    if ($leads->isEmpty()) {
+        $request->session()->flash('success', 'No leads found.');
+        return redirect()->back()->with('error', 'No leads found.');
+    }
+
+    // Update the employee_id for each lead found
+    foreach ($leads as $lead) {
+        $lead->employee_id = $validatedData['employee_id'];
+        $lead->save();
+    }
+
+    return redirect()->back()->with('success', 'Leads assigned successfully.');
+}
 
 
 

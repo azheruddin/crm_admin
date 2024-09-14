@@ -28,4 +28,9 @@ class City extends Model
         return $this->hasMany(Sale::class, 'city_id');
     }
 
+    public function leads()
+    {
+        return $this->hasMany(Leads::class);
+    }
+
 }

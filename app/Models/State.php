@@ -27,7 +27,10 @@ class State extends Model
     }
 
    
-
+    public function leads()
+    {
+        return $this->hasMany(Leads::class);
+    }
 
     
 }
