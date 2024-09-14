@@ -609,7 +609,7 @@ public function calls_count(Request $request)
         ->pluck('unique_count')
         ->first();
 
-    // Fetch the count of unique incoming calls
+    // Fetch the count of unique incoming calls 
     $uniqueIncomingCallsToday = CallHistory::where('type', 'incoming')
         ->where('employee_id', $employee_id)
         ->whereDate('created_at', $today)
@@ -691,7 +691,7 @@ public function today_Call_History(Request $request)
     });
 
     if (!$formattedCallHistories->isEmpty()) {
-        return response()->json([
+        return response()->json([ 
             'status' => 'S',
             'data' => $formattedCallHistories,
         ], 200, [], JSON_NUMERIC_CHECK);

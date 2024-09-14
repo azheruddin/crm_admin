@@ -89,6 +89,9 @@
     <td></td>
   @endif
 
+
+ 
+
              
              <td><a href="{{ route('call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
            
