@@ -17,7 +17,7 @@ use App\Models\Message;
 
 class ApiController extends Controller
 {
-    //
+    // 
     
 
     public function add_calls(Request $request)
@@ -543,67 +543,111 @@ public function followup_leads(Request $request)
 // }
 
 
-public function calls_count(Request $request)
-{
-    $employee_id = $request->input('employee_id');
+// public function calls_count(Request $request)
+// {
+//     $employee_id = $request->input('employee_id');
     
-  // Get today's date
-  $today = Carbon::today();
+//   // Get today's date
+//   $today = Carbon::today();
 
-  // Fetch the counts for different call types created today
- // $incomingCallsToday = CallHistory::where('type', 'Incoming')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-//    $outgoingCallsToday = CallHistory::where('type', 'Outgoing')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-//   $missedCallsToday = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-//   $unknownCallsToday = CallHistory::where('type', 'unknown')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-//   $todayCalls = CallHistory::whereDate('created_at', $today)->where('employee_id', $employee_id)->count();
   
   
-  $uniqueOutgoingCallsToday = CallHistory::where('type', 'Outgoing')
-  ->where('employee_id', $employee_id)
-  ->whereDate('created_at', $today)
-  ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
-  ->pluck('unique_count')
-  ->first();
-  $incoming = CallHistory::where('type', 'incoming')
-  ->where('employee_id', $employee_id)
-  ->whereDate('created_at', $today)
-  ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
-  ->pluck('unique_count')
-  ->first();
-//   $missed = CallHistory::where('type', 'missed')
+//   $uniqueOutgoingCallsToday = CallHistory::where('type', 'Outgoing')
 //   ->where('employee_id', $employee_id)
 //   ->whereDate('created_at', $today)
 //   ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
 //   ->pluck('unique_count')
 //   ->first();
- $missed = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
-  $unknown = CallHistory::where('type', 'unknown')
-  ->where('employee_id', $employee_id)
-  ->whereDate('created_at', $today)
-  ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
-  ->pluck('unique_count')
-  ->first();
-//   $total = CallHistory::where('employee_id', $employee_id)
+//   $incoming = CallHistory::where('type', 'incoming')
+//   ->where('employee_id', $employee_id)
 //   ->whereDate('created_at', $today)
 //   ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
 //   ->pluck('unique_count')
 //   ->first();
 
-$total = $uniqueOutgoingCallsToday + $incoming + $missed + $unknown;
+//  $missed = CallHistory::where('type', 'Missed')->where('employee_id', $employee_id)->whereDate('created_at', $today)->count();
+//   $unknown = CallHistory::where('type', 'unknown')
+//   ->where('employee_id', $employee_id)
+//   ->whereDate('created_at', $today)
+//   ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+//   ->pluck('unique_count')
+//   ->first();
+
+// $total = $uniqueOutgoingCallsToday + $incoming + $missed + $unknown;
    
 
 
-     return response()->json([
-            'total' => $total,
-            // 'outgoing' => $outgoingCallsToday,
-            'outgoing' => $uniqueOutgoingCallsToday,
-            'incoming' => $incoming,
-            'missed' => $missed,
-            'unknown' => $unknown,
-        ]);
+//      return response()->json([
+//             'total' => $total,
+//             // 'outgoing' => $outgoingCallsToday,
+//             'outgoing' => $uniqueOutgoingCallsToday,
+//             'incoming' => $incoming,
+//             'missed' => $missed,
+//             'unknown' => $unknown,
+//         ]);
         
 
+// }
+
+public function calls_count(Request $request)
+{
+    // Validate the employee_id
+    $request->validate([
+        'employee_id' => 'required|integer',
+    ]);
+
+    $employee_id = $request->employee_id;
+
+    // Get today's date
+    $today = Carbon::today();
+
+    // Fetch the count of unique outgoing calls
+    $uniqueOutgoingCallsToday = CallHistory::where('type', 'Outgoing')
+        ->where('employee_id', $employee_id)
+        ->whereDate('created_at', $today)
+        ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+        ->pluck('unique_count')
+        ->first();
+
+    // Fetch the count of unique incoming calls
+    $uniqueIncomingCallsToday = CallHistory::where('type', 'incoming')
+        ->where('employee_id', $employee_id)
+        ->whereDate('created_at', $today)
+        ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+        ->pluck('unique_count')
+        ->first();
+
+    // Fetch the count of missed calls
+    $missedCallsToday = CallHistory::where('type', 'Missed')
+        ->where('employee_id', $employee_id)
+        ->whereDate('created_at', $today)
+        ->count();
+
+    // Fetch the count of unknown calls
+    $uniqueUnknownCallsToday = CallHistory::where('type', 'unknown')
+        ->where('employee_id', $employee_id)
+        ->whereDate('created_at', $today)
+        ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+        ->pluck('unique_count')
+        ->first();
+
+    // Calculate the total calls (sum of all types)
+    $totalCallsToday = $uniqueOutgoingCallsToday + $uniqueIncomingCallsToday + $missedCallsToday + $uniqueUnknownCallsToday;
+
+    // Return the response with all counts
+    return response()->json([
+        'total' => $totalCallsToday,
+        'outgoing' => $uniqueOutgoingCallsToday,
+        'incoming' => $uniqueIncomingCallsToday,
+        'missed' => $missedCallsToday,
+        'unknown' => $uniqueUnknownCallsToday,
+    ], 200);
 }
+
+
+
+
+
 ///////////////////////////////////////
 
 public function today_Call_History(Request $request)
@@ -632,7 +676,7 @@ public function today_Call_History(Request $request)
         $seconds %= 60;
         $formattedDuration = sprintf('%dmin %dsec', $minutes, $seconds);
 
-        return [
+        return [ 
             'id' => $history->id,
             'customer_name' => $history->customer_name,
             'contact_name' => $history->contact_name,
@@ -780,27 +824,18 @@ public function monthSalesByEmployee(Request $request)
 }
 
 
+
+             
+
 public function TopCallsToday()
 {
     // Get the start and end of today
     $startOfDay = Carbon::now()->startOfDay();
     $endOfDay = Carbon::now()->endOfDay();
-    //////
-    
-    ///////////////
 
-    // Query to get the top 5 employees based on the number of calls made today
-    // $topEmployeesToday = DB::table('call_history AS calls')
-    //     ->join('employees', 'calls.employee_id', '=', 'employees.id')
-    //     ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))
-    //     ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
-    //     ->groupBy('employees.name')
-    //     ->orderBy('total_calls', 'desc')
-    //     ->get();
-    
     $topEmployeesToday = DB::table('call_history AS calls')
         ->join('employees', 'calls.employee_id', '=', 'employees.id')
-        ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, "-", calls.call_duration, "-", calls.created_at)) as total_calls'))
+        ->select('employees.name as employee_name', DB::raw('COUNT(calls.id) as total_calls'))
         ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
         ->groupBy('employees.name')
         ->orderBy('total_calls', 'desc')
@@ -811,59 +846,78 @@ public function TopCallsToday()
 }
 
 
+// public function TopCallsThisMonth()
+// { 
+//     $startOfMonth = Carbon::now()->startOfMonth(); 
+//     $endOfMonth = Carbon::now()->endOfMonth();
+
+//      $topEmployees = DB::table('call_history AS calls')
+//     ->join('employees', 'calls.employee_id', '=', 'employees.id')
+//     ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))   
+//     ->whereBetween('calls.created_at', ['2024-08-01 00:00:00', '2024-08-31 23:59:59'])
+//     ->groupBy('employees.name')
+//     ->orderBy('total_calls', 'desc') 
+//     ->get();
+
+//     return response()->json($topEmployees);      
+// } public function getMessage(Request $request)
+// {
+//     try {
+//         // Check if 'id' is provided in the request
+//         $id = $request->input('id');
+
+//         if ($id) {
+//             // Fetch a single message by ID
+//             $message = Message::find($id);
+
+//             if (!$message) {
+//                 return response()->json([
+//                     'status' => 'F',
+//                     'message' => 'Message not found'
+//                 ], 404); // 404 Not Found
+//             }
+
+//             return response()->json([
+//                  'status' => 'S',
+//                 'data' => $message
+//             ], 200); // 200 OK
+//         } else {
+//             // Fetch all messages
+//             $messages = Message::all();
+
+//             return response()->json([
+//                   'status' => 'S',
+//                 'data' => $messages
+//             ], 200); // 200 OK
+//         }
+//     } catch (\Exception $e) {
+//         // Return general error
+//         return response()->json([
+//            'status' => 'F',
+//             'message' => 'An error occurred',
+//             'error' => $e->getMessage()
+//         ], 500); // 500 Internal Server Error
+//     }
+// }
+
 public function TopCallsThisMonth()
-{ 
-    $startOfMonth = Carbon::now()->startOfMonth(); 
+{
+    // Get the start and end of the current month dynamically
+    $startOfMonth = Carbon::now()->startOfMonth();
     $endOfMonth = Carbon::now()->endOfMonth();
 
-     $topEmployees = DB::table('call_history AS calls')
-    ->join('employees', 'calls.employee_id', '=', 'employees.id')
-    ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))   
-    ->whereBetween('calls.created_at', ['2024-08-01 00:00:00', '2024-08-31 23:59:59'])
-    ->groupBy('employees.name')
-    ->orderBy('total_calls', 'desc') 
-    ->get();
+    $topEmployees = DB::table('call_history AS calls')
+        ->join('employees', 'calls.employee_id', '=', 'employees.id')
+        ->select('employees.name as employee_name', DB::raw('COUNT(calls.id) as total_calls'))
+        ->whereBetween('calls.created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('employees.name')
+        ->orderBy('total_calls', 'desc')
+        ->get();
 
-    return response()->json($topEmployees);      
-} public function getMessage(Request $request)
-{
-    try {
-        // Check if 'id' is provided in the request
-        $id = $request->input('id');
-
-        if ($id) {
-            // Fetch a single message by ID
-            $message = Message::find($id);
-
-            if (!$message) {
-                return response()->json([
-                    'status' => 'F',
-                    'message' => 'Message not found'
-                ], 404); // 404 Not Found
-            }
-
-            return response()->json([
-                 'status' => 'S',
-                'data' => $message
-            ], 200); // 200 OK
-        } else {
-            // Fetch all messages
-            $messages = Message::all();
-
-            return response()->json([
-                  'status' => 'S',
-                'data' => $messages
-            ], 200); // 200 OK
-        }
-    } catch (\Exception $e) {
-        // Return general error
-        return response()->json([
-           'status' => 'F',
-            'message' => 'An error occurred',
-            'error' => $e->getMessage()
-        ], 500); // 500 Internal Server Error
-    }
+    // Return the result as a JSON response
+    return response()->json($topEmployees);
 }
+
 
 public function show_sales_by_employee(Request $request)
 {
@@ -901,6 +955,63 @@ public function show_sales_by_employee(Request $request)
             'errorMsg' => 'Data not found',
         ], 200);
     }
+}
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+public function callDuration(Request $request)
+{
+    // // Validate the employee_id
+    // $request->validate([
+    //     'employee_id' => 'required|integer',
+    // ]);
+
+    $employee_id = $request->employee_id;
+
+    // Fetch total incoming call duration
+    $incomingDuration = CallHistory::where('employee_id', $employee_id)
+        ->where('type', 'incoming')
+        ->sum('call_duration'); // Replace 'duration' with the correct column name
+
+    // Fetch total outgoing call duration
+    $outgoingDuration = CallHistory::where('employee_id', $employee_id)
+        ->where('type', 'outgoing')
+        ->sum('call_duration'); // Replace 'duration' with the correct column name
+
+         $totalDurationInSeconds = $incomingDuration + $outgoingDuration;
+
+     // Convert durations to minutes and seconds format
+     $incomingDurationFormatted = $this->formatDuration($incomingDuration);
+     $outgoingDurationFormatted = $this->formatDuration($outgoingDuration);
+     $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
+
+     return response()->json([
+        'total_incoming_duration' => $incomingDurationFormatted, // Formatted in min:sec
+        'total_outgoing_duration' => $outgoingDurationFormatted, // Formatted in min:sec
+        'total_duration' => $totalDurationFormatted, // Formatted in min:sec
+    ], 200);
+}
+
+private function formatDuration($seconds)
+{
+    $minutes = floor($seconds / 60);
+    $remainingSeconds = $seconds % 60;
+
+    // Return formatted as "min:sec" (e.g., "5:23")
+    return sprintf('%02d:%02d', $minutes, $remainingSeconds);
 }
 
 

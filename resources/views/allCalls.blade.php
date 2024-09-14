@@ -20,9 +20,6 @@
           value="{{ request('to_date') }}">
             </div>
 
-
-                           
-
             
             <div class="form-group col-md-3">
                             <label for="employee_id">Employee</label> 
@@ -48,10 +45,12 @@
 <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
+                <th>CONTACT NAME</th>
                 <th>PHONE</th>
                 <th>CALL TYPE</th>
                 <th>DURATION</th>
-                <th>CALL DATE</th> 
+                <th>DATE</th>
+                <th>TIME</th>
                 <th>EMPLOYEE</th>
                 <th>ACTION</th>
             </tr>
@@ -59,21 +58,36 @@
         <tbody>
         @foreach($callHistories as $calls)
         <tr>
+            <td>{{ $calls->contact_name }}</td>
             <td>{{ $calls->phone }}</td>
             <td>{{ $calls->type }}</td>
             @php
     $totalSeconds = $calls->call_duration;
     $minutes = floor($totalSeconds / 60);
     $seconds = $totalSeconds % 60;
-    @endphp
+
+    $callDateString = $calls->call_date;
+
+    // Validate the date string before parsing with Carbon
+    if (strtotime($callDateString)) {
+        $callDate = \Carbon\Carbon::parse($callDateString);
+        $formattedDate = $callDate->format('Y-m-d');
+        $formattedTime = $callDate->format('h:i:s A');
+    } else {
+        $formattedDate = 'Invalid Date'; // Handle invalid date
+        $formattedTime = 'Invalid Time'; // Handle invalid time
+    }
+@endphp
+
 <td>{{ $minutes }} min {{ $seconds }} sec</td>
-          
-             <td>{{ $calls->created_at }}</td> 
-            @if(isset($calls->employee->name) && $calls->employee->name != null)
-             <td>{{ $calls->employee->name  }}</td> 
-             @else
-             <td></td> 
-             @endif
+<td>{{ $formattedDate }}</td>
+<td>{{ $formattedTime }}</td>
+
+        @if(isset($calls->employee->name) && $calls->employee->name != null)
+      <td>{{ $calls->employee->name }}</td>
+    @else
+    <td></td>
+  @endif
 
              
              <td><a href="{{ route('call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
@@ -92,3 +106,4 @@
 
 <tbody>
                        
+
