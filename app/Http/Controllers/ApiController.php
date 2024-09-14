@@ -960,19 +960,7 @@ public function show_sales_by_employee(Request $request)
 
 
 
-
-
-
-    
-
-
-
-
-
-
-
-
-public function callDuration(Request $request)
+public function callDurationByEmployee(Request $request)
 {
     // // Validate the employee_id
     // $request->validate([
@@ -980,15 +968,20 @@ public function callDuration(Request $request)
     // ]);
 
     $employee_id = $request->employee_id;
+    
+      $startOfDay = Carbon::now()->startOfDay();
+    $endOfDay = Carbon::now()->endOfDay();
 
     // Fetch total incoming call duration
     $incomingDuration = CallHistory::where('employee_id', $employee_id)
         ->where('type', 'incoming')
+         ->whereBetween('created_at', [$startOfDay, $endOfDay])
         ->sum('call_duration'); // Replace 'duration' with the correct column name
 
     // Fetch total outgoing call duration
     $outgoingDuration = CallHistory::where('employee_id', $employee_id)
         ->where('type', 'outgoing')
+        ->whereBetween('created_at', [$startOfDay, $endOfDay])
         ->sum('call_duration'); // Replace 'duration' with the correct column name
 
          $totalDurationInSeconds = $incomingDuration + $outgoingDuration;
@@ -1013,6 +1006,7 @@ private function formatDuration($seconds)
     // Return formatted as "min:sec" (e.g., "5:23")
     return sprintf('%02d:%02d', $minutes, $remainingSeconds);
 }
+
 
 
 }

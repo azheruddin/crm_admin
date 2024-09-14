@@ -198,19 +198,19 @@ public function filterCallHistoryByEmployee(Request $request)
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
     
-        // Query to get the top employees based on the number of calls made today
+        // Query to get the top employees based on the number of unique calls made today
         $topCallsToday = DB::table('call_history AS calls')
             ->join('employees', 'calls.employee_id', '=', 'employees.id')
-            ->select('employees.name as employee_name', DB::raw('COUNT(calls.id) as total_calls'))
+            ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, calls.call_duration)) as total_calls'))
             ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
             ->groupBy('employees.name')
             ->orderBy('total_calls', 'desc')
             ->get();
     
-        // Query to get the top employees based on the number of calls made this month
+        // Query to get the top employees based on the number of unique calls made this month
         $topCallsMonth = DB::table('call_history AS calls')
             ->join('employees', 'calls.employee_id', '=', 'employees.id')
-            ->select('employees.name as employee_name', DB::raw('COUNT(calls.id) as total_calls'))
+            ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, calls.call_duration)) as total_calls'))
             ->whereBetween('calls.created_at', [$startOfMonth, $endOfMonth])
             ->groupBy('employees.name')
             ->orderBy('total_calls', 'desc')
