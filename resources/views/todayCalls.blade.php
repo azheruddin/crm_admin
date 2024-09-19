@@ -9,33 +9,26 @@
   <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <!-- <h4 class="card-title text-primary">Filter Call History</h4>
-                <hr> -->
+      <h4 class="card-title text-primary"> Today's Call History</h4><hr>
 
-        <form action="{{ route('filter_call_history') }}" method="GET">
-          <div class="form-group col-md-3">
-            <h4 class="card-title text-primary"> Today Call History</h4>
-          </div>
 
-          <div class="form-row">
+          <!-- Employee Filter Form -->
+          <form action="{{ route('call_history_today') }}" method="GET">
             <div class="form-group col-md-3">
-              
-              <label for="from_date">From Date</label>
-              <input type="date" class="form-control" id="from_date" name="from_date"
-          value="{{ request('from_date') }}">
-            </div>
+                <label for="">Employee</label> 
+                <select class="form-control" id="employee_id" name="employee_id" onchange="this.form.submit()">
+                    <option value="">Select Employee</option>
+                    @foreach($employees as $employee)
+                    <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                        {{ $employee->name }}
+                    </option>
+                    @endforeach
+                </select>
 
-            <div class="form-group col-md-3">
-
-              <label for="to_date">To Date</label>
-              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}">
+                <!-- <button type="submit" class="btn btn-primary btn-block">Search</button> -->
             </div>
-            <div class="form-group col-md-4">
-                            <label>&nbsp;</label>
-                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                        </div>
-          </div>
         </form>
+    
 
         <!-- table goes here -->
 
@@ -82,10 +75,6 @@
 
         <td><a href="{{ route('today_call_history_detail', ['call_id' => $calls->id]) }}" class="btn btn-info"><i
             class="fa fa-eye"></i></a></a>
-
-
-
-
 
         </tr>
       @endforeach

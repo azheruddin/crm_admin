@@ -17,7 +17,7 @@ class CallHistory extends Model
         'call_type',
         'call_duration',
         'call_date',
-        'employee_id',
+        'employee_id', 
         'contact_name',
     ];
 
