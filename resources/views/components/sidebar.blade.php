@@ -99,7 +99,7 @@
               </div> -->
                <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="upload">Upload Leads</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/imports">Upload Leads</a></li>
                 </ul> 
               </div>
              

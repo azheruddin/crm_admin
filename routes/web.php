@@ -176,6 +176,7 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     // Route::post('importscreate', 'NewLeadsUploadController@create')->name('importscreate');
     // Route::post('importscreate', [NewLeadsUploadController::class, 'create'])->name('importscreate');
     Route::post('/imports', [NewLeadsUploadController::class, 'create'])->name('importscreate');
+    Route::get('/imports', [EmployeeController::class, 'showCallerEmployees'])->name('imports');
 
   
     // Route::post('Sms', 'ImportController@sms_create')->name('importsSms');
@@ -185,9 +186,9 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     
     // Route::get('/imports', [NewLeadsUploadController::class, 'index'])->name('imports');
 
-    Route::get('/imports', function () {
-        return view('NewLeadsUpload');
-    });
+    // Route::get('/imports', function () {
+    //     return view('NewLeadsUpload');
+    // });
 
     /////////////////////////
 

@@ -9,25 +9,50 @@
                 <form class="row" method="POST" action="{{ route('importscreate') }}" enctype="multipart/form-data">
                     @csrf
 
-                    @if($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                   <!-- Display success or error message -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-                    <div class="form-group">
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <!-- Display validation errors -->
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                    <div class="form-group col-md-6">
+                    <label for="">Upload File</label>
                         <input type="file" name="file" class="form-control">
                     </div>
 
-                    <div class="form-group">
-                        <!-- <input type="text" name="employee_id" class="form-control" placeholder="Employee ID"> -->
+                    <div class="form-group col-md-6">
+                            <label for="employee_id">Employee</label>
+                            <select class="form-control" id="employee_id" name="employee_id">
+                                <option value="">Select Employee</option>
+                                @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                                    {{ $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    <div class="form-group text-center">
+                         <button type="submit" class="btn btn-primary">Upload</button>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Upload</button>
                 </form>
             </div>
         </div>

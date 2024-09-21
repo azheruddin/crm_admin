@@ -164,5 +164,11 @@ public function updatePassword(Request $request, $id)
 
 /////////////////////////////////////
 
+public function showCallerEmployees()
+{
+    $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
+    return view('NewLeadsUpload')->with('employees', $employees);
+}
+
 
 }

@@ -34,6 +34,11 @@ class LeadsImport implements ToModel, WithHeadingRow
     protected $employeeId;
 
     // Constructor to receive the employee ID
+      // Constructor to receive the employee ID
+      public function __construct($employeeId)
+      {
+          $this->employeeId = $employeeId;
+      }
   
 
     public function model(array $row)
@@ -49,7 +54,7 @@ class LeadsImport implements ToModel, WithHeadingRow
             // 'expected_revenue' => $row['expected_revenue'],
             // 'next_follow_up'   => $row['next_follow_up'],
             // 'notes'            => $row['notes']
-            // 'employee_id'      => $this->employeeId // Use the passed employee ID
+            'employee_id'      => $this->employeeId // Use the passed employee ID
         ]);
     }
 }
