@@ -63,7 +63,7 @@ public function leadsFeedbackDetail(Request $request)
 public function todayLeads()
     {
         // Fetch today's leads
-        $todayLeads = Leads::whereDate('created_at', now()->toDateString())->get();
+        $todayLeads = Leads::whereDate('updated_at', now()->toDateString())->get();
 
         // Pass the leads to the view
         return view('todayLeads', compact('todayLeads'));
@@ -72,16 +72,28 @@ public function todayLeads()
  
     public function filterLeads(Request $request)
     {
-        // Get the date range from the request
-        $fromDate = $request->input('from_date', now()->startOfDay());
-        $toDate = $request->input('to_date', now()->endOfDay());
+        $employee_id = $request->employee_id;
+        $query = Leads::with('employee');
 
-        // Fetch leads within the specified date range
-        $todayLeads = Leads::whereBetween('created_at', [$fromDate, $toDate])->get();
+// Filter by from_date if provided
+        if ($request->filled('from_date')) {
+        $query->whereDate('created_at', '>=', $validatedData['from_date']);
+     }
 
+// Filter by to_date if provided
+        if ($request->filled('to_date')) {
+        $query->whereDate('created_at', '<=', $validatedData['to_date']); 
+      }
+
+// Filter by employee_id if provided
+         if ($request->filled('employee_id')) {
+        $query->where('employee_id', $validatedData['employee_id']);  
+      }
+
+      $employees = Employee::where('is_active', 1)->get();
 
         // Pass the leads and date range inputs to the view
-        return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
+        return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate','employees'));
     }
 
 

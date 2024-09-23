@@ -6,28 +6,9 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title text-primary">Call Duration</h4><hr>
-                <form action="{{ route('call_duration') }}" method="GET">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="employee_id">Employee</label>
-                            <select class="form-control" id="employee_id" name="employee_id">
-                                <option value="">Select Employee</option>
-                                @foreach($employees as $employee)
-                                   <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
-                                       {{ $employee->name }}
-                                             </option>
-                                            @endforeach
-
-                            </select>
-                        </div>
-   
-                        <div class="form-group col-md-4">
-                            <label>&nbsp;</label>
-                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                        </div>
-                    </div>
-                </form>
+                
+                <!-- <h4 class="card-title text-primary">Call Duration</h4><hr> -->
+                <a class="nav-link" href="{{ route('call_duration') }}">Call Duration Sum</a>
 
                 <!-- Call history table -->
                 <table id="example" class="table table-striped" style="width:100%">
@@ -41,36 +22,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($callDurations as $duration)
+                        @foreach($employeeDurations as $duration)
                         <tr>
-                        <td>{{ $duration->employee->name }}</td>
-
-                            @php
-                                // Convert incoming duration (seconds) to minutes and seconds
-                                $incomingMinutes = floor($duration->incoming_duration / 60);
-                                $incomingSeconds = $duration->incoming_duration % 60;
-
-                                // Convert outgoing duration (seconds) to minutes and seconds
-                                $outgoingMinutes = floor($duration->outgoing_duration / 60);
-                                $outgoingSeconds = $duration->outgoing_duration % 60;
-
-                                // Calculate total duration
-                                $totalDuration = $duration->incoming_duration + $duration->outgoing_duration;
-                                $totalMinutes = floor($totalDuration / 60);
-                                $totalSeconds = $totalDuration % 60;
-                            @endphp
+                            <td>{{ $duration['employee']->name }}</td>
 
                             <!-- Display incoming duration -->
-                            <td>{{ $incomingMinutes }} min {{ $incomingSeconds }} sec</td>
+                            <td>{{ $duration['incomingDurationFormatted'] }}</td>
 
                             <!-- Display outgoing duration -->
-                            <td>{{ $outgoingMinutes }} min {{ $outgoingSeconds }} sec</td>
+                            <td>{{ $duration['outgoingDurationFormatted'] }}</td>
 
                             <!-- Display total duration -->
-                            <td>{{ $totalMinutes }} min {{ $totalSeconds }} sec</td>
+                            <td>{{ $duration['totalDurationFormatted'] }}</td>
 
                             <td>
-                                <a href="{{ route('call_duration_detail', ['call_id' => $duration->id]) }}" class="btn btn-info">
+                                <a href="{{ route('call_duration_detail', ['call_id' => $duration['employee']->id]) }}" class="btn btn-info">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             </td>

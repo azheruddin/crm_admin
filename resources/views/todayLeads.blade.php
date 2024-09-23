@@ -21,8 +21,34 @@
             </div>
 
             <div class="form-group col-md-3">
+                            <label for="employee_id">Employee</label>
+                            <select class="form-control" id="employee_id" name="employee_id">
+                                <option value="">Select Employee</option>
+                                
+                                @isset($employees)
 
-            </div>
+                                @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                                    {{ $employee->name }}</option>
+                                @endforeach
+                                @endisset
+
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+    <label for="lead_stage">Lead Stage</label>
+    <select class="form-control" id="lead_stage" name="lead_stage">
+        <option value="">Select Lead Stage</option>
+        <option value="hot" {{ request('lead_stage') == 'hot' ? 'selected' : '' }}>Hot</option>
+        <option value="interested" {{ request('lead_stage') == 'interested' ? 'selected' : '' }}>Interested</option>
+        <option value="not_interested" {{ request('lead_stage') == 'not_interested' ? 'selected' : '' }}>Not Interested</option>
+        <option value="no_answer" {{ request('lead_stage') == 'not_answer' ? 'selected' : '' }}>Not Answer</option>
+    </select>
+</div>
+
+                       
+
             <div class="form-group col-md-4">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-primary btn-block">Filter</button>

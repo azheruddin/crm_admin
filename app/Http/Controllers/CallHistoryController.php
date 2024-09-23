@@ -68,38 +68,38 @@ class CallHistoryController extends Controller
     }
 
 
-    public function callHistory(Request $request)
-{
-    // Fetch all employees
-    $employees = Employee::all(); // This ensures you have the $employees variable
+//     public function callHistory(Request $request)
+// {
+//     // Fetch all employees
+//     $employees = Employee::all(); // This ensures you have the $employees variable
 
-    // Get the employee ID from the request (if any)
-    $employee_id = $request->employee_id;
+//     // Get the employee ID from the request (if any)
+//     $employee_id = $request->employee_id;
 
-    // Set the start and end of the day to filter the calls
-    $startOfDay = Carbon::now()->startOfDay();
-    $endOfDay = Carbon::now()->endOfDay();
+//     // Set the start and end of the day to filter the calls
+//     $startOfDay = Carbon::now()->startOfDay();
+//     $endOfDay = Carbon::now()->endOfDay();
 
-    // Initialize the query for CallHistory
-    $query = CallHistory::query();
+//     // Initialize the query for CallHistory
+//     $query = CallHistory::query();
 
-    // If an employee is selected, add a condition to filter by employee ID
-    if ($employee_id) {
-        $query->where('employee_id', $employee_id);
-    }
+//     // If an employee is selected, add a condition to filter by employee ID
+//     if ($employee_id) {
+//         $query->where('employee_id', $employee_id);
+//     }
 
-    // Filter by today's date range
-    $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
+//     // Filter by today's date range
+//     $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
 
-    // Fetch the filtered call histories
-    $callHistories = $query->get();
+//     // Fetch the filtered call histories
+//     $callHistories = $query->get();
 
-    // Pass $employees and $callHistories to the view
-    return view('todayCalls', [
-        'employees' => $employees,   // Passing $employees to the view
-        'callHistories' => $callHistories
-    ]);
-}
+//     // Pass $employees and $callHistories to the view
+//     return view('todayCalls', [
+//         'employees' => $employees,   // Passing $employees to the view
+//         'callHistories' => $callHistories
+//     ]);
+// }
 
 
 
@@ -256,64 +256,107 @@ public function filterCallHistory(Request $request)
     
 
 
-    public function callDuration(Request $request)
+
+
+// public function callDuration(Request $request)
+// {
+//     // $employee_id = $request->employee_id;
+
+//     // Fetch the employee record
+//     // $employee = Employee::find($employee_id);  // Assuming Employee is your model
+
+   
+
+//     // Define start and end of the day
+//     $startOfDay = Carbon::now()->startOfDay();
+//     $endOfDay = Carbon::now()->endOfDay();
+
+//     // Fetch total incoming call duration
+//     $incomingDuration = CallHistory::where('employee_id', $employee_id)
+//         ->where('type', 'incoming')
+//         ->whereBetween('created_at', [$startOfDay, $endOfDay])
+//         ->sum('call_duration');
+
+//     // Fetch total outgoing call duration
+//     $outgoingDuration = CallHistory::where('employee_id', $employee_id)
+//         ->where('type', 'outgoing')
+//         ->whereBetween('created_at', [$startOfDay, $endOfDay])
+//         ->sum('call_duration');
+
+//     $totalDurationInSeconds = $incomingDuration + $outgoingDuration;
+
+//     // Convert durations to minutes and seconds format
+//     $incomingDurationFormatted = $this->formatDuration($incomingDuration);
+//     $outgoingDurationFormatted = $this->formatDuration($outgoingDuration);
+//     $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
+
+//     // Pass data to the view, including the employee
+//     return view('callDurationSum', [
+//         'employee' => $employee,  // Passing employee data
+//         'incomingDurationFormatted' => $incomingDurationFormatted,
+//         'outgoingDurationFormatted' => $outgoingDurationFormatted,
+//         'totalDurationFormatted' => $totalDurationFormatted,
+//     ]);
+// }
+
+
+// private function formatDuration($seconds)
+// {
+//     $minutes = floor($seconds / 60);
+//     $remainingSeconds = $seconds % 60;
+
+//     // Return formatted as "min:sec" (e.g., "5:23")
+//     return sprintf('%02d:%02d', $minutes, $remainingSeconds);
+// }
+
+
+// public function callDuration(Request $request)
+// {
+//     $employee_id = $request->employee_id;
+
+//     // Fetch the employee record
+//     $employee = Employee::find($employee_id);
+
+//     if (!$employee) {
+//         return redirect()->back()->with('error', 'Employee not found.');
+//     }
+
+//     // Define start and end of the day
+//     $startOfDay = Carbon::now()->startOfDay();
+//     $endOfDay = Carbon::now()->endOfDay();
+
+//     // Fetch total call durations (incoming and outgoing) in one query
+//     $callDurations = CallHistory::where('employee_id', $employee_id)
+//         ->whereBetween('created_at', [$startOfDay, $endOfDay])
+//         ->selectRaw("SUM(CASE WHEN type = 'incoming' THEN call_duration ELSE 0 END) as incomingDuration,
+//                      SUM(CASE WHEN type = 'outgoing' THEN call_duration ELSE 0 END) as outgoingDuration")
+//         ->first();
+
+//     // Calculate total duration
+//     $totalDurationInSeconds = $callDurations->incomingDuration + $callDurations->outgoingDuration;
+
+//     // Format durations for display
+//     $incomingDurationFormatted = $this->formatDuration($callDurations->incomingDuration);
+//     $outgoingDurationFormatted = $this->formatDuration($callDurations->outgoingDuration);
+//     $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
+
+//     // Pass data to the view
+//     return view('callDurationSum', [
+//         'employee' => $employee,
+//         'incomingDurationFormatted' => $incomingDurationFormatted,
+//         'outgoingDurationFormatted' => $outgoingDurationFormatted,
+//         'totalDurationFormatted' => $totalDurationFormatted,
+//     ]);
+// }
+
+private function formatDuration($seconds)
 {
-    // Fetch employees to populate the dropdown
-    $employees = Employee::all(); // or use a query if needed
+    $minutes = floor($seconds / 60);
+    $remainingSeconds = $seconds % 60;
 
-    $employee_id = $request->employee_id;
-
-    // Initialize the variables outside the if block
-    $startOfDay = Carbon::now()->startOfDay();
-    $endOfDay = Carbon::now()->endOfDay();
-
-    // If an employee is selected, proceed with fetching call durations
-    $callDurations = [];
-    if ($employee_id) {
-
-        // Fetch call durations for the employee
-        $callDurations = CallHistory::where('employee_id', $employee_id)
-            ->whereBetween('created_at', [$startOfDay, $endOfDay])
-            ->get();
-    }
-
-    // Fetch total incoming call duration for the employee
-    $incomingDuration = CallHistory::where('employee_id', $employee_id)
-        ->where('type', 'incoming')
-        ->whereBetween('created_at', [$startOfDay, $endOfDay])
-        ->sum('call_duration'); // Replace with correct column name if different
-
-    // Fetch total outgoing call duration for the employee
-    $outgoingDuration = CallHistory::where('employee_id', $employee_id)
-        ->where('type', 'outgoing')
-        ->whereBetween('created_at', [$startOfDay, $endOfDay])
-        ->sum('call_duration'); // Replace with correct column name if different
-
-    // Calculate the total duration in seconds
-    $totalDurationInSeconds = $incomingDuration + $outgoingDuration; 
-
-    // Convert durations to minutes and seconds format
-    $incomingDurationFormatted = $this->formatDuration($incomingDuration);
-    $outgoingDurationFormatted = $this->formatDuration($outgoingDuration);
-    $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
-
-    // Pass the employees and call durations to the view
-    return view('callDurationSum', [
-        'employees' => $employees, 
-        'callDurations' => $callDurations,
-    ]); 
+    // Return formatted as "min:sec"
+    return sprintf('%02d:%02d', $minutes, $remainingSeconds);
 }
-
-public function formatDuration($durationInSeconds)
-{
-    // Convert seconds to minutes and seconds
-    $minutes = floor($durationInSeconds / 60);
-    $seconds = $durationInSeconds % 60;
-
-    // Return formatted string
-    return sprintf('%d min %d sec', $minutes, $seconds);
-}
-
 
 
    
@@ -346,6 +389,53 @@ public function formatDuration($durationInSeconds)
             'totalSeconds' => $totalSeconds,
         ]);
     }
+
+
+    public function callDuration(Request $request)
+{
+    // Fetch all employees (or you can filter specific employees as needed)
+    $employees = Employee::all();
+
+    // Define start and end of the day
+    $startOfDay = Carbon::now()->startOfDay();
+    $endOfDay = Carbon::now()->endOfDay();
+
+    // Prepare an array to store employee data with call durations
+    $employeeDurations = [];
+
+    // Loop through each employee and calculate call durations
+    foreach ($employees as $employee) {
+        // Fetch total incoming call duration for the employee
+        $incomingDuration = CallHistory::where('employee_id', $employee->id)
+            ->where('type', 'incoming')
+            ->whereBetween('created_at', [$startOfDay, $endOfDay])
+            ->sum('call_duration');
+
+        // Fetch total outgoing call duration for the employee
+        $outgoingDuration = CallHistory::where('employee_id', $employee->id)
+            ->where('type', 'outgoing')
+            ->whereBetween('created_at', [$startOfDay, $endOfDay])
+            ->sum('call_duration');
+
+        // Calculate the total duration
+        $totalDurationInSeconds = $incomingDuration + $outgoingDuration;
+
+        // Convert durations to minutes and seconds format
+        $incomingDurationFormatted = $this->formatDuration($incomingDuration);
+        $outgoingDurationFormatted = $this->formatDuration($outgoingDuration);
+        $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
+
+        // Add the employee's data to the array
+        $employeeDurations[] = [
+            'employee' => $employee,
+            'incomingDurationFormatted' => $incomingDurationFormatted,
+            'outgoingDurationFormatted' => $outgoingDurationFormatted,
+            'totalDurationFormatted' => $totalDurationFormatted,
+        ];
+    }
+
+}
+
 }
 
        
