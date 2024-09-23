@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;  // read about this on google
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Message;
+use App\Models\LeadReviews;
 
 class ApiController extends Controller
 {
@@ -294,7 +295,7 @@ public function leads_count(Request $request)
     // leads
     $totalLeads = Leads::where('employee_id', $employee_id)
                        ->where('is_deleted', 0)
-                       ->where('lead_stage','!=', 'new')
+                        ->whereNotIn('lead_stage', ['NEW', 'CLOSE'])
                        ->count();
 
     $newLeads = Leads::where('employee_id', $employee_id)
@@ -320,6 +321,10 @@ public function leads_count(Request $request)
                           ->where('lead_stage', 'not_answered')
                           ->where('is_deleted', 0)
                           ->count();
+    $close = Leads::where('employee_id', $employee_id)
+                          ->where('lead_stage', 'close')
+                          ->where('is_deleted', 0)
+                          ->count();
 
     // Return the counts as JSON response
     return response()->json([
@@ -329,15 +334,20 @@ public function leads_count(Request $request)
         'interested' => $interested,
         'notInterested' => $notInterested,
         'notAnswered' => $notAnswered,
+        'close' => $close,
         
     ]);
 }
 
 
-  public function lead_by_employee(Request $request)
+
+  
+public function lead_by_employee(Request $request)
 {
     $query = Leads::where('employee_id', $request->employee_id)
-                  ->where('is_deleted', 0);
+                  ->where('is_deleted', 0)
+                   ->whereNotIn('lead_stage', ['NEW', 'CLOSE']);
+                //   ->where('lead_stage', '!=', 'NEW');
 
     if ($request->has('lead_type')) {
         $query->where('lead_stage', $request->lead_type);
@@ -380,6 +390,46 @@ public function leads_count(Request $request)
     }
 }
 
+
+// for close lead only
+public function close_lead_by_employee(Request $request)
+{
+    $query = Leads::where('employee_id', $request->employee_id)
+                  ->where('is_deleted', 0)
+                   ->where('lead_stage',  'close');
+
+    
+    $leads = $query->orderBy('id', 'desc')->get();
+
+    $data_record = [];
+
+    foreach ($leads as $row) {
+        $data_record[] = [
+            'id' => $row->id,
+            'customer_name' => $row->customer_name,
+            'customer_email' => $row->customer_email,
+            'phone' => $row->phone,
+            'lead_stage' => $row->lead_stage,
+            'feedback' => $row->feedback,
+            'expected_revenue' => $row->expected_revenue,
+            'notes' => $row->notes,
+            'next_follow_up' => $row->next_follow_up,
+            'employee_id' => $row->employee_id,
+        ];
+    }
+
+    if (!empty($data_record)) {
+        return response()->json([
+            'status' => 'S',
+            'data' => $data_record,
+        ], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+        return response()->json([
+            'status' => 'F',
+            'errorMsg' => 'Data not found',
+        ], 200);
+    }
+}
 
  public function new_lead_by_employee(Request $request)
 {
@@ -1007,6 +1057,38 @@ private function formatDuration($seconds)
     return sprintf('%02d:%02d', $minutes, $remainingSeconds);
 }
 
+
+
+public function add_lead_review(Request $request)
+{
+   
+      // Find the existing lead by lead_id
+      $lead = Leads::find($request->lead_id);
+
+      if (!$lead) {
+          return response()->json(['message' => 'Lead not found'], 404);
+      }
+  
+      // Update only the lead_stage
+      $lead->lead_stage = $request->lead_stage;
+      $lead->save(); // Save the changes
+  
+      // Now insert the feedback into the LeadReviews table
+      $review = new LeadReviews();
+      $review->lead_id = $lead->id;
+      $review->employee_id = $request->employee_id; // The employee providing the feedback
+      $review->review_text = $request->review_text;
+      $review->call_date = now(); // Use current date and time
+      $review->save(); // Save the review
+  
+      return response()->json([
+          'message' => 'Lead stage updated and review added successfully',
+          'data' => [
+              'lead' => $lead,
+              'review' => $review
+          ]
+      ], 201);
+}
 
 
 }
