@@ -49,7 +49,7 @@ Route::get('/leads_feedback',[LeadsController::class, 'filterLeadsByEmployee'])-
 Route::get('/leadsfeedback_detail', [LeadsController::class, 'leadsFeedbackDetail'])->name('leadsfeedback_detail');
 Route::get('/call_history_today', [CallHistoryController::class, 'todayCallHistory'])->name('call_history_today');
 Route::get('/today_call_history_detail', [CallHistoryController::class, 'todaycallhistoryDetail'])->name('today_call_history_detail');
-Route::get('/filter_call_history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
+Route::get('/filter_call_history', [CallHistoryController::class, 'callHistory'])->name('filter_call_history');
 Route::get('/outgoing_call_history', [CallHistoryController::class, 'outgoingCall'])->name('outgoing_call_history');
 Route::get('/incoming_call_history', [CallHistoryController::class, 'incomingCall'])->name('incoming_call_history');
 Route::get('/missed_call_history', [CallHistoryController::class, 'missedCall'])->name('missed_call_history');
@@ -100,11 +100,17 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     
     
     
-    Route::get('/call_history',[CallHistoryController::class, 'filterCallHistoryByEmployee'])->name('call_history');
+    Route::get('/call_history',[CallHistoryController::class, 'filterCallHistory'])->name('call_history');
     
     Route::get('/call_history_detail', [CallHistoryController::class, 'callHistoryDetail'])->name('call_history_detail');
     
+    Route::get('/call_history_today', [CallHistoryController::class, 'todayCallHistory'])->name('call_history_today');
+
+    Route::get('/today_call_history_detail', [CallHistoryController::class, 'todaycallhistoryDetail'])->name('today_call_history_detail');
     
+    
+    
+    // Route::get('/call_history_today', [EmployeeController::class, 'showCallerEmployee'])->name('call_history_today');   
     
     Route::get('/employee_call_history',[CallHistoryController::class, 'callHistoryByEmployee'])->name('employee_call_history');
     
@@ -117,10 +123,6 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     
     Route::get('/upload', [LeadsController::class, 'showUploadForm'])->name('upload.form');
     Route::post('/import', [LeadsController::class, 'import'])->name('leads.import');
-    
-    Route::get('/call_history_today', [CallHistoryController::class, 'todayCallHistory'])->name('call_history_today');
-    Route::get('/today_call_history_detail', [CallHistoryController::class, 'todaycallhistoryDetail'])->name('today_call_history_detail');
-    
     
     Route::get('/filter_call_history', [CallHistoryController::class, 'filterCallHistory'])->name('filter_call_history');
     
@@ -172,25 +174,22 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
     
     
-    ////////////////////
-    // Route::post('importscreate', 'NewLeadsUploadController@create')->name('importscreate');
-    // Route::post('importscreate', [NewLeadsUploadController::class, 'create'])->name('importscreate');
+   
     Route::post('/imports', [NewLeadsUploadController::class, 'create'])->name('importscreate');
     Route::get('/imports', [EmployeeController::class, 'showCallerEmployees'])->name('imports');
 
-  
-    // Route::post('Sms', 'ImportController@sms_create')->name('importsSms');
-  
-    // Route::get('/imports','NewLeadsUploadController@index')->name('imports');
 
+    Route::get('/call_duration', [CallHistoryController::class, 'callDuration'])->name('call_duration');
+
+    Route::get('/call_duration_detail', [CallHistoryController::class, 'callDurationDetail'])->name('call_duration_detail');
+  
+  
     
-    // Route::get('/imports', [NewLeadsUploadController::class, 'index'])->name('imports');
 
     // Route::get('/imports', function () {
     //     return view('NewLeadsUpload');
     // });
 
-    /////////////////////////
 
 
 

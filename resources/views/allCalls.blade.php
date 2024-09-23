@@ -47,7 +47,7 @@
             <tr>
                 <th>CONTACT NAME</th>
                 <th>PHONE</th>
-                <th>CALL TYPE</th>
+                <th>CALL TYPE</th>  
                 <th>DURATION</th>
                 <th>DATE</th>
                 <th>TIME</th>
@@ -63,7 +63,7 @@
             <td>{{ $calls->type }}</td>
             @php
     $totalSeconds = $calls->call_duration;
-    $minutes = floor($totalSeconds / 60);
+    $minutes = floor($totalSeconds % 60);
     $seconds = $totalSeconds % 60;
 
     $callDateString = $calls->call_date;

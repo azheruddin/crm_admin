@@ -172,6 +172,17 @@
                 </div>
               </div>
             </div>
+            <div class="col-lg-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="circle-progress-width">
+                  <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
+                </div>
+            <div>
+                  <p class="text-small mb-2"><span class="text-primary">Not Answered</span></p>
+                  <h4 class="mb-0 fw-bold">{{$notAnswered}}</h4>
+                </div>
+              </div>
+            </div>
             </div>
             </div>
             </div>

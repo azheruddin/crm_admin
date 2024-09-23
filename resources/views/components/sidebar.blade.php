@@ -37,9 +37,17 @@
                 <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Calls</a></li>
-                </ul>
-               
+                   </ul>
 
+
+                   <!-- <div class="collapse" id="form-elements">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"><a class="nav-link" href="/call_duration">Call Duration Sum</a></li>
+                   </ul> -->
+
+
+  
+                
                 <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/show_call">Highest Calls</a></li>
@@ -59,12 +67,7 @@
                 <i class="menu-arrow"></i>
               </a>
 
-              <!-- <div class="collapse" id="charts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/add_leads">Add Leads</a></li>
-                </ul>
-              </div>
-             -->
+             
 
              <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
