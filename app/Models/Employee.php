@@ -11,6 +11,13 @@ class Employee extends Model
     protected $table = "employees";
  protected $fillable = ['name', 'email', 'phone', 'password', 'type'];
 
+
+
+ public function reviews()
+ {
+     return $this->hasMany(Review::class);
+ }
+
 }
 
 

@@ -72,10 +72,11 @@ class CommonController extends Controller
         $interested = Leads::where('lead_stage', 'interested')->whereDate('created_at', $today)->count();
         $notInterested = Leads::where('lead_stage', 'notinterested')->whereDate('created_at', $today)->count();
         $notAnswered = Leads::where('lead_stage', 'notanswered')->whereDate('created_at', $today)->count();
+        $close = Leads::where('lead_stage', 'close')->whereDate('created_at', $today)->count();
        
     
         // Return the view with the counts
-        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees','totalLeads', 'hotLeads', 'interested', 'notInterested','notAnswered','uniqueOutgoingCallsToday', 'incoming', 'missed','unknown', 'total'));
+        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees','totalLeads', 'hotLeads', 'interested', 'notInterested','notAnswered','close','uniqueOutgoingCallsToday', 'incoming', 'missed','unknown', 'total'));
     }
 
 

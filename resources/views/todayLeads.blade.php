@@ -13,11 +13,7 @@
           <div class="form-row">
             <div class="form-group col-md-3">
               
-              <label for="from_date">From Date</label>
-              <input type="date" class="form-control" id="from_date" name="from_date" value="{{ request('from_date') }}">
-          
-              <label for="to_date">To Date</label>
-              <input type="date" class="form-control" id="to_date" name="to_date" value="{{ request('to_date') }}"> 
+             
             </div>
 
             <div class="form-group col-md-3">
@@ -44,6 +40,7 @@
         <option value="interested" {{ request('lead_stage') == 'interested' ? 'selected' : '' }}>Interested</option>
         <option value="not_interested" {{ request('lead_stage') == 'not_interested' ? 'selected' : '' }}>Not Interested</option>
         <option value="no_answer" {{ request('lead_stage') == 'not_answer' ? 'selected' : '' }}>Not Answer</option>
+        <option value="close" {{ request('lead_stage') == 'close' ? 'selected' : '' }}>Close</option>
     </select>
 </div>
 
@@ -60,6 +57,7 @@
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
+                            <th>SERIAL NO.</th>
                             <th>CUSTOMER NAME</th>
                             <th>EMAIL</th>
                             <th>PHONE</th>
@@ -67,12 +65,12 @@
                             <th>LEAD DATE</th>
                             <th>NEXT FOLLOW UP</th>
                             <th>EMPLOYEE</th>
-                            <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($todayLeads as $lead)
+                        @foreach($todayLeads as $index => $lead)
                         <tr>
+                            <td>{{ $index +1 }}</td>
                             <td>{{ $lead->customer_name }}</td>
                             <td>{{ $lead->customer_email }}</td>
                             <td>{{ $lead->phone }}</td>
@@ -80,11 +78,6 @@
                             <td>{{ $lead->created_at }}</td>
                             <td>{{ $lead->next_follow_up }}</td>
                             <td>{{ $lead->employee->name ?? '' }}</td>
-                            <td>
-                                <a href="{{ route('leadsfeedback_detail', ['lead_id' => $lead->id]) }}" class="btn btn-info">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
