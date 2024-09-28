@@ -70,8 +70,8 @@ class CommonController extends Controller
         $totalLeads = Leads::whereDate('created_at', $today)->count();
         $hotLeads = Leads::where('lead_stage', 'hot')->whereDate('created_at', $today)->count();
         $interested = Leads::where('lead_stage', 'interested')->whereDate('created_at', $today)->count();
-        $notInterested = Leads::where('lead_stage', 'notinterested')->whereDate('created_at', $today)->count();
-        $notAnswered = Leads::where('lead_stage', 'notanswered')->whereDate('created_at', $today)->count();
+        $notInterested = Leads::where('lead_stage', 'not_interested')->whereDate('created_at', $today)->count();
+        $notAnswered = Leads::where('lead_stage', 'not_answered')->whereDate('created_at', $today)->count();
         $close = Leads::where('lead_stage', 'close')->whereDate('created_at', $today)->count();
        
     
