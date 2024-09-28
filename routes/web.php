@@ -115,7 +115,7 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     Route::get('/employee_call_history',[CallHistoryController::class, 'callHistoryByEmployee'])->name('employee_call_history');
     
     Route::get('/leads_feedback',[LeadsController::class, 'filterLeadsByEmployee'])->name('leads_feedback');
-    
+    Route::get('/new_leads',[LeadsController::class, 'new_leads_show'])->name('new_leads');
     Route::get('/leadsfeedback_detail', [LeadsController::class, 'leadsFeedbackDetail'])->name('leadsfeedback_detail');
     
     

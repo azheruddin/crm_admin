@@ -26,6 +26,20 @@ class LeadsController extends Controller
         
     }
 
+    public function new_leads_show(Request $request)
+    {
+        
+        $LeadsFeedback = Leads::orderBy('id','desc')->where('lead_stage', 'NEW')->get();
+        
+        if ($request->has('employee_id') && $request->employee_id != '') {
+        $LeadsFeedback =  $LeadsFeedback->where('employee_id', $request->employee_id);
+        }
+        
+    $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
+        return view('newLeads', compact('LeadsFeedback', 'employees'));
+        
+    }
+
    
 public function leadsFeedbackByEmployee(Request $request)
 {
@@ -63,7 +77,9 @@ public function leadsFeedbackDetail(Request $request)
 public function todayLeads()
     {
         // Fetch today's leads
-        $todayLeads = Leads::whereDate('updated_at', now()->toDateString())->get();
+        $todayLeads = Leads::whereDate('updated_at', now()->toDateString())
+        ->where('lead_stage','!=', "NEW")
+        ->get();
 
         // Pass the leads to the view
         return view('todayLeads', compact('todayLeads'));
@@ -73,22 +89,27 @@ public function todayLeads()
     public function filterLeads(Request $request)
     {
         $employee_id = $request->employee_id;
+
         $query = Leads::with('employee');
+
+        $query->where('lead_stage','!=', "NEW");  
 
 // Filter by from_date if provided
         if ($request->filled('from_date')) {
-        $query->whereDate('created_at', '>=', $validatedData['from_date']);
+        $query->whereDate('updated_at', '>=', $request->filled('from_date'));
      }
 
 // Filter by to_date if provided
         if ($request->filled('to_date')) {
-        $query->whereDate('created_at', '<=', $validatedData['to_date']); 
+        $query->whereDate('updated_at', '<=', $request->filled('to_date')); 
       }
 
 // Filter by employee_id if provided
          if ($request->filled('employee_id')) {
-        $query->where('employee_id', $validatedData['employee_id']);  
+        $query->where('employee_id', $employee_id);  
       }
+
+     
 
       $employees = Employee::where('is_active', 1)->get();
 

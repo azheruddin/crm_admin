@@ -37,7 +37,10 @@ Route::post('/lead_calls', [ApiController::class, 'lead_calls'])->name('lead_cal
 Route::post('/login', [ApiController::class, 'login']);
 
 Route::get('/lead_by_employee', [ApiController::class, 'lead_by_employee']);
+Route::get('/close_lead_by_employee', [ApiController::class, 'close_lead_by_employee']);
+Route::get('/new_lead_by_employee', [ApiController::class, 'new_lead_by_employee']);
 Route::get('/lead_by_id', [ApiController::class, 'lead_by_id']);
+Route::get('/lost_lead_by_employee', [ApiController::class, 'lost_lead_by_employee']);
 
 Route::put('lead/{id}', [ApiController::class, 'update_lead']);
 Route::put('lead_delete/{id}', [ApiController::class, 'delete_lead']);
