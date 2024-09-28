@@ -70,12 +70,13 @@ class CommonController extends Controller
         $totalLeads = Leads::whereDate('created_at', $today)->count();
         $hotLeads = Leads::where('lead_stage', 'hot')->whereDate('created_at', $today)->count();
         $interested = Leads::where('lead_stage', 'interested')->whereDate('created_at', $today)->count();
-        $notInterested = Leads::where('lead_stage', 'notinterested')->whereDate('created_at', $today)->count();
-        $notAnswered = Leads::where('lead_stage', 'notanswered')->whereDate('created_at', $today)->count();
+        $notInterested = Leads::where('lead_stage', 'not_interested')->whereDate('created_at', $today)->count();
+        $notAnswered = Leads::where('lead_stage', 'not_answered')->whereDate('created_at', $today)->count();
+        $close = Leads::where('lead_stage', 'close')->whereDate('created_at', $today)->count();
        
     
         // Return the view with the counts
-        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees','totalLeads', 'hotLeads', 'interested', 'notInterested','notAnswered','uniqueOutgoingCallsToday', 'incoming', 'missed','unknown', 'total'));
+        return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees','totalLeads', 'hotLeads', 'interested', 'notInterested','notAnswered','close','uniqueOutgoingCallsToday', 'incoming', 'missed','unknown', 'total'));
     }
 
 

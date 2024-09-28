@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Leads;
+use App\Models\Lead_review;
 use App\Models\Employee;
 use App\Http\Controllers\Excel;
 use App\Models\State;
@@ -74,6 +75,41 @@ public function leadsFeedbackDetail(Request $request)
 }
 
 
+// public function leadsFeedbackDetail(Request $request)
+// {
+//     // Find the lead with the given ID
+//     // $leads = Leads::find($id);
+//         $leads = Leads::findOrFail($request->lead_id);
+
+
+//     // If no lead is found, return an error or redirect
+//     if (!$leads) {
+//         return redirect()->back()->with('error', 'Lead not found');
+//     }
+
+//     // Find the lead review associated with the lead (adjust this logic as needed)
+//     $lead_review = Lead_review::where('lead_id', $id)->first(); 
+
+    
+
+//     // Pass both lead and lead review to the view
+//     return view('leadsDetails', ['leads' => $lead, 'lead_review' => $lead_review]);
+// }
+
+
+// public function leadsFeedbackDetail($id)
+// {
+//     $leads = Leads::with('employee')->find($id);
+
+//     if (!$lead) {
+//         return redirect()->back()->with('error', 'Lead not found');
+//     }
+
+//     return view('leadsDetails', ['leads' => $leads]);
+// }
+
+
+
 public function todayLeads()
     {
         // Fetch today's leads
@@ -86,6 +122,7 @@ public function todayLeads()
     }
 
  
+<<<<<<< HEAD
     public function filterLeads(Request $request)
     {
         $employee_id = $request->employee_id;
@@ -112,11 +149,63 @@ public function todayLeads()
      
 
       $employees = Employee::where('is_active', 1)->get();
+=======
+//     public function filterLeads(Request $request)
+//     {
+//         $employee_id = $request->employee_id;
+//         $query = Leads::with('employee');
 
-        // Pass the leads and date range inputs to the view
-        return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate','employees'));
+// // Filter by from_date if provided
+//         if ($request->filled('from_date')) {
+//         $query->whereDate('created_at', '>=', $validatedData['from_date']);
+//      }
+
+// // Filter by to_date if provided
+//         if ($request->filled('to_date')) {
+//         $query->whereDate('created_at', '<=', $validatedData['to_date']); 
+//       }
+
+// // Filter by employee_id if provided
+// if ($request->filled('employee_id')) {
+//     $query->where('employee_id', $validatedData['employee_id']);  
+// }
+
+>>>>>>> 5edfd0beb2977439786f1ec9461e43936e98ac13
+
+//       $employees = Employee::where('is_active', 1)->get();
+
+//         // Pass the leads and date range inputs to the view
+//         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate','employees'));
+//     }
+
+
+
+public function filterLeads(Request $request)
+{
+    // Retrieve employee list for the dropdown
+    $employees = Employee::all();
+
+    // Initialize query
+    $query = Leads::with('employee')->whereDate('updated_at', now()->toDateString());
+
+    // Apply filters
+   
+
+    if ($request->has('employee_id') && $request->employee_id != '') {
+        $query->where('employee_id', $request->employee_id);
     }
 
+    if ($request->has('lead_stage') && $request->lead_stage != '') {
+        $query->where('lead_stage', $request->lead_stage);
+    }
+
+    // Fetch filtered leads
+    // $todayLeads = $query->get();
+    $todayLeads = $query->get();  // Leads::whereDate('updated_at', now()->toDateString())->get();
+
+    // Return view with filtered leads and employees
+    return view('todayLeads', compact('todayLeads', 'employees'));
+}
 
     
 
@@ -195,6 +284,8 @@ public function todayLeads()
         $query->where('employee_id', $validatedData['employee_id']);  
     }
 
+   
+
     // Retrieve filtered call histories ordered by id desc
     $LeadsFeedback = $query->where('is_deleted', 0)->orderBy('id', 'desc')->get();
 
@@ -207,7 +298,6 @@ public function todayLeads()
     return view('LeadsFeedback', compact('LeadsFeedback', 'employees'));
 }
 
-//code for delete leads
 
 
 public function showdeleteLeads(Request $request)
@@ -359,4 +449,50 @@ public function getCities($state_id)
     return response()->json($cities);
 }
 
+
+// public function leadsReview()
+//     {
+//         // Fetch all reviews, optionally with the associated lead
+//         $reviews = Lead_review::with('lead')->get();  // Assuming 'lead' is a relationship
+
+//         // Pass the reviews to the view
+//         return view('leadsDetails', compact('reviews'));
+//     }
+
+
+    // public function leadsReview()
+    // {
+    //     // Fetch all reviews
+    //     $reviews = Lead_review::all();  // Retrieve all reviews from the database
+
+    //     // Pass the reviews to the view
+    //     return view('leadsDetails', compact('reviews'));
+    // }
+
+
+
+    // public function leadsReview($id)
+    // {
+    //     // Fetch the lead review by its ID
+    //     $lead_review = Lead_review::findOrFail($id);
+
+    //     // Pass the lead review data to the view
+    //     return view('leadsDetails', compact('lead_review'));  // Pass the lead review data to the view
+    // }
+
+
+
+    public function leadsReview($id)
+    {
+        // Fetch the lead review by ID
+        $lead_review = Lead_review::find($id);
+
+        // Check if the lead review exists
+        if (!$lead_review) {
+            return redirect()->back()->with('error', 'Lead Review not found');
+        }
+        
+        // Pass the lead review to the view
+        return view('leadsDetails', compact('lead_review'));
+    }
 }

@@ -46,7 +46,6 @@ Route::get('/call_history',[CallHistoryController::class, 'filterCallHistoryByEm
 Route::get('/call_history_detail', [CallHistoryController::class, 'callHistoryDetail'])->name('call_history_detail');
 Route::get('/employee_call_history',[CallHistoryController::class, 'callHistoryByEmployee'])->name('employee_call_history');
 Route::get('/leads_feedback',[LeadsController::class, 'filterLeadsByEmployee'])->name('leads_feedback');
-Route::get('/leadsfeedback_detail', [LeadsController::class, 'leadsFeedbackDetail'])->name('leadsfeedback_detail');
 Route::get('/call_history_today', [CallHistoryController::class, 'todayCallHistory'])->name('call_history_today');
 Route::get('/today_call_history_detail', [CallHistoryController::class, 'todaycallhistoryDetail'])->name('today_call_history_detail');
 Route::get('/filter_call_history', [CallHistoryController::class, 'callHistory'])->name('filter_call_history');
@@ -182,6 +181,15 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     Route::get('/call_duration', [CallHistoryController::class, 'callDuration'])->name('call_duration');
 
     Route::get('/call_duration_detail', [CallHistoryController::class, 'callDurationDetail'])->name('call_duration_detail');
+
+    // Route::get('/leadsfeedback_detail', [LeadsController::class, 'leadsReview'])->name('leadsfeedback_detail');
+
+    // Route::get('/leadsfeedback_detail/{id}', [LeadsController::class, 'leadsReview'])->name('leadsfeedback_detail');
+
+    Route::get('/leadsfeedback_detail/{id}', [LeadsController::class, 'leadsFeedbackDetail'])->name('leadsfeedback_detail');
+
+
+
   
   
     

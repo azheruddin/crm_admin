@@ -63,7 +63,7 @@
 
         <h4 class="text-primary">
     <a href="{{ route('filter_call_history') }}"><span class="text-primary">
-    Today Calls</span><span class="text-dark">{{ $total }}</span>
+    Today Calls</span><span class="text-dark">&nbsp:{{ $total }}</span>
     </a>
 </h4><hr>
 
@@ -121,24 +121,18 @@
             </div>             
             </div>
 
-            <div class="row">
   <div class="col-md-6 col-lg-6 grid-margin stretch-card">
   <div class="card card-rounded">
         <div class="card-body">
-            <h4 class="text-primary"> Today Leads </h4><hr>
+        <div class="row">
 
-          <div class="row">
-            <div class="col-lg-3">
-              <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
-                <div class="circle-progress-width">
-                  <div id="totalVisitors1" class="progressbar-js-circle pr-2"></div>
-                </div>
-                <div>
-                  <p class="text-small mb-2"><span class="text-primary">Total</span></p>
-                  <h4 class="mb-0 fw-bold">{{ $totalLeads }}</h4>
-                </div>
-              </div>
-            </div>
+        <h4 class="text-primary">
+
+        <span class="text-primary">
+    Today Leads</span><span class="text-dark">&nbsp:{{$totalLeads }}</span>
+</h4><hr>
+         
+
             <div class="col-lg-3">
               <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
                 <div class="circle-progress-width">
@@ -180,6 +174,19 @@
             <div>
                   <p class="text-small mb-2"><span class="text-primary">Not Answered</span></p>
                   <h4 class="mb-0 fw-bold">{{$notAnswered}}</h4>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="circle-progress-width">
+                  <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
+                </div>
+            <div>
+                  <p class="text-small mb-2"><span class="text-primary">Close</span></p>
+                  <h4 class="mb-0 fw-bold">{{$close}}</h4>
                 </div>
               </div>
             </div>
