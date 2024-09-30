@@ -90,6 +90,7 @@ Route::post('/logout', [ApiController::class, 'logout']);
 
 
 Route::post('/add_lead_review', [ApiController::class, 'add_lead_review']);
+Route::get('/review_by_lead', [ApiController::class, 'review_by_lead']);
 
 Route::get('/call_duration_by_employee', [ApiController::class, 'callDurationByEmployee']);
 

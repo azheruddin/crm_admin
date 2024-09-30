@@ -122,34 +122,6 @@ public function todayLeads()
     }
 
  
-<<<<<<< HEAD
-    public function filterLeads(Request $request)
-    {
-        $employee_id = $request->employee_id;
-
-        $query = Leads::with('employee');
-
-        $query->where('lead_stage','!=', "NEW");  
-
-// Filter by from_date if provided
-        if ($request->filled('from_date')) {
-        $query->whereDate('updated_at', '>=', $request->filled('from_date'));
-     }
-
-// Filter by to_date if provided
-        if ($request->filled('to_date')) {
-        $query->whereDate('updated_at', '<=', $request->filled('to_date')); 
-      }
-
-// Filter by employee_id if provided
-         if ($request->filled('employee_id')) {
-        $query->where('employee_id', $employee_id);  
-      }
-
-     
-
-      $employees = Employee::where('is_active', 1)->get();
-=======
 //     public function filterLeads(Request $request)
 //     {
 //         $employee_id = $request->employee_id;
@@ -170,7 +142,6 @@ public function todayLeads()
 //     $query->where('employee_id', $validatedData['employee_id']);  
 // }
 
->>>>>>> 5edfd0beb2977439786f1ec9461e43936e98ac13
 
 //       $employees = Employee::where('is_active', 1)->get();
 

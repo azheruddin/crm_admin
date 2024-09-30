@@ -1093,12 +1093,12 @@ public function add_lead_review(Request $request)
   
       return response()->json([
           'message' => 'Lead stage updated and review added successfully',
-          'data' => [
-              'lead' => $lead,
-              'review' => $review
-          ]
+        //   'data' => [
+        //       'lead' => $lead,
+        //       'review' => $review
+        //   ]
       ], 201);
 }
-
+ 
 
 }
