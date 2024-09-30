@@ -189,6 +189,9 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
     Route::get('/leadsfeedback_detail/{id}', [LeadsController::class, 'leadsFeedbackDetail'])->name('leadsfeedback_detail');
 
 
+    Route::get('/count_leads', [LeadsController::class, 'countLeads'])->name('count_leads');
+
+
 
   
   

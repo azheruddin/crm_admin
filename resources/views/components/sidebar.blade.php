@@ -94,7 +94,11 @@
                 </ul>
               </div>
 
-              
+              <div class="collapse" id="charts">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/count_leads">Count Leads</a></li>
+                </ul>
+              </div>
               <!--  <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">Leadfeedback By Employee</a></li>

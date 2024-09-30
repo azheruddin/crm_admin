@@ -125,23 +125,29 @@ public function todayLeads()
 //     public function filterLeads(Request $request)
 //     {
 //         $employee_id = $request->employee_id;
+
 //         $query = Leads::with('employee');
+
+//         $query->where('lead_stage','!=', "NEW");  
 
 // // Filter by from_date if provided
 //         if ($request->filled('from_date')) {
-//         $query->whereDate('created_at', '>=', $validatedData['from_date']);
+//         $query->whereDate('updated_at', '>=', $request->filled('from_date'));
 //      }
 
 // // Filter by to_date if provided
 //         if ($request->filled('to_date')) {
-//         $query->whereDate('created_at', '<=', $validatedData['to_date']); 
+//         $query->whereDate('updated_at', '<=', $request->filled('to_date')); 
 //       }
 
 // // Filter by employee_id if provided
-// if ($request->filled('employee_id')) {
-//     $query->where('employee_id', $validatedData['employee_id']);  
-// }
+//          if ($request->filled('employee_id')) {
+//         $query->where('employee_id', $employee_id);  
+//       }
 
+     
+
+    //   $employees = Employee::where('is_active', 1)->get();
 
 //       $employees = Employee::where('is_active', 1)->get();
 
@@ -466,4 +472,54 @@ public function getCities($state_id)
         // Pass the lead review to the view
         return view('leadsDetails', compact('lead_review'));
     }
+
+
+
+    // public function countLeads(Request $request)
+    // {
+    //     // Fetch employees with lead counts for each lead stage
+    //     $employees = Employee::withCount([
+    //         'leads as hotLeads' => function ($query) {
+    //             $query->where('lead_stage', 'hot');
+    //         },
+    //         'leads as interestedLeads' => function ($query) {
+    //             $query->where('lead_stage', 'interested');
+    //         },
+    //         'leads as notInterestedLeads' => function ($query) {
+    //             $query->where('lead_stage', 'not_interested');
+    //         },
+    //         'leads as notAnsweredLeads' => function ($query) {
+    //             $query->where('lead_stage', 'no_answer');
+    //         }
+    //     ])->get();
+    
+    //     // Return view with the employees and their lead counts
+    //     return view('newLeads', compact('employees'));
+    // }
+
+     
+
+
+
+    public function countLeads(Request $request)
+{
+    // Fetch employees with lead counts for each lead stage
+    $employees = Employee::withCount([
+        'leads as hotLeads' => function ($query) {
+            $query->where('lead_stage', 'hot');
+        },
+        'leads as interestedLeads' => function ($query) {
+            $query->where('lead_stage', 'interested');
+        },
+        'leads as notInterestedLeads' => function ($query) {
+            $query->where('lead_stage', 'not_interested');
+        },
+        'leads as notAnsweredLeads' => function ($query) {
+            $query->where('lead_stage', 'no_answer');
+        }
+    ])->get();
+
+    return view('countLeads', compact('employees'));
 }
+}
+

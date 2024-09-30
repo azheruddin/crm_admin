@@ -18,6 +18,12 @@ class Employee extends Model
      return $this->hasMany(Review::class);
  }
 
+
+
+ public function leads()
+ {
+     return $this->hasMany(Leads::class, 'employee_id'); // Adjust 'employee_id' if your foreign key is named differently
+ }
 }
 
 
