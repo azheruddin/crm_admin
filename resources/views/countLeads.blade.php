@@ -38,11 +38,16 @@
                         <tr>
                             <th>SERIAL NO.</th>
                             <th>EMPLOYEE</th>
+                            <th>ALL</th>
+                            <th>TODAY UPLOAD</th>
+                            <th>NEW</th>
+                             <th>FOLLOW UP</th>
                             <th>HOT</th>
                             <th>INTERESTED</th>
-                            <th>NOT INTERESTED</th>
                             <th>NOT ANSWERED</th>
-                            <th>NEXT FOLLOW UP</th>
+                            <th>NOT INTERESTED</th>
+                            <th>CLOSE</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -50,10 +55,15 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $employee->name }}</td>
+                                <td>{{ $employee->all ?? 0 }}</td> <!-- Hot leads count -->
+                                <td>{{ $employee->todayUploads ?? 0 }}</td> <!-- Hot leads count -->
+                                <td>{{ $employee->newLeads ?? 0 }}</td> <!-- Hot leads count -->
+                                <td>{{ $employee->followUpLeads ?? 0 }}</td> <!-- Hot leads count -->
                                 <td>{{ $employee->hotLeads ?? 0 }}</td> <!-- Hot leads count -->
                                 <td>{{ $employee->interestedLeads ?? 0 }}</td> <!-- Interested leads count -->
-                                <td>{{ $employee->notInterestedLeads ?? 0 }}</td> <!-- Not Interested leads count -->
                                 <td>{{ $employee->notAnsweredLeads ?? 0 }}</td> <!-- No Answer leads count -->
+                                 <td>{{ $employee->notInterestedLeads ?? 0 }}</td> <!-- Not Interested leads count -->
+                                <td>{{ $employee->closeLeads ?? 0 }}</td> <!-- No Answer leads count -->
                                 <td><!-- Logic for the next follow-up can be added here --></td>
                             </tr>
                         @endforeach

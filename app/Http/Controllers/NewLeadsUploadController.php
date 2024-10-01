@@ -23,6 +23,11 @@ class NewLeadsUploadController extends Controller
     }
     public function create(Request $request){
         
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv',
+            'employee_id' => 'required|exists:employees,id', // Ensure employee ID is valid
+        ]);
+
         $employeeId = $request->input('employee_id');
 
         try {

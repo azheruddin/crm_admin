@@ -43,6 +43,12 @@ class LeadsImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
+
+          // Validate the data before inserting
+        if (empty($row['phone'])) {
+            return null; // Skip this record if any critical field is null
+        }
+
         return new Leads([
             'customer_name'    => $row['customer_name'],
             'customer_email'   => $row['customer_email'],

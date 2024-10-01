@@ -129,7 +129,11 @@
         <h4 class="text-primary">
 
         <span class="text-primary">
-    Today Leads</span><span class="text-dark">&nbsp:{{$totalLeads }}</span>
+    Today Uploaded Leads</span><span class="text-dark">&nbsp; {{$todaysUploadedLeads }} </span> 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     <span class="text-primary">
+    Today Leads</span><span class="text-dark">&nbsp;{{$totalLeads }}</span>
 </h4><hr>
          
 
@@ -193,7 +197,10 @@
             </div>
             </div>
             </div>
-            </div>    
+            </div>   
+            
+            <!-- -->
+            <!-- -->
             
           
 
@@ -204,86 +211,3 @@
 
 @endsection
 
-               
-       
-
- 
-           
-    
-                       
-
-
-           
-            
-           
-            
-            
-          
-
-
-
- 
-                 
-           
-   
-                
-
-    
-   
-               
-       
-
- 
-           
-    
-                       
-
-
-           
-            
-           
-            
-            
-          
-
-
-
- 
-                 
-           
-   
-                
-
-                  
-
-
-          
-
-                  
-
-    
-
-
-   
-                 
-                  
-   
-               
-       
-
- 
-           
-    
-                       
-
-   
-                 
-                  
-   
-               
-       
-
- 
-           
-    
-                       

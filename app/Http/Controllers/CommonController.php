@@ -81,6 +81,8 @@ class CommonController extends Controller
         return view('dashboard', compact('totalEmployees', 'activeEmployees', 'deactivatedEmployees','totalLeads', 'hotLeads', 'interested', 'notInterested','uniqueOutgoingCallsToday', 'incoming', 'missed','unknown', 'total', 'notAnswered', 'close', 'todaysUploadedLeads'));
     }
 
+
+   
 }
     
 

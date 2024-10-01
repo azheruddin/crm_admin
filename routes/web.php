@@ -190,6 +190,7 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
 
     Route::get('/count_leads', [LeadsController::class, 'countLeads'])->name('count_leads');
+    Route::delete('/leads/{id}', [LeadsController::class, 'deleteLeads'])->name('leads.delete');
 
 
 

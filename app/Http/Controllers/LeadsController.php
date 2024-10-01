@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Leads;
-use App\Models\Lead_review;
 use App\Models\Employee;
 use App\Http\Controllers\Excel;
 use App\Models\State;
@@ -26,7 +25,6 @@ class LeadsController extends Controller
         return view('LeadsFeedback')->with('LeadsFeedback', $leadsFeedback);
         
     }
-
     public function new_leads_show(Request $request)
     {
         
@@ -35,7 +33,7 @@ class LeadsController extends Controller
         if ($request->has('employee_id') && $request->employee_id != '') {
         $LeadsFeedback =  $LeadsFeedback->where('employee_id', $request->employee_id);
         }
-        
+        // Load active callers
     $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
         return view('newLeads', compact('LeadsFeedback', 'employees'));
         
@@ -75,87 +73,68 @@ public function leadsFeedbackDetail(Request $request)
 }
 
 
-// public function leadsFeedbackDetail(Request $request)
-// {
-//     // Find the lead with the given ID
-//     // $leads = Leads::find($id);
-//         $leads = Leads::findOrFail($request->lead_id);
+// public function todayLeads()
+//     {
+//         // Fetch today's leads
+//         $todayLeads = Leads::whereDate('created_at', now()->toDateString())->get();
 
-
-//     // If no lead is found, return an error or redirect
-//     if (!$leads) {
-//         return redirect()->back()->with('error', 'Lead not found');
+//         // Pass the leads to the view
+//         return view('todayLeads', compact('todayLeads'));
 //     }
 
-//     // Find the lead review associated with the lead (adjust this logic as needed)
-//     $lead_review = Lead_review::where('lead_id', $id)->first(); 
+ 
+    // public function filterLeads(Request $request)
+    // {
+    //     // Get the date range from the request
+    //     $fromDate = $request->input('from_date', now()->startOfDay());
+    //     $toDate = $request->input('to_date', now()->endOfDay());
 
+    //     // Fetch leads within the specified date range
+    //     $todayLeads = Leads::whereBetween('created_at', [$fromDate, $toDate])->get();
+
+
+    //     // Pass the leads and date range inputs to the view
+    //     return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate'));
+    // }
     
-
-//     // Pass both lead and lead review to the view
-//     return view('leadsDetails', ['leads' => $lead, 'lead_review' => $lead_review]);
-// }
-
-
-// public function leadsFeedbackDetail($id)
-// {
-//     $leads = Leads::with('employee')->find($id);
-
-//     if (!$lead) {
-//         return redirect()->back()->with('error', 'Lead not found');
-//     }
-
-//     return view('leadsDetails', ['leads' => $leads]);
-// }
-
-
-
+    
+    
 public function todayLeads()
     {
         // Fetch today's leads
         $todayLeads = Leads::whereDate('updated_at', now()->toDateString())
         ->where('lead_stage','!=', "NEW")
         ->get();
+        
+        $employees = Employee::where('is_active', 1)->get();
 
         // Pass the leads to the view
-        return view('todayLeads', compact('todayLeads'));
+        return view('todayLeads', compact('todayLeads', 'employees'));
     }
-
- 
+    
+    
+    
 //     public function filterLeads(Request $request)
 //     {
 //         $employee_id = $request->employee_id;
-
-//         $query = Leads::with('employee');
-
+        
+//         $query = Leads::with('employee')->whereDate('updated_at', now()->toDateString());
+        
 //         $query->where('lead_stage','!=', "NEW");  
 
-// // Filter by from_date if provided
-//         if ($request->filled('from_date')) {
-//         $query->whereDate('updated_at', '>=', $request->filled('from_date'));
-//      }
-
-// // Filter by to_date if provided
-//         if ($request->filled('to_date')) {
-//         $query->whereDate('updated_at', '<=', $request->filled('to_date')); 
-//       }
 
 // // Filter by employee_id if provided
 //          if ($request->filled('employee_id')) {
 //         $query->where('employee_id', $employee_id);  
 //       }
 
-     
-
-    //   $employees = Employee::where('is_active', 1)->get();
+//      $todayLeads = $query->get();
 
 //       $employees = Employee::where('is_active', 1)->get();
 
 //         // Pass the leads and date range inputs to the view
-//         return view('todayLeads', compact('todayLeads', 'fromDate', 'toDate','employees'));
+//         return view('todayLeads', compact('todayLeads', 'employees'));
 //     }
-
-
 
 public function filterLeads(Request $request)
 {
@@ -163,7 +142,9 @@ public function filterLeads(Request $request)
     $employees = Employee::all();
 
     // Initialize query
-    $query = Leads::with('employee')->whereDate('updated_at', now()->toDateString());
+    $query = Leads::with('employee')
+    ->where('lead_stage','!=', "NEW")
+    ->whereDate('updated_at', now()->toDateString());
 
     // Apply filters
    
@@ -183,6 +164,10 @@ public function filterLeads(Request $request)
     // Return view with filtered leads and employees
     return view('todayLeads', compact('todayLeads', 'employees'));
 }
+    
+    
+    
+
 
     
 
@@ -261,8 +246,6 @@ public function filterLeads(Request $request)
         $query->where('employee_id', $validatedData['employee_id']);  
     }
 
-   
-
     // Retrieve filtered call histories ordered by id desc
     $LeadsFeedback = $query->where('is_deleted', 0)->orderBy('id', 'desc')->get();
 
@@ -275,6 +258,7 @@ public function filterLeads(Request $request)
     return view('LeadsFeedback', compact('LeadsFeedback', 'employees'));
 }
 
+//code for delete leads
 
 
 public function showdeleteLeads(Request $request)
@@ -427,39 +411,7 @@ public function getCities($state_id)
 }
 
 
-// public function leadsReview()
-//     {
-//         // Fetch all reviews, optionally with the associated lead
-//         $reviews = Lead_review::with('lead')->get();  // Assuming 'lead' is a relationship
-
-//         // Pass the reviews to the view
-//         return view('leadsDetails', compact('reviews'));
-//     }
-
-
-    // public function leadsReview()
-    // {
-    //     // Fetch all reviews
-    //     $reviews = Lead_review::all();  // Retrieve all reviews from the database
-
-    //     // Pass the reviews to the view
-    //     return view('leadsDetails', compact('reviews'));
-    // }
-
-
-
-    // public function leadsReview($id)
-    // {
-    //     // Fetch the lead review by its ID
-    //     $lead_review = Lead_review::findOrFail($id);
-
-    //     // Pass the lead review data to the view
-    //     return view('leadsDetails', compact('lead_review'));  // Pass the lead review data to the view
-    // }
-
-
-
-    public function leadsReview($id)
+public function leadsReview($id)
     {
         // Fetch the lead review by ID
         $lead_review = Lead_review::find($id);
@@ -474,37 +426,16 @@ public function getCities($state_id)
     }
 
 
-
-    // public function countLeads(Request $request)
-    // {
-    //     // Fetch employees with lead counts for each lead stage
-    //     $employees = Employee::withCount([
-    //         'leads as hotLeads' => function ($query) {
-    //             $query->where('lead_stage', 'hot');
-    //         },
-    //         'leads as interestedLeads' => function ($query) {
-    //             $query->where('lead_stage', 'interested');
-    //         },
-    //         'leads as notInterestedLeads' => function ($query) {
-    //             $query->where('lead_stage', 'not_interested');
-    //         },
-    //         'leads as notAnsweredLeads' => function ($query) {
-    //             $query->where('lead_stage', 'no_answer');
-    //         }
-    //     ])->get();
-    
-    //     // Return view with the employees and their lead counts
-    //     return view('newLeads', compact('employees'));
-    // }
-
-     
-
-
-
     public function countLeads(Request $request)
 {
     // Fetch employees with lead counts for each lead stage
-    $employees = Employee::withCount([
+        $employees = Employee::withCount([
+        'leads as all' => function ($query) {
+            // $query->where('lead_stage', 'NEW');
+        },
+        'leads as newLeads' => function ($query) {
+            $query->where('lead_stage', 'NEW');
+        },
         'leads as hotLeads' => function ($query) {
             $query->where('lead_stage', 'hot');
         },
@@ -514,12 +445,40 @@ public function getCities($state_id)
         'leads as notInterestedLeads' => function ($query) {
             $query->where('lead_stage', 'not_interested');
         },
+        'leads as closeLeads' => function ($query) {
+            $query->where('lead_stage', 'close');
+        },
+         'leads as followUpLeads' => function ($query) {
+            $query->whereIn('lead_stage', ['hot', 'interested', 'not_answered']);
+        },
         'leads as notAnsweredLeads' => function ($query) {
-            $query->where('lead_stage', 'no_answer');
-        }
+            $query->where('lead_stage', 'not_answered');
+        },
+        
+        'leads as todayUploads' => function ($query) {
+        $query->whereDate('created_at', Carbon::today()); // Get today's date
+            //   ->where('lead_stage', 'NEW'); // Add the lead_status condition
+    }
     ])->get();
 
     return view('countLeads', compact('employees'));
 }
+
+public function deleteLeads($id, Request $request)
+{
+    // Find the lead by ID
+    $lead = Leads::find($id);
+
+    if ($lead) {
+        $lead->delete(); // Delete the lead
+        $request->session()->flash('success', 'Lead deleted successfully.');
+    } else {
+        $request->session()->flash('error', 'Lead not found.');
+    }
+
+    // Redirect back or to a specific view
+    return redirect()->back();
 }
 
+
+}
