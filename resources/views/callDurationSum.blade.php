@@ -1,53 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                
-                <!-- <h4 class="card-title text-primary">Call Duration</h4><hr> -->
-                <a class="nav-link" href="{{ route('call_duration') }}">Call Duration Sum</a>
+                <h4 class="card-title text-primary">Calls Summary by Employee</h4>
+                <hr>
 
-                <!-- Call history table -->
+                <!-- <form action="{{ route('call_duration') }}" method="GET"> -->
+                <form action="{{ route('call_duration') }}" method="GET">
+            <div class="form-group col-md-3">
+                <label for="">Employee</label> 
+                <select class="form-control" id="employee_id" name="employee_id" onchange="this.form.submit()">
+                    <option value="">Select Employee</option>
+                    @foreach($employeesSelect as $employee)
+                    <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                        {{ $employee->name }}
+                    </option>
+                    @endforeach
+                </select>
+
+                <!-- <button type="submit" class="btn btn-primary btn-block">Search</button> -->
+            </div>
+        </form>
+                <!-- Calls and Leads table grouped by employee -->
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>EMPLOYEE NAME</th>
-                            <th>INCOMING DURATION</th>
-                            <th>OUTGOING DURATION</th>
-                            <th>TOTAL DURATION</th>
-                            <th>ACTION</th>
+                            <th>SERIAL NO.</th>
+                            <th>EMPLOYEE</th>
+                            <th>TODAY CALLS</th> <!-- Today’s calls -->
+                            <th>INCOMING CALLS</th> <!-- Incoming calls -->
+                            <th>OUTGOING CALLS</th> <!-- Outgoing calls -->
+                            <th>MISSED CALLS</th> <!-- Missed calls -->
+                            <th>UNKNOWN CALLS</th> <!-- Unknown calls -->
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($employeeDurations as $duration)
-                        <tr>
-                            <td>{{ $duration['employee']->name }}</td>
-
-                            <!-- Display incoming duration -->
-                            <td>{{ $duration['incomingDurationFormatted'] }}</td>
-
-                            <!-- Display outgoing duration -->
-                            <td>{{ $duration['outgoingDurationFormatted'] }}</td>
-
-                            <!-- Display total duration -->
-                            <td>{{ $duration['totalDurationFormatted'] }}</td>
-
-                            <td>
-                                <a href="{{ route('call_duration_detail', ['call_id' => $duration['employee']->id]) }}" class="btn btn-info">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        @foreach($employees as $index => $employee)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $employee->name }}</td>
+                                <td>{{ $employee->todayCalls ?? 0 }}</td> <!-- Today’s calls -->
+                                <td>{{ $employee->incoming ?? 0 }}</td> <!-- Incoming calls -->
+                                <td>{{ $employee->outgoing ?? 0 }}</td> <!-- Outgoing calls -->
+                                <td>{{ $employee->missed ?? 0 }}</td> <!-- Missed calls -->
+                                <td>{{ $employee->unknown ?? 0 }}</td> <!-- Unknown calls -->
+                            </tr>
                         @endforeach
                     </tbody>
-                </table>
-
+                </table>     
             </div>
-        </div>
+        </div> 
     </div>
 </div>
-
 @endsection

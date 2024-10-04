@@ -40,10 +40,10 @@
                    </ul>
 
 
-                   <!-- <div class="collapse" id="form-elements">
+                   <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/call_duration">Call Duration Sum</a></li>
-                   </ul> -->
+                   </ul>
 
 
   

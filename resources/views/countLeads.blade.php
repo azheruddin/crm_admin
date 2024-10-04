@@ -8,30 +8,23 @@
                 <h4 class="card-title text-primary">Leads Summary by Employee</h4>
                 <hr>
 
-                <form action="{{ route('filter_leads') }}" method="GET">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="employee_id">Employee</label>
-                            <select class="form-control" id="employee_id" name="employee_id">
-                                <option value="">Select Employee</option>
-                                
-                                @isset($employees)
-                                    @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
-                                            {{ $employee->name }}
-                                        </option>
-                                    @endforeach
-                                @endisset
-                            </select>
-                        </div>
+                <!-- <form action="{{ route('count_leads') }}" method="GET"> -->
+                <form action="{{ route('count_leads') }}" method="GET">
+            <div class="form-group col-md-3">
+                <label for="">Employee</label> 
+                <select class="form-control" id="employee_id" name="employee_id" onchange="this.form.submit()">
+                    <option value="">Select Employee</option>
+                    @foreach($employeesSelect as $employee)
+                    <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                        {{ $employee->name }}
+                    </option>
+                    @endforeach
+                </select>
 
-                        <div class="form-group col-md-4">
-                            <label>&nbsp;</label>
-                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                        </div>
-                    </div>
-                </form>
-
+                <!-- <button type="submit" class="btn btn-primary btn-block">Search</button> -->
+            </div>
+        </form>
+                    
                 <!-- Leads table grouped by employee -->
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
@@ -55,16 +48,16 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $employee->name }}</td>
-                                <td>{{ $employee->all ?? 0 }}</td> <!-- Hot leads count -->
-                                <td>{{ $employee->todayUploads ?? 0 }}</td> <!-- Hot leads count -->
+                                <td>{{ $employee->totalLeads ?? 0 }}</td> <!-- Hot leads count -->
+                                <td>{{ $employee->todaysUploadedLeads ?? 0 }}</td> <!-- Hot leads count -->
                                 <td>{{ $employee->newLeads ?? 0 }}</td> <!-- Hot leads count -->
                                 <td>{{ $employee->followUpLeads ?? 0 }}</td> <!-- Hot leads count -->
                                 <td>{{ $employee->hotLeads ?? 0 }}</td> <!-- Hot leads count -->
-                                <td>{{ $employee->interestedLeads ?? 0 }}</td> <!-- Interested leads count -->
-                                <td>{{ $employee->notAnsweredLeads ?? 0 }}</td> <!-- No Answer leads count -->
-                                 <td>{{ $employee->notInterestedLeads ?? 0 }}</td> <!-- Not Interested leads count -->
-                                <td>{{ $employee->closeLeads ?? 0 }}</td> <!-- No Answer leads count -->
-                                <td><!-- Logic for the next follow-up can be added here --></td>
+                                <td>{{ $employee->interested ?? 0 }}</td> <!-- Interested leads count -->
+                                <td>{{ $employee->notAnswered ?? 0 }}</td> <!-- No Answer leads count -->
+                                 <td>{{ $employee->notInterested ?? 0 }}</td> <!-- Not Interested leads count -->
+                                <td>{{ $employee->close ?? 0 }}</td> <!-- No Answer leads count -->
+                                <!--  <td> Logic for the next follow-up can be added here </td>  -->
                             </tr>
                         @endforeach
                     </tbody>

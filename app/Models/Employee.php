@@ -24,6 +24,13 @@ class Employee extends Model
  {
      return $this->hasMany(Leads::class, 'employee_id'); // Adjust 'employee_id' if your foreign key is named differently
  }
+
+
+
+ public function calls()
+ {
+     return $this->hasMany(CallHistory::class);
+ }
 }
 
 

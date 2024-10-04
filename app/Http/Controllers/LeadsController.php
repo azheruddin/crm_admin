@@ -224,40 +224,51 @@ public function filterLeads(Request $request)
 
     public function filterLeadsByEmployee(Request $request)
     {
-        $validatedData = $request->validate([
-            'from_date' => 'nullable|date',
-            'to_date' => 'nullable|date',
-            'employee_id' => 'nullable|integer',
-        ]);
-    $query = Leads::with('employee');
-
-    // Filter by from_date if provided
-    if ($request->filled('from_date')) {
-        $query->whereDate('created_at', '>=', $validatedData['from_date']);
-    }
-
-    // Filter by to_date if provided
-    if ($request->filled('to_date')) {
-        $query->whereDate('created_at', '<=', $validatedData['to_date']); 
-    }
-
-    // Filter by employee_id if provided
-    if ($request->filled('employee_id')) {
-        $query->where('employee_id', $validatedData['employee_id']);  
-    }
-
-    // Retrieve filtered call histories ordered by id desc
-    $LeadsFeedback = $query->where('is_deleted', 0)->orderBy('id', 'desc')->get();
-
+        // Fetch all active employees who are callers
+        $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
     
+        // Fetch employee_id, from_date, and to_date from the request
+        $employee_id = $request->employee_id;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+    
+        // If employee_id or date range is missing, return empty data
+        if (!$employee_id || !$from_date || !$to_date) {
+            return view('LeadsFeedback', [
+                'employees' => $employees,
+                'LeadsFeedback' => collect() // Return an empty collection
+            ]);
+        }
+    
+        // Convert dates to Carbon instances
+        $startOfDay = Carbon::parse($from_date)->startOfDay();
+        $endOfDay = Carbon::parse($to_date)->endOfDay();
+    
+        // Build the query for Leads
+        $query = Leads::query()->with('employee')
+            ->where('is_deleted', 0)
+            ->whereBetween('created_at', [$startOfDay, $endOfDay]);
+    
+        // Filter by employee_id if provided
+        if ($employee_id) {
+            $query->where('employee_id', $employee_id);
+        }
+    
+        // Retrieve the filtered leads
+        $LeadsFeedback = $query->orderBy('id', 'desc')->get();
+    
+        // Pass $employees and $LeadsFeedback to the view
+        return view('LeadsFeedback', [
+            'employees' => $employees,
+            'LeadsFeedback' => $LeadsFeedback
+        ]);
+    }
+    
+///////////////////
 
-    // Load active callers
-    $employees = Employee::where('is_active', '1')->where('type', 'caller')->get();
 
-    // Return view with filtered call histories and active employees
-    return view('LeadsFeedback', compact('LeadsFeedback', 'employees'));
-}
 
+////////////////////
 //code for delete leads
 
 
@@ -425,45 +436,131 @@ public function leadsReview($id)
         return view('leadsDetails', compact('lead_review'));
     }
 
+    // public function countLeads(Request $request)
+    // {
+    //     $employeeId = $request->get('employee_id');
+    
+    //     $employees = Employee::withCount([
+    //         'leads as all' => function ($query) {
+    //             // Add your query logic here
+    //         },
+    //         'leads as newLeads' => function ($query) {
+    //             $query->where('lead_stage', 'NEW');
+    //         },
+    //         // Add more lead counts here as needed
+    //     ]);
+    
+    //     // If employee filter is selected, apply the filter to the query
+    //     if (!empty($employeeId)) {
+    //         $employees->where('id', $employeeId);
+    //     }
+    
+    //     $employees = $employees->get();
+    
+    //     return view('countLeads', compact('employees'));
+    // }
 
-    public function countLeads(Request $request)
+
+
+//     public function countLeads(Request $request)
+// {
+//     $employeeId = $request->get('employee_id');
+
+//     $employees = Employee::withCount([
+//         'leads as all' => function ($query) {
+//             // Count all leads 
+//             $query->whereNotNull('id');
+//         },
+//         'leads as newLeads' => function ($query) {
+//             $query->where('lead_stage', 'NEW');
+//         },
+//         'leads as todayUploads' => function ($query) {
+//             $query->whereDate('created_at', Carbon::today());
+//         },
+//         'leads as followUpLeads' => function ($query) {
+//             $query->where('lead_stage', 'FOLLOW UP');
+//         },
+//         'leads as hotLeads' => function ($query) {
+//             $query->where('lead_stage', 'HOT');
+//         },
+//         'leads as interestedLeads' => function ($query) {
+//             $query->where('lead_stage', 'INTERESTED');
+//         },
+//         'leads as notAnsweredLeads' => function ($query) {
+//             $query->where('lead_stage', 'NOT ANSWERED');
+//         },
+//         'leads as notInterestedLeads' => function ($query) {
+//             $query->where('lead_stage', 'NOT INTERESTED');
+//         },
+//         'leads as closeLeads' => function ($query) {
+//             $query->where('lead_stage', 'CLOSED');
+//         },
+//     ]);
+
+//     // If employee filter is selected, apply the filter to the query
+//     if (!empty($employeeId)) {
+//         $employees->where('id', $employeeId);
+//     }
+
+//     $employees = $employees->get();
+
+//     return view('countLeads', compact('employees'));
+// }
+
+
+
+public function countLeads(Request $request)
 {
-    // Fetch employees with lead counts for each lead stage
-        $employees = Employee::withCount([
+    $employeeId = $request->get('employee_id');
+
+    $employees = Employee::withCount([
         'leads as all' => function ($query) {
-            // $query->where('lead_stage', 'NEW');
+            // Count all leads
+            $query->whereNotNull('id');
         },
         'leads as newLeads' => function ($query) {
             $query->where('lead_stage', 'NEW');
         },
+        'leads as todayUploads' => function ($query) {
+            $query->whereDate('created_at', Carbon::today());
+        },
+        'leads as followUpLeads' => function ($query) {
+            $query->where('lead_stage', 'FOLLOW UP');
+        },
         'leads as hotLeads' => function ($query) {
-            $query->where('lead_stage', 'hot');
+            $query->where('lead_stage', 'HOT');
         },
         'leads as interestedLeads' => function ($query) {
-            $query->where('lead_stage', 'interested');
-        },
-        'leads as notInterestedLeads' => function ($query) {
-            $query->where('lead_stage', 'not_interested');
-        },
-        'leads as closeLeads' => function ($query) {
-            $query->where('lead_stage', 'close');
-        },
-         'leads as followUpLeads' => function ($query) {
-            $query->whereIn('lead_stage', ['hot', 'interested', 'not_answered']);
+            $query->where('lead_stage', 'INTERESTED');
         },
         'leads as notAnsweredLeads' => function ($query) {
-            $query->where('lead_stage', 'not_answered');
+            $query->where('lead_stage', 'NOT ANSWERED');
         },
-        
-        'leads as todayUploads' => function ($query) {
-        $query->whereDate('created_at', Carbon::today()); // Get today's date
-            //   ->where('lead_stage', 'NEW'); // Add the lead_status condition
-    }
-    ])->get();
+        'leads as notInterestedLeads' => function ($query) {
+            $query->where('lead_stage', 'NOT INTERESTED');
+        },
+        'leads as closeLeads' => function ($query) {
+            $query->where('lead_stage', 'CLOSED');
+        },
+    ]);
 
-    return view('countLeads', compact('employees'));
+    // If employee filter is selected, apply the filter to the query
+    if (!empty($employeeId)) {
+        $employees->where('id', $employeeId);
+    }
+
+    // Sort by today's uploads count in descending order
+    $employees->orderBy('todayUploads', 'desc');
+
+    $employees = $employees->get();
+
+    $employeesSelect = Employee::where('is_active', '1')->where('type', 'caller')->get();
+
+
+    return view('countLeads', compact('employees','employeesSelect'));
 }
 
+    
 public function deleteLeads($id, Request $request)
 {
     // Find the lead by ID

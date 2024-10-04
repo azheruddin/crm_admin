@@ -45,6 +45,7 @@
                     <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
+              <th>SERIAL NO.</th>
               <th>CUSTOMER NAME</th>
               <th>BUSINESS NAME</th>
               <th>KEYS</th>
@@ -59,8 +60,11 @@
             </tr>
         </thead> 
         <tbody>
-        @foreach($Sales as $sale)
-        <tr>
+       
+
+        @foreach($Sales as $index => $sale)
+            <tr>
+            <td>{{ $index +1 }}</td>
             <td>{{ $sale->customer_name }}</td>
             <td>{{ $sale->business_name }}</td>
             <td>{{ $sale->keys }}</td>
