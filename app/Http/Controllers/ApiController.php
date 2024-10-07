@@ -256,12 +256,17 @@ public function delete_lead(Request $request, $id)
 }
 
 
+
 public function leads_count(Request $request)
 {
     $employee_id = $request->input('employee_id');
 
     // leads  
     
+    // all leads
+    $allLeads = Leads::where('employee_id', $employee_id)->count();
+    // $allLeads = Leads::where('employee_id', $employee_id)
+    //                   ->where('is_deleted', 0)->count();
     // follow up
     $totalLeads = Leads::where('employee_id', $employee_id)
                        ->where('is_deleted', 0)
@@ -295,17 +300,20 @@ public function leads_count(Request $request)
                           ->where('lead_stage', 'close')
                           ->where('is_deleted', 0)
                           ->count();
+     $deletedLeads = Leads::where('employee_id', $employee_id)
+                       ->where('is_deleted', 1)->count();
 
     // Return the counts as JSON response
     return response()->json([
-        'totalLeads' => $totalLeads,
+        'allLeads' => $allLeads,
         'newLeads' => $newLeads,
+        'followup' => $totalLeads,
         'hotLeads' => $hotLeads,
         'interested' => $interested,
         'notInterested' => $notInterested,
         'notAnswered' => $notAnswered,
         'close' => $close,
-        
+        'deletedLeads' => $deletedLeads,
     ]);
 }
 

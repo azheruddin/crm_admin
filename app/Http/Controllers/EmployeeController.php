@@ -46,7 +46,7 @@ class EmployeeController extends Controller
 // show employees method 
 public function showEmployees()
 {
-    $employees = Employee::all();
+    $employees = Employee::where('type', '!=' , 'manager');
     return view('showEmployee')->with('employees', $employees);
 }
 

@@ -10,6 +10,21 @@
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <i class="menu-icon mdi mdi-floor-plan"></i>
+                <span class="menu-title">Manager</span>
+                <i class="menu-arrow"></i>
+              </a>
+                    
+              <div class="collapse" id="ui-basic"> 
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="/add_manager">Add Manager</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/show_manager">Show Manager</a></li>
+                    <!-- <li class="nav-item"> <a class="nav-link" href="#">Typography</a></li> -->                                               
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <i class="menu-icon mdi mdi-floor-plan"></i>
                 <span class="menu-title">Employees</span>
                 <i class="menu-arrow"></i>
               </a>

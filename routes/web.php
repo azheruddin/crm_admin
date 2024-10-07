@@ -9,6 +9,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewLeadsUploadController;
+use App\Http\Controllers\ManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+/////////////////manager
+Route::get('/add_manager', function () {
+    return view('addManager');
+});
+Route::get('/show_manager', [ManagerController::class, 'showManager'])->name('show_manager');
+Route::post('/add_manager', [ManagerController::class, 'createManager'])->name('manager.store');
+///////////////////////////////////////
 
 Route::get('/show_employee', [EmployeeController::class, 'showEmployees'])->name('show_employee');
 Route::get('/employee_detail', [EmployeeController::class, 'employeeDetail'])->name('employee_detail');

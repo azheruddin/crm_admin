@@ -11,15 +11,15 @@
     </div>
 @endif
                   <div class="card-body">
-                    <h4 class="card-title text-primary">Add New Employee</h4>
+                    <h4 class="card-title text-primary">Add Manager</h4>
                
                     <hr>
-                    <form class="forms-sample" method="POST" action="{{ route('employees.store') }}">
+                    <form class="forms-sample" method="POST" action="{{ route('manager.store') }}">
             @csrf
                     
                       <div class="form-group">
                         <label for="exampleInputUsername1">Name</label>
-                        <input type="text" class="form-control" id="exampleInputUsername1" name="name" placeholder="Employee">
+                        <input type="text" class="form-control" id="exampleInputUsername1" name="name" placeholder="Enter Name">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
@@ -29,13 +29,6 @@
                         <label for="exampleInputEmail1">Phone Number</label>
                         <input type="number" class="form-control" id="exampleInputEmail1" name="phone" placeholder="Enter Phone Number">
                       </div>
-                      <div class="form-group">
-                      <label>Employee Type</label>
-                      <select class="form-control" name="type">
-                        <option value="caller">Caller</option>
-                        <option value="Other">other</option>
-                      </select>
-                    </div>
                       
                       <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
@@ -44,7 +37,7 @@
                       <div class="form-check form-check-flat form-check-primary">
                         <label class="form-check-label">
                       </div>
-                      <button type="submit" class="btn btn-primary me-2">Add Employee</button>
+                      <button type="submit" class="btn btn-primary me-2">Add Manager</button>
                       <button class="btn btn-light">Cancel</button>
                     </form>
                   </div>
