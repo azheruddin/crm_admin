@@ -5,7 +5,7 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title text-primary">Calls Summary by Employee</h4>
+                <h4 class="card-title text-primary">Calls Status Today</h4>
                 <hr>
 
                 <!-- <form action="{{ route('call_duration') }}" method="GET"> -->

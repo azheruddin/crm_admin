@@ -51,13 +51,13 @@
 
                 <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Calls</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/call_history_today">Today Calls History</a></li>
                    </ul>
 
 
                    <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"><a class="nav-link" href="/call_duration">Call Duration Sum</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/call_duration">Calls Status Today</a></li>
                    </ul>
 
 
