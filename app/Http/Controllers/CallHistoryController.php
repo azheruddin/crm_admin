@@ -446,7 +446,7 @@ private function formatDuration($seconds)
 
 public function callDuration(Request $request)
 {
-    // Get the employee_id from the request (if any)
+   
     $employeeId = $request->get('employee_id');
 
     // Build the query to get employees with call counts for today
