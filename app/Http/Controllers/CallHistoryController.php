@@ -251,103 +251,6 @@ public function filterCallHistory(Request $request)
             'topCallsMonth' => $topCallsMonth,
         ]);
     }
-    
-
-    
-
-
-
-
-// public function callDuration(Request $request)
-// {
-//     // $employee_id = $request->employee_id;
-
-//     // Fetch the employee record
-//     // $employee = Employee::find($employee_id);  // Assuming Employee is your model
-
-   
-
-//     // Define start and end of the day
-//     $startOfDay = Carbon::now()->startOfDay();
-//     $endOfDay = Carbon::now()->endOfDay();
-
-//     // Fetch total incoming call duration
-//     $incomingDuration = CallHistory::where('employee_id', $employee_id)
-//         ->where('type', 'incoming')
-//         ->whereBetween('created_at', [$startOfDay, $endOfDay])
-//         ->sum('call_duration');
-
-//     // Fetch total outgoing call duration
-//     $outgoingDuration = CallHistory::where('employee_id', $employee_id)
-//         ->where('type', 'outgoing')
-//         ->whereBetween('created_at', [$startOfDay, $endOfDay])
-//         ->sum('call_duration');
-
-//     $totalDurationInSeconds = $incomingDuration + $outgoingDuration;
-
-//     // Convert durations to minutes and seconds format
-//     $incomingDurationFormatted = $this->formatDuration($incomingDuration);
-//     $outgoingDurationFormatted = $this->formatDuration($outgoingDuration);
-//     $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
-
-//     // Pass data to the view, including the employee
-//     return view('callDurationSum', [
-//         'employee' => $employee,  // Passing employee data
-//         'incomingDurationFormatted' => $incomingDurationFormatted,
-//         'outgoingDurationFormatted' => $outgoingDurationFormatted,
-//         'totalDurationFormatted' => $totalDurationFormatted,
-//     ]);
-// }
-
-
-// private function formatDuration($seconds)
-// {
-//     $minutes = floor($seconds / 60);
-//     $remainingSeconds = $seconds % 60;
-
-//     // Return formatted as "min:sec" (e.g., "5:23")
-//     return sprintf('%02d:%02d', $minutes, $remainingSeconds);
-// }
-
-
-// public function callDuration(Request $request)
-// {
-//     $employee_id = $request->employee_id;
-
-//     // Fetch the employee record
-//     $employee = Employee::find($employee_id);
-
-//     if (!$employee) {
-//         return redirect()->back()->with('error', 'Employee not found.');
-//     }
-
-//     // Define start and end of the day
-//     $startOfDay = Carbon::now()->startOfDay();
-//     $endOfDay = Carbon::now()->endOfDay();
-
-//     // Fetch total call durations (incoming and outgoing) in one query
-//     $callDurations = CallHistory::where('employee_id', $employee_id)
-//         ->whereBetween('created_at', [$startOfDay, $endOfDay])
-//         ->selectRaw("SUM(CASE WHEN type = 'incoming' THEN call_duration ELSE 0 END) as incomingDuration,
-//                      SUM(CASE WHEN type = 'outgoing' THEN call_duration ELSE 0 END) as outgoingDuration")
-//         ->first();
-
-//     // Calculate total duration
-//     $totalDurationInSeconds = $callDurations->incomingDuration + $callDurations->outgoingDuration;
-
-//     // Format durations for display
-//     $incomingDurationFormatted = $this->formatDuration($callDurations->incomingDuration);
-//     $outgoingDurationFormatted = $this->formatDuration($callDurations->outgoingDuration);
-//     $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
-
-//     // Pass data to the view
-//     return view('callDurationSum', [
-//         'employee' => $employee,
-//         'incomingDurationFormatted' => $incomingDurationFormatted,
-//         'outgoingDurationFormatted' => $outgoingDurationFormatted,
-//         'totalDurationFormatted' => $totalDurationFormatted,
-//     ]);
-// }
 
 private function formatDuration($seconds)
 {
@@ -391,53 +294,209 @@ private function formatDuration($seconds)
     }
 
 
-    public function callDuration(Request $request)
+    // public function callDuration(Request $request)
+    // {
+    //     // Get the employee_id from the request (if any)
+    //     $employeeId = $request->get('employee_id');
+    
+    //     // Build the query to get employees with lead and call counts
+    //     $employees = Employee::withCount([
+    //         'leads as all',
+    //         'leads as newLeads' => function ($query) {
+    //             $query->where('lead_stage', 'NEW');
+    //         },
+    //         'calls as todayCalls' => function ($query) {
+    //             $query->whereDate('created_at', Carbon::today());
+    //         },
+    //         'calls as incomingCalls' => function ($query) {
+    //             $query->where('type', 'INCOMING'); // Use 'type' instead of 'call_type'
+    //         },
+    //         'calls as outgoingCalls' => function ($query) {
+    //             $query->where('type', 'OUTGOING');
+    //         },
+    //         'calls as missedCalls' => function ($query) {
+    //             $query->where('type', 'MISSED');
+    //         },
+    //         'calls as unknownCalls' => function ($query) {
+    //             $query->where('type', 'UNKNOWN');
+    //         }
+    //     ]);
+    
+    //     // Apply the filter by employee if an employee is selected
+    //     if (!empty($employeeId)) {
+    //         $employees->where('id', $employeeId);
+    //     }
+    
+    //     // Get the result of the query
+    //     $employees = $employees->get();
+    
+    //     // Return the view with the employees data
+    //     return view('callDurationSum', compact('employees'));
+    // }
+
+
+
+//     public function callDuration(Request $request)
+// {
+//     // Get the employee_id from the request (if any)
+//     $employeeId = $request->get('employee_id');
+
+//     // Build the query to get employees with lead and call counts
+//     $employees = Employee::withCount([
+//         // Count all leads
+//         'leads as all',
+
+//         // Count today's calls
+//         'calls as todayCalls' => function ($query) {
+//             $query->whereDate('created_at', Carbon::today()); // Filter by today's date
+//         },
+
+//         // Count today's incoming calls
+//         'calls as incomingCalls' => function ($query) {
+//             $query->where('type', 'INCOMING')
+//                   ->whereDate('created_at', Carbon::today()); // Filter by today's date
+//         },
+
+//         // Count today's outgoing calls
+//         'calls as outgoingCalls' => function ($query) {
+//             $query->where('type', 'OUTGOING')
+//                   ->whereDate('created_at', Carbon::today()); // Filter by today's date
+//         },
+
+//         // Count today's missed calls
+//         'calls as missedCalls' => function ($query) {
+//             $query->where('type', 'MISSED')
+//                   ->whereDate('created_at', Carbon::today()); // Filter by today's date
+//         },
+
+//         // Count today's unknown calls
+//         'calls as unknownCalls' => function ($query) {
+//             $query->where('type', 'UNKNOWN')
+//                   ->whereDate('created_at', Carbon::today()); // Filter by today's date
+//         }
+//     ]);
+
+//     // Apply the filter by employee if an employee is selected
+//     if (!empty($employeeId)) {
+//         $employees->where('id', $employeeId);
+//     }
+
+//     // Get the result of the query
+//     $employees = $employees->get();
+
+
+
+//     // Return the view with the employees data
+//     return view('callDurationSum', compact('employees'));
+// }
+   
+
+
+// public function callDuration(Request $request)
+// {
+//     // Get the employee_id from the request (if any)
+//     $employeeId = $request->get('employee_id');
+
+//     // Build the query to get employees with call counts
+//     $employees = Employee::withCount([
+//         // Count today's calls
+//         'calls as todayCalls' => function ($query) {
+//             $query->whereDate('created_at', Carbon::today());
+//         },
+
+//         // Count today's incoming calls
+//         'calls as incoming' => function ($query) {
+//             $query->where('type', 'INCOMING')
+//                   ->whereDate('created_at', Carbon::today());
+//         },
+
+//         // Count today's outgoing calls
+//         'calls as outgoing' => function ($query) {
+//             $query->where('type', 'OUTGOING')
+//                   ->whereDate('created_at', Carbon::today());
+//         },
+
+//         // Count today's missed calls
+//         'calls as missed' => function ($query) {
+//             $query->where('type', 'MISSED')
+//                   ->whereDate('created_at', Carbon::today());
+//         },
+
+//         // Count today's unknown calls
+//         'calls as unknown' => function ($query) {
+//             $query->where('type', 'UNKNOWN')
+//                   ->whereDate('created_at', Carbon::today());
+//         }
+//     ]);
+
+//     // Apply the filter by employee if an employee is selected
+//     if (!empty($employeeId)) {
+//         $employees->where('id', $employeeId);
+//     }
+
+//     // Get the result of the query
+//     $employees = $employees->get();
+
+//     $employeesSelect = Employee::where('is_active', '1')->where('type', 'caller')->get();
+
+//     // Return the view with the employees data
+//     return view('callDurationSum', compact('employees', 'employeesSelect'));
+// }
+
+
+public function callDuration(Request $request)
 {
-    // Fetch all employees (or you can filter specific employees as needed)
-    $employees = Employee::all();
+   
+    $employeeId = $request->get('employee_id');
 
-    // Define start and end of the day
-    $startOfDay = Carbon::now()->startOfDay();
-    $endOfDay = Carbon::now()->endOfDay();
+    // Build the query to get employees with call counts for today
+    $employees = Employee::withCount([
+        // Count today's total calls
+        'calls as todayCalls' => function ($query) {
+            $query->whereDate('created_at', Carbon::today());
+        },
 
-    // Prepare an array to store employee data with call durations
-    $employeeDurations = [];
+        // Count today's incoming calls
+        'calls as incoming' => function ($query) {
+            $query->where('type', 'INCOMING')
+                  ->whereDate('created_at', Carbon::today());
+        },
 
-    // Loop through each employee and calculate call durations
-    foreach ($employees as $employee) {
-        // Fetch total incoming call duration for the employee
-        $incomingDuration = CallHistory::where('employee_id', $employee->id)
-            ->where('type', 'incoming')
-            ->whereBetween('created_at', [$startOfDay, $endOfDay])
-            ->sum('call_duration');
+        // Count today's outgoing calls
+        'calls as outgoing' => function ($query) {
+            $query->where('type', 'OUTGOING')
+                  ->whereDate('created_at', Carbon::today());
+        },
 
-        // Fetch total outgoing call duration for the employee
-        $outgoingDuration = CallHistory::where('employee_id', $employee->id)
-            ->where('type', 'outgoing')
-            ->whereBetween('created_at', [$startOfDay, $endOfDay])
-            ->sum('call_duration');
+        // Count today's missed calls
+        'calls as missed' => function ($query) {
+            $query->where('type', 'MISSED')
+                  ->whereDate('created_at', Carbon::today());
+        },
 
-        // Calculate the total duration
-        $totalDurationInSeconds = $incomingDuration + $outgoingDuration;
+        // Count today's unknown calls
+        'calls as unknown' => function ($query) {
+            $query->where('type', 'UNKNOWN')
+                  ->whereDate('created_at', Carbon::today());
+        }
+    ]);
 
-        // Convert durations to minutes and seconds format
-        $incomingDurationFormatted = $this->formatDuration($incomingDuration);
-        $outgoingDurationFormatted = $this->formatDuration($outgoingDuration);
-        $totalDurationFormatted = $this->formatDuration($totalDurationInSeconds);
-
-        // Add the employee's data to the array
-        $employeeDurations[] = [
-            'employee' => $employee,
-            'incomingDurationFormatted' => $incomingDurationFormatted,
-            'outgoingDurationFormatted' => $outgoingDurationFormatted,
-            'totalDurationFormatted' => $totalDurationFormatted,
-        ];
+    // Apply filter by employee if an employee is selected
+    if (!empty($employeeId)) {
+        $employees->where('id', $employeeId);
     }
 
+    // Fetch the results
+    $employees = $employees->get();
+
+    // Fetch active callers for the dropdown
+    $employeesSelect = Employee::where('is_active', '1')->where('type', 'caller')->get();
+
+    // Return the view with the employees data
+    return view('callDurationSum', compact('employees', 'employeesSelect'));
 }
 
-}
 
-       
-    
+}    
+
 

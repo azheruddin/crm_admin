@@ -45,6 +45,7 @@
 <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
+                <th>SERIAL NO.</th>
                 <th>CONTACT NAME</th>
                 <th>PHONE</th>
                 <th>CALL TYPE</th>  
@@ -56,8 +57,10 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($callHistories as $calls)
-        <tr>
+        
+        @foreach($callHistories as $index => $calls)
+             <tr>
+            <td>{{ $index +1 }}</td>
             <td>{{ $calls->contact_name }}</td>
             <td>{{ $calls->phone }}</td>
             <td>{{ $calls->type }}</td>

@@ -56,17 +56,23 @@
     $totalSeconds = $calls->call_duration;
     $minutes = floor($totalSeconds / 60);
     $seconds = $totalSeconds % 60;
-    
 
-      $callDate = \Carbon\Carbon::parse($calls->call_date);
-                $formattedDate = $callDate->format('Y-m-d'); // Extract date part
-                $formattedTime = $callDate->format('h:i:s A'); // Extract time part
-   
-    @endphp
+    try {
+        // Check if call_date is valid before parsing
+        $callDate = \Carbon\Carbon::parse($calls->call_date);
+        $formattedDate = $callDate->format('Y-m-d'); // Extract date part
+        $formattedTime = $callDate->format('h:i:s A'); // Extract time part
+    } catch (\Carbon\Exceptions\InvalidFormatException $e) {
+        // Handle invalid date format by setting defaults or showing error
+        $formattedDate = 'Invalid Date';
+        $formattedTime = 'Invalid Time';
+    }
+@endphp
+
 <td>{{ $minutes }} min {{ $seconds }} sec</td>
 
          <td>{{ $formattedDate }}</td>
-                <td>{{ $formattedTime }}</td>
+        <td>{{ $formattedTime }}</td>
         @if(isset($calls->employee->name) && $calls->employee->name != null)
       <td>{{ $calls->employee->name }}</td>
     @else

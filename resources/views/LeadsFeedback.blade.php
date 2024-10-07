@@ -45,6 +45,7 @@
 <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
+                <th>SERIAL NO.</th>
                 <th>CUSTOMER NAME</th>
                 <th>EMAIL</th>
                 <th>PHONE</th>
@@ -59,8 +60,11 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($LeadsFeedback as $leads)
-        <tr>
+       
+
+        @foreach($LeadsFeedback as $index => $leads)
+                        <tr>
+              <td>{{ $index +1 }}</td>
             <td>{{ $leads->customer_name }}</td>
             <td>{{ $leads->customer_email }}</td>
             <td>{{ $leads->phone }}</td>

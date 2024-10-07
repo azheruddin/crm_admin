@@ -6,10 +6,37 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title text-primary">Today Sales</h4><hr>
+
+
+
+                <form action="{{ route('today_sales') }}" method="GET">
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              
+             
+            </div>
+
+                           <div class="form-group col-md-3">
+                            <label for="employee_id">Employee</label>
+                            <select class="form-control" id="employee_id" name="employee_id">
+                                <option value="">Select Employee</option>
+                                
+                                @isset($employees)
+
+                                @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                                    {{ $employee->name }}</option>
+                                @endforeach
+                                @endisset
+
+                            </select>
+                        </div>
+
                 <!-- table goes here -->
                 <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
+                            <th>SERIAL NO.</th>
                             <th>CUSTOMER NAME</th>
                             <th>BUSINESS NAME</th>
                             <th>KEYS</th> 
@@ -23,8 +50,10 @@
                         </tr>
                     </thead> 
                     <tbody>
-                        @foreach($Sales as $sale)
-                        <tr>
+                       
+                        @foreach($Sales as $index => $sale)
+                          <tr>
+                            <td>{{ $index +1 }}</td>
                             <td>{{ $sale->customer_name }}</td>
                             <td>{{ $sale->business_name }}</td>
                             <td>{{ $sale->keys }}</td>
