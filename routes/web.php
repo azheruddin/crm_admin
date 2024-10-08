@@ -10,6 +10,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewLeadsUploadController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\MasterDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -200,6 +201,20 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
     Route::get('/count_leads', [LeadsController::class, 'countLeads'])->name('count_leads');
     Route::delete('/leads/{id}', [LeadsController::class, 'deleteLeads'])->name('leads.delete');
+
+    
+    Route::get('/interested_in', function () {
+        return view('InterestedIn');  
+    });
+      
+
+    // Route::get('/interested_in', [MasterDataController::class, 'interestedIn'])->name('interested_in');
+    // Route::post('/interested_in', [MasterDataController::class, 'interested'])->name('interested_in');
+
+
+    Route::match(['get', 'post'], '/interested_in', [MasterDataController::class, 'interestedIn'])->name('interested_in');
+
+
 
 
 

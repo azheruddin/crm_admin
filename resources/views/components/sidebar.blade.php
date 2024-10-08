@@ -168,7 +168,7 @@
             <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#message" aria-expanded="false" aria-controls="charts">
             <i class="menu-icon mdi mdi-comment-text"></i>
-            <span class="menu-title">Messages</span>
+            <span class="menu-title">Messages</span>   
              <i class="menu-arrow"></i>
              </a>
              </li>
@@ -185,6 +185,23 @@
                   <li class="nav-item"> <a class="nav-link" href="/show_message">Show Message</a></li>
                 </ul>
               </div>
+
+
+              <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="collapse" href="#masterdata" aria-expanded="false" aria-controls="masterdata">
+        <i class="menu-icon mdi mdi-database"></i>
+        <span class="menu-title">Master Data</span>
+        <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="masterdata">
+        <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> 
+                <a class="nav-link" href="{{ route('interested_in') }}">Interested In</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
              
 
 

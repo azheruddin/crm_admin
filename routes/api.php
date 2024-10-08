@@ -96,6 +96,10 @@ Route::get('/call_duration_by_employee', [ApiController::class, 'callDurationByE
 
 
 
+Route::get('/interested_in', [ApiController::class, 'interestedIn']);
+
+
+
 
 
 

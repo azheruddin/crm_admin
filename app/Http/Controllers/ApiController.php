@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Message;
 use App\Models\LeadReviews;
+use App\Models\InterestedIn;
+
 
 class ApiController extends Controller
 {
@@ -982,4 +984,38 @@ public function review_by_lead(Request $request)
 /////////////////////
 
 
+
+public function interestedIn(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            // Validate the input
+            $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+            // Create a new record in the 'interested_in' table
+            $interestedIn = InterestedIn::create([
+                'interested_type' => $request->name,
+            ]);
+
+            // Return a JSON response with success message and the created record
+            return response()->json([
+                'success' => true,
+                'message' => 'Record added successfully!',
+                'data' => $interestedIn
+            ], 201); // 201 Created status code
+        }
+
+        // Fetch all records from the 'interested_in' table for GET request
+        $interestedInRecords = InterestedIn::orderBy('interested_type', 'asc')->get();
+
+        // Return the fetched data as a JSON response
+        return response()->json([
+            'success' => true,
+            'data' => $interestedInRecords,
+        ], 200); // 200 OK status code
+    }
 }
+
+
+
