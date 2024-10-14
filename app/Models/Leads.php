@@ -48,7 +48,10 @@ class Leads extends Model
     return $this->hasOne(Feedback::class, 'lead_id');
 }
 
-     
+public function scopeFindByEmployeeId($query, $employeeId)
+{
+    return $query->where('employee_id', $employeeId);
+}
 }
 
 

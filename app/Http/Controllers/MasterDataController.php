@@ -66,29 +66,54 @@ class MasterDataController extends Controller
     // }
 
 
+    // public function interestedIn(Request $request)
+    // {
+    //     if ($request->isMethod('post')) {
+    //         // Validate the input
+    //         $request->validate([
+    //             'name' => 'required|string|max:255',
+    //         ]);
+    
+    //         // Create a new record in the 'interested_in' table
+    //         InterestedIn::create([
+    //             'interested_type' => $request->name,
+    //         ]);
+    
+    //         // Redirect back with a success message
+    //         return redirect()->route('interested_in')->with('success', 'Record added successfully!');
+    //     }
+    
+    //     // Fetch all records from the 'interested_in' table for GET request
+    //     $interestedIn = InterestedIn::orderBy('interested_type', 'asc')->get();
+    
+    //     // Return the view with the fetched data
+    //     return view('InterestedIn', compact('interestedIn'));
+    // }
+    
+
+
     public function interestedIn(Request $request)
-    {
-        if ($request->isMethod('post')) {
-            // Validate the input
-            $request->validate([
-                'name' => 'required|string|max:255',
-            ]);
-    
-            // Create a new record in the 'interested_in' table
-            InterestedIn::create([
-                'interested_type' => $request->name,
-            ]);
-    
-            // Redirect back with a success message
-            return redirect()->route('interested_in')->with('success', 'Record added successfully!');
-        }
-    
-        // Fetch all records from the 'interested_in' table for GET request
-        $interestedIn = InterestedIn::orderBy('interested_type', 'asc')->get();
-    
-        // Return the view with the fetched data
-        return view('InterestedIn', compact('interestedIn'));
+{
+    if ($request->isMethod('post')) {
+        // Validate the input
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Create a new record in the 'interested_in' table
+        InterestedIn::create([
+            'interested_type' => $request->name,  // Ensure 'name' field corresponds to form input
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->route('interested_in')->with('success', 'Record added successfully!');
     }
-    
+
+    // Fetch all records from the 'interested_in' table for GET request
+    $interestedIn = InterestedIn::orderBy('interested_type', 'asc')->get();
+
+    // Return the view with the fetched data
+    return view('InterestedIn', compact('interestedIn'));
+}
 
 }

@@ -46,7 +46,7 @@ class EmployeeController extends Controller
 // show employees method 
 public function showEmployees()
 {
-    $employees = Employee::where('type', '!=' , 'manager');
+    $employees = Employee::where('type', '!=' , 'manager')->get();;
     return view('showEmployee')->with('employees', $employees);
 }
 
@@ -101,6 +101,36 @@ public function toggleActive($id)
 
     return redirect()->route('show_employee')->with('success', 'Employee status updated successfully');
 }
+
+
+public function toggleActiveLogin($id)
+{
+    $employee = Employee::findOrFail($id);
+    $employee->is_login = !$employee->is_login;  // Toggle the status
+    $employee->save();
+
+    return redirect()->route('show_employee')->with('success', 'Is Login status change');
+}
+
+// public function toggle($id, $type)
+// {
+//     $employee = Employee::findOrFail($id);
+
+//     if ($type == 'login') {
+//         $employee->is_login = !$employee->is_login;
+//         $message = $employee->is_login ? 'Employee logged in successfully' : 'Employee logged out successfully';
+//     } elseif ($type == 'active') {
+//         $employee->is_active = !$employee->is_active;
+//         $message = $employee->is_active ? 'Employee activated successfully' : 'Employee deactivated successfully';
+//     } else {
+//         return redirect()->route('show_employee')->with('error', 'Invalid action');
+//     }
+
+//     $employee->save();
+
+//     return redirect()->route('show_employee')->with('success', $message);
+// }
+
 
 // Employee Delete Code
 public function destroy($id)

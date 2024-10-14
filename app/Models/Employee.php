@@ -9,7 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
     protected $table = "employees";
- protected $fillable = ['name', 'email', 'phone', 'password', 'type'];
+ protected $fillable = ['name', 'email', 'phone', 'password', 'type','is_login'];
 
 
 
