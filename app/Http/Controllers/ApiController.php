@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Models\Message;
 use App\Models\LeadReviews;
 use App\Models\InterestedIn;
+use App\Models\SignatureMessage;
 
 
 class ApiController extends Controller
@@ -1015,7 +1016,196 @@ public function interestedIn(Request $request)
             'data' => $interestedInRecords,
         ], 200); // 200 OK status code
     }
+
+
+
+
+
+    // public function signatureMessage()
+    // {
+    //     // Fetch all records from the 'signature_message' table
+    //     $signatureMessages = SignatureMessage::all();
+
+    //     // Return the data as JSON
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => $signatureMessages
+    //     ]);
+    // }
+
+
+    public function signatureMessage(Request $request)
+    {
+        // Check if 'employee_id' is present in the query parameters
+        $employee_id = $request->query('employee_id');
+
+        if ($employee_id) {
+            // Fetch records where employee_id matches the given parameter
+            $signatureMessages = SignatureMessage::where('employee_id', $employee_id)->get();
+
+            // Check if any records were found
+            if ($signatureMessages->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No signature messages found.'
+                ], 404);
+            }
+
+            // Return the filtered data as JSON
+            return response()->json([
+                'success' => true,
+                'data' => $signatureMessages
+            ]);
+        }
+
+        // If no employee_id is provided, fetch all records 
+        $signatureMessages = SignatureMessage::all();
+
+        // Return all records as JSON
+        return response()->json([
+            'success' => true,
+            'data' => $signatureMessages
+        ]);
+    }
+
+
+    // public function fetchLeadsFromToday(Request $request)
+    // {
+    //     // Get the employee ID from the request
+    //     $employeeId = $request->input('employee_id');
+    
+    //     // Get the current timestamp
+    //     $now = Carbon::now();
+    
+    //     // Fetch leads where next_follow_up is greater than or equal to the current timestamp,
+    //     // employee_id matches, and lead_stage is not 'NEW'
+    //     $leads = Leads::where('employee_id', $employeeId)
+    //         ->whereRaw("STR_TO_DATE(next_follow_up, '%Y-%m-%d %H:%i:%s') >= ?", [$now])
+    //         ->where('lead_stage', '!=', 'NEW')
+    //         ->get();
+    
+    //     // Return the fetched leads, or an empty array if no leads are found
+    //     return response()->json([
+    //         'leads' => $leads->isEmpty() ? [] : $leads,
+    //     ], 200);
+    // }
+    
+    
+
+    public function fetchLeadsFromToday(Request $request)
+    {
+        // Validate the employee_id input to ensure it exists in the employees table
+        $request->validate([
+            'employee_id' => 'required|exists:employees,id',
+        ]);
+    
+        // Get the employee ID from the request
+        $employeeId = $request->input('employee_id');
+    
+        // Get the current timestamp to compare with next_follow_up
+        $now = Carbon::now();
+    
+        // Fetch leads using the custom scope
+        $leads = Leads::findByEmployeeId($employeeId)  // Custom scope
+            ->whereRaw("STR_TO_DATE(next_follow_up, '%Y-%m-%d %H:%i:%s') >= ?", [$now])
+            ->whereIn('lead_stage', ['hot', 'interested']) 
+            ->orderByRaw("STR_TO_DATE(next_follow_up, '%Y-%m-%d %H:%i:%s') ASC")  // Order by next_follow_up (ascending)
+            ->get();
+
+              $leads->transform(function ($lead) {
+        $lead->next_follow_up = Carbon::createFromFormat('Y-m-d H:i:s', $lead->next_follow_up)
+                                      ->format('Y-m-d h:i:s A');  // Convert to 12-hour format
+        return $lead;
+    });
+    
+        // If no leads are found, return an empty array
+        if ($leads->isEmpty()) {
+            return response()->json([
+                'leads' => [],
+            ], 200);
+        }
+    
+        // Otherwise, return the fetched leads
+        return response()->json([
+            'leads' => $leads,
+        ], 200);
+    }
+
+    // public function fetchLeadsFromToday(Request $request)
+    // {
+    //     // Validate the employee_id input to ensure it exists in the employees table
+    //     // $request->validate([
+    //     //     'employee_id' => 'required|exists:employees,id',
+    //     // ]);
+    
+    //     // Get the employee ID from the request
+    //     $employeeId = $request->input('employee_id');
+    
+    //     // Get the current timestamp to compare with next_follow_up
+    //     $now = Carbon::now();  
+    
+    //     // Fetch leads where next_follow_up is greater than or equal to the current timestamp
+    //     $leads = Leads::where('employee_id', $employeeId)
+    //         // ->where('next_follow_up', '>=', $now) // Compare with current date and time
+    //         ->where('lead_stage', '!=', 'NEW')    // Exclude leads with 'NEW' stage
+    //         ->get();
+    
+    //     // Return the fetched leads in JSON format
+    //     return response()->json([
+    //         'leads' => $leads,
+    //     ], 200);
+    // }
+
+
+// public function fetchLeadsFromToday(Request $request)
+// {
+//     // $request->validate([
+//     //     'employee_id' => 'required|exists:employees,id',
+//     // ]);
+
+//     $employeeId = $request->input('employee_id');
+//     $today = Carbon::today()->toDateString();  
+
+//     $leads = Leads::where('employee_id', $employeeId)
+//         ->whereDate('next_follow_up', '>=', now()->toDateString()) 
+//         ->where('lead_stage', '!=', 'NEW') 
+//         // ->select('id', 'employee_id', 'lead_stage', 'next_follow_up') 
+//         ->get();
+
+
+//     return response()->json([
+//         'leads' => $leads,
+//     ], 200);
+// }
+     
+
+ 
+// public function fetchLeadsFromToday(Request $request)
+// {
+//     // Validate the employee_id to ensure it exists in the employees table
+//     $request->validate([
+//         'employee_id' => 'required|exists:employees,id', // This checks if the employee_id exists
+//     ]);
+
+//     // Get the employee_id from the request
+//     $employeeId = $request->input('employee_id');
+    
+//     // Fetch leads for the specific employee starting from today and excluding 'NEW' stage
+//     $leads = Leads::where('employee_id', $employeeId)
+//         ->whereDate('next_follow_up', '>=', now()->toDateString()) // Leads with next follow-up date from today onward
+//         ->where('lead_stage', '!=', 'NEW') // Exclude 'NEW' stage leads
+//         ->select('id', 'employee_id', 'lead_stage', 'next_follow_up', 'created_at', 'updated_at') // Include timestamps
+//         ->get();
+
+//     // Return only the leads for the provided employee_id
+//     return response()->json([
+//         'leads' => $leads,
+//     ], 200);
+// }
+
+      
 }
+
 
 
 

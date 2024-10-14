@@ -20,9 +20,10 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Email</th>
+                <!-- <th>Email</th> -->
                 <th>Phone</th>
                 <th>Employee Type</th>
+                <th>Is Login</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -31,9 +32,14 @@
         @foreach($employees as $employee)
         <tr>
             <td>{{ $employee->name }}</td> 
-            <td>{{ $employee->email }}</td>
+            <!-- <td>{{ $employee->email }}</td> -->
             <td>{{ $employee->phone }}</td>
             <td>{{ $employee->type }}</td>
+            <td>
+            <a href="{{ route('employees.toggle_login', ['id' => $employee->id]) }}" class="btn btn-{{ $employee->is_login ? 'danger' : 'success' }}" onclick="return confirm('Are you sure you want to {{ $employee->is_login ? 'logout' : 'login' }} this employee?');">
+             {{ $employee->is_login ? 'logout' : 'login' }}     
+            </a>  
+            </td>
             <td>
             <a href="{{ route('employees.toggle', ['id' => $employee->id]) }}" class="btn btn-{{ $employee->is_active ? 'danger' : 'success' }}" onclick="return confirm('Are you sure you want to {{ $employee->is_active ? 'deactivate' : 'activate' }} this employee?');">
              {{ $employee->is_active ? 'Deactivate' : 'Activate' }}     

@@ -49,6 +49,9 @@ Route::post('/employees/{id}/update', [EmployeeController::class, 'update'])->na
 Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 Route::get('/employees/{id}/toggle', [EmployeeController::class, 'toggleActive'])->name('employees.toggle');
 
+Route::get('/employees/{id}/toggle_login', [EmployeeController::class, 'toggleActiveLogin'])->name('employees.toggle_login');
+// Route::get('/employees/{id}/toggle', [EmployeeController::class, 'toggle'])->name('employees.toggle');
+
 
 
 

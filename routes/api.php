@@ -99,6 +99,15 @@ Route::get('/call_duration_by_employee', [ApiController::class, 'callDurationByE
 Route::get('/interested_in', [ApiController::class, 'interestedIn']);
 
 
+Route::get('/signature_message', [ApiController::class, 'signatureMessage']);
+Route::post('/signature_message_by_id', [ApiController::class, 'signatureMessageById']);
+
+
+
+Route::get('/follow_up_call_reminder', [ApiController::class, 'fetchLeadsFromToday']);
+
+
+
 
 
 
