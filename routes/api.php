@@ -107,6 +107,10 @@ Route::post('/signature_message_by_id', [ApiController::class, 'signatureMessage
 Route::get('/follow_up_call_reminder', [ApiController::class, 'fetchLeadsFromToday']);
 
 
+Route::get('/business_in', [ApiController::class, 'businessIn']);
+
+
+
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\InterestedIn;
+use App\Models\Business;
 
 
 class MasterDataController extends Controller
@@ -114,6 +115,33 @@ class MasterDataController extends Controller
 
     // Return the view with the fetched data
     return view('InterestedIn', compact('interestedIn'));
+}
+           
+
+
+
+public function businessIn(Request $request)
+{
+    if ($request->isMethod('post')) {
+        // Validate the input
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Create a new record in the 'interested_in' table
+        Business::create([
+            'business_type' => $request->name,  // Ensure 'name' field corresponds to form input
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->route('business_in')->with('success', 'Record added successfully!');
+    }
+
+    // Fetch all records from the 'interested_in' table for GET request
+    $businessIn = Business::orderBy('business_type', 'asc')->get();
+
+    // Return the view with the fetched data
+    return view('Business', compact('businessIn'));
 }
 
 }

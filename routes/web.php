@@ -216,6 +216,7 @@ Route::post('/update_password/{id}', [EmployeeController::class, 'updatePassword
 
 
     Route::match(['get', 'post'], '/interested_in', [MasterDataController::class, 'interestedIn'])->name('interested_in');
+    Route::match(['get', 'post'], '/business_in', [MasterDataController::class, 'businessIn'])->name('business_in');
 
 
 

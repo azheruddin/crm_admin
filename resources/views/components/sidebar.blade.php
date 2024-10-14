@@ -200,6 +200,15 @@
             </li>
         </ul>
     </div>
+
+
+    <div class="collapse" id="masterdata">
+        <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> 
+                <a class="nav-link" href="{{ route('business_in') }}">Business In</a>
+            </li>
+        </ul>
+    </div>
 </li>
 
              
