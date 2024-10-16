@@ -44,13 +44,16 @@ class CallHistoryController extends Controller
     public function todayCallHistory(Request $request)
     {
 
+        $admin_id = auth()->id(); // Get the authenticated admin's ID
 
         $employee_id = $request->employee_id;
 
         $today = Carbon::today();
         $callHistoriesQuery = CallHistory::with('employee')
             ->whereDate('created_at', $today)
-            
+            ->whereHas('employee', function ($query) use ($admin_id) {
+                $query->where('admin_id', $admin_id); // Filter employees by admin_id
+            })            
             ->selectRaw('MAX(id) as id, CONCAT(phone, "-", call_duration) as phone_duration, phone, call_duration, employee_id, type, contact_name ,  MAX(call_date) as call_date   ') // Select specific columns
             ->groupBy('phone', 'call_duration', 'employee_id','type', 'contact_name') // Group by necessary columns
             ->orderBy('call_date', 'desc');

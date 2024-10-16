@@ -34,19 +34,36 @@ class EmployeeController extends Controller
     }else{
 
         // Create a new employee instance with the validated data
-        $employee = Employee::create($validatedData);
+        // $employee = Employee::create($validatedData);
+        $employee = Employee::create(array_merge($validatedData, [
+            'admin_id' => auth()->id(), // Set the admin_id to the authenticated user's id
+        ]));
 
         // Redirect or return a response as needed
         $request->session()->flash('success', 'Employee added successfully.');
         return view('addEmployee')->with('success', 'Employee added successfully.');
+        
     }
     }
 
 
 // show employees method 
+// public function showEmployees()
+// {
+//     $employees = Employee::where('type', '!=' , 'manager')->get();;
+//     return view('showEmployee')->with('employees', $employees);
+// }
+
 public function showEmployees()
 {
-    $employees = Employee::where('type', '!=' , 'manager')->get();;
+    // Get the currently authenticated admin's ID
+    $adminId = auth()->id();
+
+    // Retrieve employees that belong to the authenticated admin and are not managers
+    $employees = Employee::where('admin_id', $adminId)
+        ->where('type', '!=', 'manager')
+        ->get();
+
     return view('showEmployee')->with('employees', $employees);
 }
 
