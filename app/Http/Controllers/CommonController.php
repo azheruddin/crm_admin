@@ -15,10 +15,11 @@ class CommonController extends Controller
 {
     public function dashBoardCounts()
     {
-        // Fetch the counts for total, active, and deactivated employees
-        $totalEmployees = Employee::count();
-        $activeEmployees = Employee::where('is_active', 1)->count();
-        $deactivatedEmployees = Employee::where('is_active', 0)->count();
+        $admin_id = auth()->id();
+
+        $totalEmployees = Employee::where('admin_id', $admin_id)->count();
+        $activeEmployees = Employee::where('is_active', 1)->where('admin_id', $admin_id)->count();
+        $deactivatedEmployees = Employee::where('is_active', 0)->where('admin_id', $admin_id)->count();
     
         // Get today's date
         $today = Carbon::today();
@@ -31,37 +32,55 @@ class CommonController extends Controller
 
         // $todayCalls = CallHistory::whereDate('created_at', $today)->count();
         ////////////
-        $uniqueOutgoingCallsToday = CallHistory::where('type', 'Outgoing')
-        // ->where('employee_id', $employee_id)
-        ->whereDate('created_at', $today)
-        ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
-        ->pluck('unique_count')
-        ->first();
+       
 
     // Get unique incoming calls
     $incoming = CallHistory::where('type', 'Incoming')
+    // ->where('employee_id', $employee_id)
+    ->whereDate('created_at', $today)
+    ->whereHas('employee', function ($query) use ($admin_id) {
+        $query->where('admin_id', $admin_id); // Filter employees by admin_id
+    })
+    ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
+    ->pluck('unique_count')
+    ->first();
+
+
+        $uniqueOutgoingCallsToday = CallHistory::where('type', 'Outgoing')
+        ->whereHas('employee', function ($query) use ($admin_id) {
+            $query->where('admin_id', $admin_id); // Filter employees by admin_id
+        })
         // ->where('employee_id', $employee_id)
         ->whereDate('created_at', $today)
+       
         ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
         ->pluck('unique_count')
+       
         ->first();
 
     // Get missed calls
     $missed = CallHistory::where('type', 'Missed')
         // ->where('employee_id', $employee_id)
         ->whereDate('created_at', $today)
+        ->whereHas('employee', function ($query) use ($admin_id) {
+            $query->where('admin_id', $admin_id); // Filter employees by admin_id
+        })
         ->count();
 
     // Get unknown calls
     $unknown = CallHistory::where('type', 'Unknown')
         // ->where('employee_id', $employee_id)
         ->whereDate('created_at', $today)
+        ->whereHas('employee', function ($query) use ($admin_id) {
+            $query->where('admin_id', $admin_id); // Filter employees by admin_id
+        })
         ->select(DB::raw('COUNT(DISTINCT CONCAT(phone, "-", call_duration)) as unique_count'))
         ->pluck('unique_count')
+       
         ->first();
 
     // Calculate total calls
-    $total = $uniqueOutgoingCallsToday + $incoming + $missed + $unknown;
+    $total = $incoming + $uniqueOutgoingCallsToday +  $missed + $unknown;
         //////////////////////
 
 

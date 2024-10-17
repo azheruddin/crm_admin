@@ -94,7 +94,8 @@ Route::get('/review_by_lead', [ApiController::class, 'review_by_lead']);
 
 Route::get('/call_duration_by_employee', [ApiController::class, 'callDurationByEmployee']);
 
-
+Route::put('lead_transfer/{id}', [ApiController::class, 'lead_transfer']);
+Route::get('/caller_employees', [ApiController::class, 'caller_employees']);
 
 Route::get('/interested_in', [ApiController::class, 'interestedIn']);
 
@@ -104,7 +105,7 @@ Route::post('/signature_message_by_id', [ApiController::class, 'signatureMessage
 
 
 
-Route::get('/follow_up_call_reminder', [ApiController::class, 'fetchLeadsFromToday']);
+Route::get('/follow_up_call_reminder', [ApiController::class, 'fetchFollowCallsReminder']);
 
 
 Route::get('/business_in', [ApiController::class, 'businessIn']);

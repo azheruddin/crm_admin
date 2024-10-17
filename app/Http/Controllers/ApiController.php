@@ -307,6 +307,9 @@ public function leads_count(Request $request)
                           ->count();
      $deletedLeads = Leads::where('employee_id', $employee_id)
                        ->where('is_deleted', 1)->count();
+                       
+     $transferLeads = Leads::where('transfer_by', $employee_id)
+                       ->where('is_deleted', 0)->count();
 
     // Return the counts as JSON response
     return response()->json([
@@ -319,6 +322,7 @@ public function leads_count(Request $request)
         'notAnswered' => $notAnswered,
         'close' => $close,
         'deletedLeads' => $deletedLeads,
+        'transferLeads' => $transferLeads,
     ]);
 }
 
@@ -986,7 +990,37 @@ public function review_by_lead(Request $request)
 }
 /////////////////////
 
+public function lead_transfer(Request $request, $id)
+{
+  $lead = Leads::where('id', $id)->where('employee_id', $request->employee_id)->where('lead_stage', 'NEW')->first();
 
+    // If lead does not exist, return error response
+    if (!$lead) {
+        return response()->json(['error' => 'Lead not found'], 404);
+    }
+
+    $lead->transfer_reason = $request->input('transfer_reason');
+    $lead->transfer_by = $request->employee_id;
+    $lead->employee_id = $request->transfer_to;
+
+    // Save the updated lead
+    $lead->save();
+
+    // Return success response
+    return response()->json([
+        'message' => 'Lead Transfer successfull'
+    ], 200);
+}
+
+ public function caller_employees()
+    {
+        // Retrieve all employees, selecting only the id and name fields
+        $employees = Employee::select('id', 'name')->where('type', 'caller')->get();
+
+        // Return the employee list as a JSON response
+        return response()->json($employees);
+    }
+//////////////////////////////
 
 public function interestedIn(Request $request)
     {

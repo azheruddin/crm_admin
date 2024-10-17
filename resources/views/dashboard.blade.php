@@ -66,6 +66,19 @@
     Today Calls</span><span class="text-dark">&nbsp:{{ $total }}</span>
     </a>
 </h4><hr>
+<div class="col-lg-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="circle-progress-width">
+                  <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
+                </div>
+                <div> 
+                  <p class="text-small mb-2"><a href="{{ route('incoming_call_history') }}"><span class="text-primary">Incoming</a></span></p>
+                  <h4 class="mb-0 fw-bold">{{ $incoming}}</h4>
+                </div>
+              </div>
+            </div>
+
+
 
             <div class="col-lg-3">
               <div class="d-flex justify-content-between align-items-center">
@@ -78,17 +91,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="circle-progress-width">
-                  <div id="visitperday1" class="progressbar-js-circle pr-2"></div>
-                </div>
-                <div>
-                  <p class="text-small mb-2"><a href="{{ route('incoming_call_history') }}"><span class="text-primary">Incoming</a></span></p>
-                  <h4 class="mb-0 fw-bold">{{ $incoming}}</h4>
-                </div>
-              </div>
-            </div>
+           
 
             <div class="col-lg-3">
               <div class="d-flex justify-content-between align-items-center">

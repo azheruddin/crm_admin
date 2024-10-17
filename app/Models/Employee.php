@@ -9,7 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
     protected $table = "employees";
- protected $fillable = ['name', 'email', 'phone', 'password', 'type','is_login'];
+ protected $fillable = ['name', 'email', 'phone', 'password', 'type','is_login', 'admin_id'];
 
 
 
@@ -31,6 +31,13 @@ class Employee extends Model
  {
      return $this->hasMany(CallHistory::class);
  }
+
+
+ public function admin()
+ {
+     return $this->belongsTo(User::class, 'admin_id');
+ }
+
 }
 
 
