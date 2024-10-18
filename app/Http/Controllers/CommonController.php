@@ -83,16 +83,16 @@ class CommonController extends Controller
     $total = $incoming + $uniqueOutgoingCallsToday +  $missed + $unknown;
         //////////////////////
 
-
+        $admin_id = auth()->id();
 
         // leads
         // $totalLeads = Leads::whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
-        $hotLeads = Leads::where('lead_stage', 'hot')->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
-        $interested = Leads::where('lead_stage', 'interested')->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
-        $notInterested = Leads::where('lead_stage', 'not_interested')->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
-        $notAnswered = Leads::where('lead_stage', 'not_answered')->whereDate('created_at', $today)->count();
-        $close = Leads::where('lead_stage', 'close')->whereDate('created_at', $today)->count();
-        $todaysUploadedLeads = Leads::where('lead_stage', 'NEW')->whereDate('created_at', $today)->count();
+        $hotLeads = Leads::where('lead_stage', 'hot')->where('admin_id', $admin_id)->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
+        $interested = Leads::where('lead_stage', 'interested')->where('admin_id', $admin_id)->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
+        $notInterested = Leads::where('lead_stage', 'not_interested')->where('admin_id', $admin_id)->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
+        $notAnswered = Leads::where('lead_stage', 'not_answered')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
+        $close = Leads::where('lead_stage', 'close')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
+        $todaysUploadedLeads = Leads::where('lead_stage', 'NEW')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
         $totalLeads = $hotLeads + $interested + $notInterested + $close + $notAnswered ;
        
     

@@ -29,10 +29,10 @@ class NewLeadsUploadController extends Controller
         ]);
 
         $employeeId = $request->input('employee_id');
-
+        $admin_id = auth()->id();
         try {
             // Excel::import(new LeadsImport, $request->file('file'));
-            Excel::import(new LeadsImport($employeeId), $request->file('file'));
+            Excel::import(new LeadsImport($employeeId, $admin_id), $request->file('file'));
             return redirect()->back()->with('success', 'Import successful!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Import failed: ' . $e->getMessage());
