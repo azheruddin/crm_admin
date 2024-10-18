@@ -53,7 +53,7 @@ public function showUploadForm()
     return view('upload');
 }
 
-public function import(Request $request)
+public function import(Request $request) 
 {
     $request->validate([
         'file' => 'required|mimes:xlsx,xls,csv',
@@ -101,11 +101,17 @@ public function leadsFeedbackDetail(Request $request)
     
 public function todayLeads()
     {
+
+        $admin_id = auth()->id();
+
         // Fetch today's leads
         $todayLeads = Leads::whereDate('updated_at', now()->toDateString())
         ->where('lead_stage','!=', "NEW")
+        ->where('admin_id', $admin_id)
         ->get();
-        
+
+
+       
         $employees = Employee::where('is_active', 1)->get();
 
         // Pass the leads to the view
@@ -138,15 +144,18 @@ public function todayLeads()
 
 public function filterLeads(Request $request)
 {
+
+    $admin_id = auth()->id();
+
     // Retrieve employee list for the dropdown
     $employees = Employee::all();
 
     // Initialize query
     $query = Leads::with('employee')
     ->where('lead_stage','!=', "NEW")
-    ->whereDate('updated_at', now()->toDateString());
+    ->whereDate('updated_at', now()->toDateString())
+    ->where('admin_id', $admin_id);
 
-    // Apply filters
    
 
     if ($request->has('employee_id') && $request->employee_id != '') {
@@ -511,37 +520,46 @@ public function leadsReview($id)
 
 public function countLeads(Request $request)
 {
+    $admin_id = auth()->id();
+
+
     $employeeId = $request->get('employee_id');
 
     $employees = Employee::withCount([
-        'leads as all' => function ($query) {
-            // Count all leads
-            $query->whereNotNull('id');
+        'leads as all' => function ($query) use ($admin_id) {
+            // Count all leads where the admin is linked
+            $query->whereNotNull('id')->where('admin_id', $admin_id);
         },
-        'leads as newLeads' => function ($query) {
-            $query->where('lead_stage', 'NEW');
+        
+        'leads as newLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'NEW')->where('admin_id', $admin_id);
         },
-        'leads as todayUploads' => function ($query) {
-            $query->whereDate('created_at', Carbon::today());
+        'leads as todayUploads' => function ($query) use ($admin_id) {
+            $query->whereDate('created_at', Carbon::today())->where('admin_id', $admin_id);
         },
-        'leads as followUpLeads' => function ($query) {
-            $query->where('lead_stage', 'FOLLOW UP');
+        'leads as followUpLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'FOLLOW UP')->where('admin_id', $admin_id);
         },
-        'leads as hotLeads' => function ($query) {
-            $query->where('lead_stage', 'HOT');
+        'leads as hotLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'HOT')->where('admin_id', $admin_id);
         },
-        'leads as interestedLeads' => function ($query) {
-            $query->where('lead_stage', 'INTERESTED');
+        'leads as interestedLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'INTERESTED')->where('admin_id', $admin_id);
         },
-        'leads as notAnsweredLeads' => function ($query) {
-            $query->where('lead_stage', 'NOT ANSWERED');
+        'leads as notAnsweredLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'NOT ANSWERED')->where('admin_id', $admin_id);
         },
-        'leads as notInterestedLeads' => function ($query) {
-            $query->where('lead_stage', 'NOT INTERESTED');
+        'leads as notInterestedLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'NOT INTERESTED')->where('admin_id', $admin_id);
         },
-        'leads as closeLeads' => function ($query) {
-            $query->where('lead_stage', 'CLOSED');
+        'leads as closeLeads' => function ($query) use ($admin_id) {
+            $query->where('lead_stage', 'CLOSED')->where('admin_id', $admin_id);
         },
+
+
+
+
+
     ]);
 
     // If employee filter is selected, apply the filter to the query
