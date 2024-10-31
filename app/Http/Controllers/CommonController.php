@@ -91,9 +91,9 @@ class CommonController extends Controller
         $interested = Leads::where('lead_stage', 'interested')->where('admin_id', $admin_id)->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
         $notInterested = Leads::where('lead_stage', 'not_interested')->where('admin_id', $admin_id)->whereDate('updated_at', $today)->where('lead_stage', '!=', 'new')->count();
         $notAnswered = Leads::where('lead_stage', 'not_answered')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
-        $close = Leads::where('lead_stage', 'close')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
-        $todaysUploadedLeads = Leads::where('lead_stage', 'NEW')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
-        $totalLeads = $hotLeads + $interested + $notInterested + $close + $notAnswered ;
+        $close = Leads::where('lead_stage', operator: 'close')->where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
+        $todaysUploadedLeads = Leads::where('admin_id', $admin_id)->whereDate('created_at', $today)->count();
+         $totalLeads = $hotLeads + $interested + $notInterested + $close + $notAnswered ;
        
     
         // Return the view with the counts

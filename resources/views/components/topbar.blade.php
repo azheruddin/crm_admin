@@ -19,8 +19,14 @@
 
         <div class="navbar-menu-wrapper d-flex align-items-top">
           <ul class="navbar-nav">
-            <li class="nav-item fw-semibold d-none d-lg-block ms-0">
-              <h1 class="welcome-text">Welcome,<span class="text-black fw-bold">Admin</span></h1> 
+          <li class="nav-item fw-semibold d-none d-lg-block ms-0">
+              <h1 class="welcome-text">Welcome,<span class="text-black fw-bold">
+                  @if (Auth::check())
+                    {{ Auth::user()->name }}
+                @else
+                    Please log in.
+                @endif
+                  </span></h1> 
             </li>
           </ul>
 
