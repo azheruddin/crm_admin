@@ -413,59 +413,59 @@ private function formatDuration($seconds)
     }
 
 
-public function callDuration(Request $request)
-{
-   
-    $employeeId = $request->get('employee_id');
-
-    // Build the query to get employees with call counts for today
-    $employees = Employee::withCount([
-        // Count today's total calls
-        'calls as todayCalls' => function ($query) {
-            $query->whereDate('created_at', Carbon::today())
-            ->wherenot('type', NULL);
-        },
-
-        // Count today's incoming calls
-        'calls as incoming' => function ($query) {
-            $query->where('type', 'INCOMING')
-                  ->whereDate('created_at', Carbon::today());
-        },
-
-        // Count today's outgoing calls
-        'calls as outgoing' => function ($query) {
-            $query->where('type', 'OUTGOING')
-                  ->whereDate('created_at', Carbon::today());
-        },
-
-        // Count today's missed calls
-        'calls as missed' => function ($query) {
-            $query->where('type', 'MISSED')
-                  ->whereDate('created_at', Carbon::today());
-        },  
-
-        // Count today's unknown calls
-        'calls as unknown' => function ($query) {
-            $query->where('type', 'UNKNOWN')
-                  ->whereDate('created_at', Carbon::today());
+    public function callDuration(Request $request)
+    {
+       $admin_id = auth()->id();
+        $employeeId = $request->get('employee_id');
+    
+        // Build the query to get employees with call counts for today
+        $employees = Employee::where('admin_id', $admin_id)->withCount([
+            // Count today's total calls
+            'calls as todayCalls' => function ($query) {
+                $query->whereDate('created_at', Carbon::today())
+                ->wherenot('type', NULL);
+            },
+    
+            // Count today's incoming calls
+            'calls as incoming' => function ($query) {
+                $query->where('type', 'INCOMING')
+                      ->whereDate('created_at', Carbon::today());
+            }, 
+    
+            // Count today's outgoing calls
+            'calls as outgoing' => function ($query) {
+                $query->where('type', 'OUTGOING')
+                      ->whereDate('created_at', Carbon::today());
+            },
+    
+            // Count today's missed calls
+            'calls as missed' => function ($query) {
+                $query->where('type', 'MISSED')
+                      ->whereDate('created_at', Carbon::today());
+            },  
+    
+            // Count today's unknown calls
+            'calls as unknown' => function ($query) {
+                $query->where('type', 'UNKNOWN')
+                      ->whereDate('created_at', Carbon::today());
+            }
+        ])->where('admin_id', $admin_id);
+    
+        // Apply filter by employee if an employee is selected
+        if (!empty($employeeId)) {
+            $employees->where('id', $employeeId);
         }
-    ]);
-
-    // Apply filter by employee if an employee is selected
-    if (!empty($employeeId)) {
-        $employees->where('id', $employeeId);
+    
+        // Fetch the results
+        $employees = $employees->get();
+    
+        // Fetch active callers for the dropdown
+        $employeesSelect = Employee::where('is_active', '1')->where('admin_id', $admin_id)->where('type', 'caller')->get();
+    
+        // Return the view with the employees data
+        return view('callDurationSum', compact('employees', 'employeesSelect'));
     }
-
-    // Fetch the results
-    $employees = $employees->get();
-
-    // Fetch active callers for the dropdown
-    $employeesSelect = Employee::where('is_active', '1')->where('type', 'caller')->get();
-
-    // Return the view with the employees data
-    return view('callDurationSum', compact('employees', 'employeesSelect'));
-}
-
+    
 
 }    
 

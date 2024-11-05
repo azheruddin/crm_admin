@@ -8,13 +8,13 @@
             </li>
             <li class="nav-item nav-category"><hr></li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <a class="nav-link" data-bs-toggle="collapse" href="#ui" aria-expanded="false" aria-controls="ui">
                 <i class="menu-icon mdi mdi-floor-plan"></i>
                 <span class="menu-title">Manager</span>
                 <i class="menu-arrow"></i>
               </a>
                     
-              <div class="collapse" id="ui-basic"> 
+              <div class="collapse" id="ui"> 
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="/add_manager">Add Manager</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/show_manager">Show Manager</a></li>
@@ -84,7 +84,7 @@
 
              
 
-             <div class="collapse" id="charts">
+             <!-- <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"><a class="nav-link" href="/add_leads">Add Leads</a></li>
                 </ul>
@@ -95,7 +95,7 @@
                   <li class="nav-item"> <a class="nav-link" href='/assign_leads'>Assign Leads</a></li>
                 </ul>
               </div>
-            </li> 
+            </li>  -->
 
               <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">

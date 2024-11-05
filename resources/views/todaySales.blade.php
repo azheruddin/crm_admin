@@ -18,18 +18,14 @@
 
                            <div class="form-group col-md-3">
                             <label for="employee_id">Employee</label>
-                            <select class="form-control" id="employee_id" name="employee_id">
-                                <option value="">Select Employee</option>
-                                
-                                @isset($employees)
-
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
-                                    {{ $employee->name }}</option>
-                                @endforeach
-                                @endisset
-
-                            </select>
+                            <select class="form-control" id="employee_id" name="employee_id" onchange="this.form.submit()">
+                    <option value="">Select Employee</option>
+                    @foreach($employees as $employee)
+                    <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                        {{ $employee->name }}
+                    </option>
+                    @endforeach
+                </select>
                         </div>
 
                 <!-- table goes here -->

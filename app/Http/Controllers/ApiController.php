@@ -656,7 +656,6 @@ public function getCities($state_id)
         $sale->state_id = $request->state;
         $sale->city_id = $request->city;
         $sale->employee_id = $request->employee_id;
-        $sale->lead_id = $request->lead_id;
         //            
         $sale->save();
 
@@ -667,8 +666,8 @@ public function getCities($state_id)
         ], 201);
     }
     
-    ///////////
-    
+   
+        
 public function getTopSalesToday()
 {
     $today = Carbon::today()->toDateString();  // Ensure the format matches your database
@@ -750,35 +749,59 @@ public function monthSalesByEmployee(Request $request)
 }
 
 
-public function TopCallsToday()
+// public function TopCallsToday()
+// {
+//     // Get the start and end of today
+//     $startOfDay = Carbon::now()->startOfDay();
+//     $endOfDay = Carbon::now()->endOfDay();
+   
+//     $topEmployeesToday = DB::table('call_history AS calls')
+//         ->join('employees', 'calls.employee_id', '=', 'employees.id')
+//         ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, "-", calls.call_duration, "-", calls.created_at)) as total_calls'))
+//         ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
+//         ->groupBy('employees.name')
+//         ->orderBy('total_calls', 'desc')
+//         ->get();
+
+//     // Return the result as a JSON response
+//     return response()->json($topEmployeesToday);
+// }
+
+public function TopCallsToday($adminId)
 {
-    // Get the start and end of today
     $startOfDay = Carbon::now()->startOfDay();
     $endOfDay = Carbon::now()->endOfDay();
-    //////
-    
-    ///////////////
 
-    // Query to get the top 5 employees based on the number of calls made today
-    // $topEmployeesToday = DB::table('call_history AS calls')
-    //     ->join('employees', 'calls.employee_id', '=', 'employees.id')
-    //     ->select('employees.name as employee_name', DB::raw('COUNT(calls.call_date) as total_calls'))
-    //     ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
-    //     ->groupBy('employees.name')
-    //     ->orderBy('total_calls', 'desc')
-    //     ->get();
-    
     $topEmployeesToday = DB::table('call_history AS calls')
         ->join('employees', 'calls.employee_id', '=', 'employees.id')
-        ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, "-", calls.call_duration, "-", calls.created_at)) as total_calls'))
+        ->select('employees.id as employee_id', 'employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, "-", calls.call_duration, "-", calls.created_at)) as total_calls'))
         ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
-        ->groupBy('employees.name')
+        ->where('employees.admin_id', $adminId) // Filter by admin_id parameter
+        ->groupBy('employees.id', 'employees.name')
         ->orderBy('total_calls', 'desc')
         ->get();
 
-    // Return the result as a JSON response
-    return response()->json($topEmployeesToday);
+    return response()->json($topEmployeesToday);  
 }
+
+// public function TopCallsToday()
+// {
+//     // Get the start and end of today
+//     $startOfDay = Carbon::now()->startOfDay();
+//     $endOfDay = Carbon::now()->endOfDay();
+   
+//     $topEmployeesToday = DB::table('call_history AS calls')
+//         ->join('employees', 'calls.employee_id', '=', 'employees.id')
+//         ->select('employees.name as employee_name', DB::raw('COUNT(DISTINCT CONCAT(calls.phone, "-", calls.call_duration, "-", calls.created_at)) as total_calls'))
+//         ->whereBetween('calls.created_at', [$startOfDay, $endOfDay])
+//         ->where('employees.is_active', 1) // Add this condition for active employees
+//         ->groupBy('employees.name')
+//         ->orderBy('total_calls', 'desc')
+//         ->get();
+
+//     // Return the result as a JSON response
+//     return response()->json($topEmployeesToday);
+// }
 
 
 public function TopCallsThisMonth()
@@ -795,94 +818,15 @@ public function TopCallsThisMonth()
     ->orderBy('total_calls', 'desc') 
     ->get();
 
-    return response()->json($topEmployees);      
-} public function getMessage(Request $request)
-{
-    try {
-        // Check if 'id' is provided in the request
-        $id = $request->input('id');
+    return response()->json($topEmployees); 
 
-        if ($id) {
-            // Fetch a single message by ID
-            $message = Message::find($id);
 
-            if (!$message) {
-                return response()->json([
-                    'status' => 'F',
-                    'message' => 'Message not found'
-                ], 404); // 404 Not Found
-            }
-
-            return response()->json([
-                 'status' => 'S',
-                'data' => $message
-            ], 200); // 200 OK
-        } else {
-            // Fetch all messages
-            $messages = Message::all();
-
-            return response()->json([
-                  'status' => 'S',
-                'data' => $messages
-            ], 200); // 200 OK
-        }
-    } catch (\Exception $e) {
-        // Return general error
-        return response()->json([
-           'status' => 'F',
-            'message' => 'An error occurred',
-            'error' => $e->getMessage()
-        ], 500); // 500 Internal Server Error
-    }
-}
-
-public function show_sales_by_employee(Request $request)
-{
-    $sale = Sale::where('employee_id', $request->employee_id)
-                  ->orderBy('id', 'desc')->get();
-
-    
-
-    $data_record = [];
-
-    foreach ($sale as $row) {
-        $data_record[] = [
-            'id' => $row->id,
-            'customer_name' => $row->customer_name,
-            'business_name' => $row->business_name,
-            'keys' => $row->keys,
-            'free' => $row->free,
-             'amount' => $row->amount,
-            'transaction' => $row->transaction,
-            'balance' => $row->balance,
-            'state' => $row->state,
-            'city' => $row->city,
-            'employee_id' => $row->employee_id,
-            'lead_id' => $row->lead_id,
-        ];
-    }
-
-    if (!empty($data_record)) {
-        return response()->json([
-            'status' => 'S',
-            'data' => $data_record,
-        ], 200, [], JSON_NUMERIC_CHECK);
-    } else {
-        return response()->json([
-            'status' => 'F',
-            'errorMsg' => 'Data not found',
-        ], 200);
-    }
-}
-
+}     
 
 
 public function callDurationByEmployee(Request $request)
 {
-    // // Validate the employee_id
-    // $request->validate([
-    //     'employee_id' => 'required|integer',
-    // ]);
+   
 
     $employee_id = $request->employee_id;
     
@@ -891,7 +835,7 @@ public function callDurationByEmployee(Request $request)
 
     // Fetch total incoming call duration
     $incomingDuration = CallHistory::where('employee_id', $employee_id)
-        ->where('type', 'incoming')
+        ->where('type', 'incoming')  
          ->whereBetween('created_at', [$startOfDay, $endOfDay])
         ->sum('call_duration'); // Replace 'duration' with the correct column name
 

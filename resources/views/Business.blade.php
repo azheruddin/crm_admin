@@ -32,7 +32,7 @@
                 <!-- Table to display records -->
                 <table id="masterdata" class="table table-striped" style="width:80%">
                     <thead>
-                        <tr>
+                        <tr> 
                             <th>SERIAL NO.</th>
                             <th>BUSINESS TYPE</th>
                         </tr>

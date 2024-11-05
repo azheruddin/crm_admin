@@ -91,37 +91,70 @@ class MasterDataController extends Controller
     //     return view('InterestedIn', compact('interestedIn'));
     // }
     
-
-
     public function interestedIn(Request $request)
-{
-    if ($request->isMethod('post')) {
-        // Validate the input
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        // Create a new record in the 'interested_in' table
-        InterestedIn::create([
-            'interested_type' => $request->name,  // Ensure 'name' field corresponds to form input
-        ]);
-
-        // Redirect back with a success message
-        return redirect()->route('interested_in')->with('success', 'Record added successfully!');
+    {
+        // Get the authenticated admin's ID
+        $admin_id = auth()->id();
+    
+        if ($request->isMethod('post')) {
+            // Validate the input
+            $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+    
+            // Create a new record in the 'interested_in' table using the authenticated admin's ID
+            InterestedIn::create([
+                'interested_type' => $request->name,  // Ensure 'name' field corresponds to form input
+                'admin_id' => $admin_id  // Use the authenticated admin's ID
+            ]);
+    
+            // Redirect back with a success message
+            return redirect()->route('interested_in')->with('success', 'Record added successfully!');
+        }
+    
+        // Fetch all records from the 'interested_in' table for the authenticated admin
+        $interestedIn = InterestedIn::where('admin_id', $admin_id)
+                                   ->orderBy('interested_type', 'asc')
+                                   ->get();
+    
+        // Return the view with the fetched data
+        return view('InterestedIn', compact('interestedIn'));
     }
 
-    // Fetch all records from the 'interested_in' table for GET request
-    $interestedIn = InterestedIn::orderBy('interested_type', 'asc')->get();
+//     public function interestedIn(Request $request)
+// {
 
-    // Return the view with the fetched data
-    return view('InterestedIn', compact('interestedIn'));
-}
+//     $admin_id = auth()->id();
+//     if ($request->isMethod('post')) {
+//         // Validate the input
+//         $request->validate([
+//             'name' => 'required|string|max:255',
+//         ]);
+
+//         // Create a new record in the 'interested_in' table
+//         InterestedIn::create([
+//             'interested_type' => $request->name,  // Ensure 'name' field corresponds to form input
+//             'admin_id' =>4   // Ensure 'name' field corresponds to form input
+//         ]);
+
+//         // Redirect back with a success message
+//         return redirect()->route('interested_in')->with('success', 'Record added successfully!');
+//     }
+
+//     // Fetch all records from the 'interested_in' table for GET request
+//     $interestedIn = InterestedIn::orderBy('interested_type', 'asc')->where('admin_id',  $admin_id)->get();
+
+//     // Return the view with the fetched data
+//     return view('InterestedIn', compact('interestedIn'));
+// }
            
 
 
 
 public function businessIn(Request $request)
 {
+    $admin_id = auth()->id();
+
     if ($request->isMethod('post')) {
         // Validate the input
         $request->validate([
@@ -131,6 +164,8 @@ public function businessIn(Request $request)
         // Create a new record in the 'interested_in' table
         Business::create([
             'business_type' => $request->name,  // Ensure 'name' field corresponds to form input
+            'admin_id' => $admin_id  // Use the authenticated admin's ID
+
         ]);
 
         // Redirect back with a success message
@@ -138,7 +173,9 @@ public function businessIn(Request $request)
     }
 
     // Fetch all records from the 'interested_in' table for GET request
-    $businessIn = Business::orderBy('business_type', 'asc')->get();
+    $businessIn = Business::where('admin_id', $admin_id)
+    ->orderBy('business_type', 'asc')
+    ->get();
 
     // Return the view with the fetched data
     return view('Business', compact('businessIn'));
