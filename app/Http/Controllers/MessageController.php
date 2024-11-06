@@ -18,11 +18,16 @@ class MessageController extends Controller
 
         ]);
 
+        $admin_id = auth()->id();
+
+
         // Create a new message
         $message = new Message();
         $message->title = $request->input('title');
         $message->message = $request->input('message');
         $message->category = $request->input('category');
+        $message->admin_id = $admin_id;  // Store the admin ID in the message
+
 
         $message->save();
 
@@ -30,15 +35,19 @@ class MessageController extends Controller
         return redirect()->back()->with('success', 'Message added successfully!');
     }
 
+   
     public function showMessage()
     {
-        // Fetch all messages from the database
-        $messages = Message::all();
+        // Get the authenticated admin's ID using the 'admin' guard
+        $admin_id = auth()->id();
+    
+        // Fetch all messages that belong to the authenticated admin
+        $messages = Message::where('admin_id', $admin_id)->get();
     
         // Return the view with messages
         return view('showMessage', compact('messages'));
     }
-
+    
 
     public function messageDetail($id)
     {

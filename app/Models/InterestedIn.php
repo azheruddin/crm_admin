@@ -11,7 +11,7 @@ class InterestedIn extends Model
 
 
     protected $table = "interested_in";
-    protected $fillable = ['interested_type'];
+    protected $fillable = ['interested_type', 'admin_id'];
 
     public $timestamps = false;  
     protected $hidden = ['created_at', 'updated_at'];

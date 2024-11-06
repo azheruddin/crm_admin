@@ -12,6 +12,6 @@ class Message extends Model
     protected $table = "message";
 
 
-    protected $fillable = ['title', 'message', 'category']; 
+    protected $fillable = ['title', 'message', 'category', 'admin_id']; 
 
 }

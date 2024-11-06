@@ -17,25 +17,51 @@ class SalesController extends Controller
 {
     
 
-public function showTodaySales()
+    public function showTodaySales(Request $request)
 {
+    // Get the authenticated admin's ID
+    $admin_id = auth()->id();
+
+    // Debugging admin_id
+    if (is_null($admin_id)) {
+        return back()->withErrors('Admin ID is missing.');
+    }
+
     // Get the current date in Y-m-d format
     $today = Carbon::today()->toDateString();
 
+    // Get the selected employee ID from the request
+    $employee_id = $request->input('employee_id');  
 
-    // Fetch sales records for the current date
-    // $Sales = Sale::whereDate('created_at', $today)->get(); 
-    $Sales = Sale::with(['state', 'city', 'employee'])->whereDate('created_at', $today)->get();
+    // Fetch sales records for the current date, filtered by admin_id and optionally by employee_id
+    $query = Sale::with(['state', 'city', 'employee'])
+    ->whereDate('created_at', $today)
+    ->whereHas('employee', function ($query) use ($admin_id, $employee_id) {
+        // Ensure employee belongs to the authenticated admin
+        $query->where('admin_id', $admin_id);
 
+    // If an employee is selected, filter the sales by employee_id
+    if ($employee_id) {
+        $query->where('id', $employee_id); // assuming employee's id is the reference
+    }
+});
 
-    // Return the view with the sales records
-    // return view('todaySales', compact('Sales'));
-    $employees = Employee::all();
+    // Execute the query and get the sales data
+    $Sales = $query->get();
+
+    // Debug the query
+    // dd($query->toSql(), $query->getBindings());
+
+    // Fetch all employees, states, and cities for the form dropdowns
+    $employees = Employee::where('admin_id', $admin_id)->get();
     $state = State::all();
     $city = City::all();
 
-    return view('todaySales', compact('Sales', 'employees', 'state', 'city' ));
+    // Return the view with the sales records and other necessary data
+    return view('todaySales', compact('Sales', 'employees', 'state', 'city'));
 }
+
+    
 
     public function showSaleDetails(Request $request)
 {
@@ -46,77 +72,80 @@ public function showTodaySales()
 
 
 
+// public function allSales(Request $request)
+//     {
+//         // Retrieve filter inputs
+//         $fromDate = $request->input('from_date');
+//         $toDate = $request->input('to_date');
+//         $employeeId = $request->input('employee_id');
+
+//         // Initialize the query builder
+//         $salesQuery = Sale::query(); // Correct initialization
+
+//         // Apply date range filters  
+//         if ($fromDate) {
+//             $salesQuery->whereDate('created_at', '>=', $fromDate);
+//         }
+
+//         if ($toDate) {
+//             $salesQuery->whereDate('created_at', '<=', $toDate);
+//         }
+
+//         // Apply employee filter
+//         if ($employeeId) {
+//             $salesQuery->where('employee_id', $employeeId);
+//         }
+
+//         // Execute the query
+//         $Sales = $salesQuery->get(); // Use $salesQuery
+
+//         // Get list of employees for the dropdown
+//         $employees = Employee::all();
+//         $states = State::all(); // If needed elsewhere
+
+//         // Return the view with the filtered sales data
+//         return view('allSales', compact('Sales', 'employees', 'states'));
+//     }
+
 public function allSales(Request $request)
-    {
-        // Retrieve filter inputs
-        $fromDate = $request->input('from_date');
-        $toDate = $request->input('to_date');
-        $employeeId = $request->input('employee_id');
+{
+    // Get the authenticated admin's ID
+    $admin_id = auth()->id();
 
-        // Initialize the query builder
-        $salesQuery = Sale::query(); // Correct initialization
+    // Retrieve filter inputs
+    $fromDate = $request->input('from_date');
+    $toDate = $request->input('to_date');
+    $employeeId = $request->input('employee_id');
 
-        // Apply date range filters  
-        if ($fromDate) {
-            $salesQuery->whereDate('created_at', '>=', $fromDate);
-        }
+    // Initialize the query builder and filter by admin_id
+    $salesQuery = Sale::where('admin_id', $admin_id); // Apply admin_id filter
 
-        if ($toDate) {
-            $salesQuery->whereDate('created_at', '<=', $toDate);
-        }
-
-        // Apply employee filter
-        if ($employeeId) {
-            $salesQuery->where('employee_id', $employeeId);
-        }
-
-        // Execute the query
-        $Sales = $salesQuery->get(); // Use $salesQuery
-
-        // Get list of employees for the dropdown
-        $employees = Employee::all();
-        $states = State::all(); // If needed elsewhere
-
-        // Return the view with the filtered sales data
-        return view('allSales', compact('Sales', 'employees', 'states'));
+    // Apply date range filters  
+    if ($fromDate) {
+        $salesQuery->whereDate('created_at', '>=', $fromDate);
     }
 
+    if ($toDate) {
+        $salesQuery->whereDate('created_at', '<=', $toDate);
+    }
 
-    // public function showSales()
-    // {
-    //     // Get today's date and the start of the month
-    //     $today = Carbon::today();
-    //     $startOfMonth = Carbon::now()->startOfMonth();
-    //     $endOfMonth = Carbon::now()->endOfMonth();
+    // Apply employee filter
+    if ($employeeId) {
+        $salesQuery->where('employee_id', $employeeId);
+    }
 
-    //     // Retrieve sales data for today
-    //     // $todaySales = Sale::whereDate('created_at', $today)->get(['customer_name', 'amount']);
+    // Execute the query and get the sales data
+    $Sales = $salesQuery->get();
 
-    //     $topSalesMonth = Sale::select('sales.employee_id', 'employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
-    //     ->join('employees', 'sales.employee_id', '=', 'employees.id')
-    //     ->whereBetween('sales.created_at', [$startOfMonth, $endOfMonth])
-    //     ->groupBy('sales.employee_id', 'employees.name')  // Group by employee ID and name
-    //     ->orderBy('total_sales', 'desc')  // Order by the aggregated total sales
-    //     ->get();
+    // Get list of employees for the dropdown
+    $employees = Employee::where('admin_id', $admin_id)->get(); // Filter employees by admin_id
+    $states = State::all(); // If needed elsewhere
 
+    // Return the view with the filtered sales data and necessary dropdown data
+    return view('allSales', compact('Sales', 'employees', 'states'));
+}
 
-    //     $topSalesToday = Sale::select('sales.employee_id', 'employees.name as employee_name', DB::raw('SUM(sales.amount) as total_sales'))
-    //     ->join('employees', 'sales.employee_id', '=', 'employees.id')
-    //     ->whereDate('sales.created_at', $today)
-    //     ->groupBy('sales.employee_id', 'employees.name')  // Group by employee ID and name
-    //     ->orderBy('total_sales', 'desc')  // Order by the aggregated total sales
-    //     ->get();
-    //     // Retrieve sales data for the current month
-    //     // $monthlySales = Sale::whereBetween('created_at', [$startOfMonth, $today])
-    //     //     ->get(['customer_name', 'amount']);
-
-    //     // Pass data to the view
-    //     return view('highestSale', [
-    //         'todaySales' => $topSalesToday,
-    //         'monthlySales' => $topSalesMonth,
-    //     ]);
-    // }
-
+    
     public function highestSales()
 {
     $startOfMonth = Carbon::now()->startOfMonth();
